@@ -1,0 +1,46 @@
+{
+  "model": "../ner_service/model",
+  "backend": "onnx",
+  "onnxruntime_threads": 2,
+  "cpu_logical_cores": 16,
+  "cpu_physical_cores": 12,
+  "model_load": {
+    "seconds": 0.632,
+    "cold_start_ms": 25.0
+  },
+  "memory_mb": {
+    "before_load": 32.1,
+    "after_load": 109.7,
+    "peak_during_load_test": 115.5,
+    "model_footprint": 77.6
+  },
+  "cpu_percent_during_load_test": {
+    "mean": 193.8,
+    "max": 216.1,
+    "note": "% of one core; 2 ORT intra-op threads requested"
+  },
+  "single_message_latency_ms": {
+    "n": 200,
+    "mean": 37.19,
+    "min": 17.96,
+    "p50": 32.26,
+    "p90": 56.24,
+    "p95": 62.09,
+    "p99": 104.82,
+    "max": 140.64
+  },
+  "batch_throughput": {
+    "1": {
+      "messages_per_sec": 44.0,
+      "ms_per_batch": 22.74
+    },
+    "8": {
+      "messages_per_sec": 22.1,
+      "ms_per_batch": 361.42
+    },
+    "32": {
+      "messages_per_sec": 13.0,
+      "ms_per_batch": 2456.83
+    }
+  }
+}

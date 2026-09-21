@@ -1,0 +1,15 @@
+# PII flows through ner-service; restrict inbound traffic to cs-agent only. Adjust/extend if
+# you also scrape /metrics from a monitoring namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ner-service-allow-cs-agent
+  namespace: pii-guardrail
+spec:
+  podSelector:
+    matchLabels: { app: ner-service }
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector: { matchLabels: { app: cs-agent } }
+      ports: [{ protocol: TCP, port: 8001 }]

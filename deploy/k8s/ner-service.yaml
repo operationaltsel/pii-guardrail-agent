@@ -1,0 +1,87 @@
+# NER service: deployed and scaled independently from the agent (per the brief's "NER Service
+# sebagai service terpisah"). CPU-bound, stateless -> HPA on CPU utilisation.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ner-service
+  namespace: pii-guardrail
+  labels: { app: ner-service }
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: ner-service }
+  template:
+    metadata:
+      labels: { app: ner-service }
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8001"
+    spec:
+      containers:
+        - name: ner-service
+          image: REGISTRY/pii-ner-service:latest   # replace with your Artifact Registry path
+          ports: [{ containerPort: 8001 }]
+          env:
+            - { name: NER_THREADS, value: "1" }        # matches the CPU request/limit below
+            - { name: OMP_NUM_THREADS, value: "1" }
+            - { name: LOG_LEVEL, value: "INFO" }
+          resources:
+            # measured single-message p95 latency at these limits: see docs/performance.md
+            requests: { cpu: "250m", memory: "256Mi" }
+            limits:   { cpu: "1",    memory: "512Mi" }
+          startupProbe:
+            httpGet: { path: /health/ready, port: 8001 }
+            failureThreshold: 20
+            periodSeconds: 2
+          readinessProbe:
+            httpGet: { path: /health/ready, port: 8001 }
+            periodSeconds: 5
+            failureThreshold: 2
+          livenessProbe:
+            httpGet: { path: /health/live, port: 8001 }
+            periodSeconds: 10
+            failureThreshold: 3
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+      # spread replicas across nodes so a single node loss doesn't take the guardrail down
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector: { matchLabels: { app: ner-service } }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ner-service
+  namespace: pii-guardrail
+spec:
+  selector: { app: ner-service }
+  ports: [{ port: 8001, targetPort: 8001, name: http }]
+  type: ClusterIP
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: ner-service-pdb
+  namespace: pii-guardrail
+spec:
+  minAvailable: 1
+  selector: { matchLabels: { app: ner-service } }
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ner-service-hpa
+  namespace: pii-guardrail
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: ner-service }
+  minReplicas: 2
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource: { name: cpu, target: { type: Utilization, averageUtilization: 70 } }

@@ -1,0 +1,46 @@
+{
+  "model": "../ner_training/models/indobert-base-onnx-int8",
+  "backend": "onnx",
+  "onnxruntime_threads": 2,
+  "cpu_logical_cores": 16,
+  "cpu_physical_cores": 12,
+  "model_load": {
+    "seconds": 0.585,
+    "cold_start_ms": 11.9
+  },
+  "memory_mb": {
+    "before_load": 32.3,
+    "after_load": 194.8,
+    "peak_during_load_test": 200.5,
+    "model_footprint": 162.4
+  },
+  "cpu_percent_during_load_test": {
+    "mean": 192.5,
+    "max": 200.5,
+    "note": "% of one core; 2 ORT intra-op threads requested"
+  },
+  "single_message_latency_ms": {
+    "n": 200,
+    "mean": 18.66,
+    "min": 8.34,
+    "p50": 15.51,
+    "p90": 29.81,
+    "p95": 42.53,
+    "p99": 76.54,
+    "max": 82.84
+  },
+  "batch_throughput": {
+    "1": {
+      "messages_per_sec": 67.1,
+      "ms_per_batch": 14.91
+    },
+    "8": {
+      "messages_per_sec": 38.3,
+      "ms_per_batch": 209.05
+    },
+    "32": {
+      "messages_per_sec": 22.5,
+      "ms_per_batch": 1423.7
+    }
+  }
+}

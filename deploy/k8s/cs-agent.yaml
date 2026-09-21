@@ -1,0 +1,66 @@
+# CS agent: calls Gemini (external) and the in-cluster ner-service. Scales on CPU; the real
+# bottleneck under load is Gemini latency, not local CPU, so replicas matter more than HPA here.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cs-agent
+  namespace: pii-guardrail
+  labels: { app: cs-agent }
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: cs-agent }
+  template:
+    metadata:
+      labels: { app: cs-agent }
+    spec:
+      containers:
+        - name: cs-agent
+          image: REGISTRY/nusatel-cs-agent:latest   # replace with your Artifact Registry path
+          ports: [{ containerPort: 8000 }]
+          env:
+            - { name: GEMINI_MODEL, value: "gemini-3.5-flash-lite" }
+            - { name: NER_SERVICE_URL, value: "http://ner-service.pii-guardrail.svc.cluster.local:8001" }
+            - { name: NER_TIMEOUT_S, value: "3.0" }
+            - { name: PII_REDACTION_MODE, value: "pseudonymize" }
+            - { name: PII_FAIL_MODE, value: "closed" }
+            - name: GOOGLE_API_KEY
+              valueFrom: { secretKeyRef: { name: cs-agent-secrets, key: google-api-key } }
+          resources:
+            requests: { cpu: "250m", memory: "256Mi" }
+            limits:   { cpu: "1",    memory: "512Mi" }
+          readinessProbe:
+            httpGet: { path: /list-apps, port: 8000 }
+            periodSeconds: 5
+            failureThreshold: 2
+          livenessProbe:
+            httpGet: { path: /list-apps, port: 8000 }
+            periodSeconds: 15
+            failureThreshold: 3
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cs-agent
+  namespace: pii-guardrail
+spec:
+  selector: { app: cs-agent }
+  ports: [{ port: 8000, targetPort: 8000, name: http }]
+  type: ClusterIP
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cs-agent-hpa
+  namespace: pii-guardrail
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: cs-agent }
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource: { name: cpu, target: { type: Utilization, averageUtilization: 70 } }

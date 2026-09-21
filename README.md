@@ -20,6 +20,11 @@ terpisah**.
 ## Arsitektur singkat
 
 ```
+                    ┌─ frontend/ (chat UI, :3100) ─┐
+                    │   HTML/CSS/JS statis,          │
+                    │   terhubung ke REST API ADK    │
+                    └───────────────┬─────────────────┘
+                                    ▼
 User ─▶ CS Agent (Google ADK + Gemini) ─┐
          before_model_callback:          │  HTTP POST /v1/ner
            1. vault (PII giliran lalu)   │  (hanya teks yang sudah
@@ -30,9 +35,10 @@ User ─▶ CS Agent (Google ADK + Gemini) ─┐
          yang sudah diredaksi            │  (PERSON, ADDRESS)
 ```
 
-Dua service independen, masing-masing dengan Dockerfile dan bisa di-deploy/scale
-terpisah: [`agent/`](agent) dan [`ner_service/`](ner_service). Detail lengkap +
-alasan desain: [docs/architecture.md](docs/architecture.md).
+Tiga service independen, masing-masing dengan Dockerfile dan bisa di-deploy/scale
+terpisah: [`frontend/`](frontend) (chat UI customer-facing), [`agent/`](agent) (Google ADK
++ guardrail), [`ner_service/`](ner_service) (NER model). Detail lengkap + alasan desain:
+[docs/architecture.md](docs/architecture.md).
 
 ## Cara menjalankan
 
@@ -43,11 +49,12 @@ cp .env.example .env        # isi GOOGLE_API_KEY (https://aistudio.google.com/ap
 docker compose up --build
 ```
 
+* **Chat UI: http://localhost:3100** — ini yang dipakai pengguna akhir (lihat [frontend/](frontend))
 * NER Service: http://localhost:8001/docs (Swagger), health: `/health/ready`
-* CS Agent: http://localhost:8000 (`adk api_server`), coba lewat `adk web` untuk UI chat
-  (lihat Opsi B) atau lewat `curl`/Postman ke endpoint ADK standar.
+* CS Agent (API mentah): http://localhost:8000 — `adk api_server`, endpoint ADK standar
+  (`/run_sse`, `/apps/.../sessions`, dst.) untuk integrasi atau `curl`/Postman
 
-### Opsi B — Lokal, tanpa Docker (untuk development / `adk web` UI interaktif)
+### Opsi B — Lokal, tanpa Docker (untuk development / `adk web` konsol developer)
 
 ```bash
 python -m venv .venv && source .venv/Scripts/activate   # Windows Git Bash
@@ -59,9 +66,14 @@ cd ner_service && uvicorn app.main:app --port 8001
 
 # terminal 2 — Agent (model NER sudah ter-bundle, tidak perlu training ulang)
 export GOOGLE_API_KEY=xxx NER_SERVICE_URL=http://localhost:8001
-cd agent && adk web agents          # UI chat di http://localhost:8000
-# atau: adk run agents/cs_agent     # chat di terminal
+cd agent && adk api_server agents --allow_origins http://localhost:3100
+
+# terminal 3 — Chat UI
+cd frontend && python -m http.server 3100   # buka http://localhost:3100
 ```
+
+Untuk konsol developer ADK (debug event/trace mentah, bukan untuk pengguna akhir):
+`adk web agents` (ganti terminal 2 di atas) → http://localhost:8000.
 
 ### Menjalankan test
 
@@ -128,13 +140,14 @@ konkret: `*_errors.md` di `ner_training/reports/` setelah `make evaluate-model`.
 ## Struktur repo
 
 ```
-agent/            CS Agent — Google ADK, guardrail, tools, tests
+frontend/          Chat UI customer-facing (HTML/CSS/JS statis, tanpa build step)
+agent/             CS Agent — Google ADK, guardrail, tools, tests
 ner_service/       NER Service — FastAPI + ONNX Runtime, model, tests
 ner_training/      Dataset generation, training (CRF & transformer), evaluasi
 benchmark/         Pengukuran CPU/RAM/latency (brief bagian F)
 deploy/k8s/        Manifest Kubernetes (bonus — brief bagian G)
 docs/              Dokumentasi detail (arsitektur, guardrail, model, performa, deployment)
-docker-compose.yml Menjalankan kedua service sekaligus secara lokal
+docker-compose.yml Menjalankan ketiga service sekaligus secara lokal
 Makefile           Semua perintah build/train/test/benchmark
 ```
 
@@ -148,6 +161,7 @@ Makefile           Semua perintah build/train/test/benchmark
 | [docs/performance.md](docs/performance.md) | CPU, memory, latency (brief bagian F) |
 | [docs/deployment.md](docs/deployment.md) | Rencana deploy GKE (bonus — brief bagian G) |
 | [docs/example_transcript.md](docs/example_transcript.md) | Contoh input–output lengkap: regex, NER, tool-calling, fail-closed |
+| [frontend/README.md](frontend/README.md) | Desain chat UI, keputusan implementasi, cara menjalankan berdiri sendiri |
 
 ## Status checklist brief
 

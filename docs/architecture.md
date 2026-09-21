@@ -3,10 +3,10 @@
 ## Komponen
 
 ```
-┌─────────────┐   HTTP    ┌────────────────────────────────────────┐
-│   User /    │──────────▶│  CS Agent  (Google ADK + Gemini)         │
-│   Chat UI   │◀──────────│  agent/agents/cs_agent/                  │
-└─────────────┘  reply    │                                          │
+┌─────────────┐  HTTP/SSE ┌─────────────┐   HTTP    ┌────────────────────────────────────────┐
+│   User      │──────────▶│  Chat UI     │──────────▶│  CS Agent  (Google ADK + Gemini)         │
+│  (browser)  │◀──────────│  frontend/   │◀──────────│  agent/agents/cs_agent/                  │
+└─────────────┘           └─────────────┘  reply    │                                          │
                            │  before_model_callback  ─┐               │
                            │  after_model_callback    │  PII          │
                            │  before_tool_callback    │  Guardrail    │
@@ -33,6 +33,7 @@ service terpisah"):
 
 | Service | Path | Responsibility |
 |---|---|---|
+| **Chat UI** | [`frontend/`](../frontend) | Static HTML/CSS/JS customer-facing chat, talks to the CS Agent's REST API directly |
 | **CS Agent** | [`agent/`](../agent) | Google ADK agent, conversation, tool-calling, orchestrates the guardrail |
 | **NER Service** | [`ner_service/`](../ner_service) | Stateless REST API: text in, `PERSON`/`ADDRESS` entities out |
 

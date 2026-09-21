@@ -1,5 +1,5 @@
-# Local end-to-end run: NER service + CS agent, wired together like they would be in
-# separate GKE deployments. `docker compose up --build`, then hit the agent at :8000.
+# Local end-to-end run: NER service + CS agent + chat UI, wired together like they would be
+# in separate GKE deployments. `docker compose up --build`, then open http://localhost:3100.
 services:
   ner-service:
     build: ./ner_service
@@ -28,6 +28,7 @@ services:
       - NER_TIMEOUT_S=3.0
       - PII_REDACTION_MODE=${PII_REDACTION_MODE:-pseudonymize}
       - PII_FAIL_MODE=${PII_FAIL_MODE:-closed}
+      - ALLOW_ORIGINS=http://localhost:3100
     depends_on:
       ner-service:
         condition: service_healthy
@@ -35,3 +36,12 @@ services:
       resources:
         limits: { cpus: "1.0", memory: 512M }
         reservations: { cpus: "0.25", memory: 256M }
+
+  frontend:
+    build: ./frontend
+    ports: ["3100:80"]
+    depends_on: [cs-agent]
+    deploy:
+      resources:
+        limits: { cpus: "0.25", memory: 64M }
+        reservations: { cpus: "0.05", memory: 16M }

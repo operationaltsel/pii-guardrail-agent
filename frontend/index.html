@@ -563,11 +563,14 @@
     return res;
   }
 
+  // Returns the existing Session (with its `events`) when one was found and reused,
+  // or null when a fresh session was created — the caller uses this to decide whether
+  // there is history to replay into the transcript.
   async function ensureSession() {
     if (sessionId) {
       try {
-        await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions/${sessionId}`, { method: 'GET' });
-        return;
+        const res = await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions/${sessionId}`, { method: 'GET' });
+        return await res.json();
       } catch (_) { /* session gone (server restarted) — fall through and create a new one */ }
     }
     const res = await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions`, { method: 'POST', body: '{}' });
@@ -575,6 +578,7 @@
     sessionId = data.id;
     sessionStorage.setItem(STORAGE_SESSION, sessionId);
     localStorage.setItem(STORAGE_SESSION, sessionId);
+    return null;
   }
 
   async function checkHealth() {
@@ -596,6 +600,48 @@
     transcriptInner.appendChild(welcome);
     sessionTotalRedactions = 0;
     trustDetail.textContent = DEFAULT_TRUST_DETAIL;
+  }
+
+  // Rebuilds the transcript from a Session's stored events after a page reload — otherwise
+  // the conversation continues correctly server-side (context, vault) but the page would
+  // look empty, as if it had been reset. Only final text is replayed (no tool-call chips,
+  // no typing indicator) — that transient activity already played out live the first time.
+  function renderHistory(events) {
+    if (!events || !events.length) return;
+    ensureWelcomeHidden();
+    let redactedTotal = 0;
+    let currentUserCol = null;    // the most recent user bubble, for attaching its redact-note
+    let markedThisTurn = false;   // only the first detection per turn is real (see sendMessage)
+    for (const evt of events) {
+      const role = evt.content && evt.content.role;
+      const parts = (evt.content && evt.content.parts) || [];
+      for (const part of parts) {
+        if (part.thought || typeof part.text !== 'string' || !part.text.trim()) continue;
+        if (role === 'user') {
+          currentUserCol = addUserMessage(part.text);
+          markedThisTurn = false;
+        } else {
+          const col = addAgentPlaceholder();
+          setAgentText(col, part.text);
+          finalizeAgentMessage(col);
+        }
+      }
+      const detected = evt.actions && evt.actions.stateDelta && evt.actions.stateDelta.pii_report
+        && evt.actions.stateDelta.pii_report.detected;
+      if (detected) {
+        const entries = Object.entries(detected).filter(([, n]) => n > 0);
+        if (entries.length) {
+          redactedTotal += entries.reduce((sum, [, n]) => sum + n, 0);
+          if (!markedThisTurn && currentUserCol) {
+            markRedacted(currentUserCol, entries.map(([label, n]) => `${n} ${PII_LABELS[label] || label}`));
+            markedThisTurn = true;
+          }
+        }
+      }
+    }
+    sessionTotalRedactions = redactedTotal;
+    trustDetail.textContent = sessionTrustDetail();
+    scrollToBottom(false);
   }
 
   /* ============================== Send flow ============================== */
@@ -774,7 +820,11 @@
     updateSendState();
     input.focus();
     const ok = await checkHealth();
-    if (ok) await ensureSession().catch(() => {});
+    if (!ok) return;
+    try {
+      const session = await ensureSession();
+      if (session) renderHistory(session.events);
+    } catch (_) { /* couldn't load history — user can still start typing */ }
   })();
 })();
 </script>

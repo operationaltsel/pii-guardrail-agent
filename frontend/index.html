@@ -3,69 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>NusaTel Care — Layanan Pelanggan</title>
-<meta name="description" content="Asisten customer support NusaTel dengan perlindungan data pribadi otomatis.">
+<title>NusaTel Care</title>
+<meta name="description" content="Asisten AI customer support NusaTel dengan perlindungan data pribadi otomatis.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ============================== Design tokens ============================== */
+  /* ============================== Design tokens ==============================
+     Flat, restrained palette — one accent colour, no gradients, no drop-shadow
+     decoration. Reads as a real assistant app (Claude/ChatGPT-shaped), not a
+     marketing widget: full-bleed shell, no floating card, no banner chrome. */
   :root {
-    --color-primary: #2563EB;
-    --color-primary-hover: #1D4ED8;
-    --color-on-primary: #FFFFFF;
-    --color-secondary: #3B82F6;
-    --color-background: #F8FAFC;
-    --color-surface: #FFFFFF;
-    --color-foreground: #1E293B;
-    --color-muted: #EEF2F8;
-    --color-muted-foreground: #64748B;
-    --color-border: #E2E8F0;
-    --color-success: #16A34A;
-    --color-success-bg: #F0FDF4;
-    --color-destructive: #DC2626;
-    --color-destructive-bg: #FEF2F2;
-    --color-ring: #2563EB;
-    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-    --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08);
-    --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.14);
-    --radius-sm: 8px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --font-display: 'Lexend', 'Source Sans 3', system-ui, sans-serif;
-    --font-body: 'Source Sans 3', 'Lexend', system-ui, sans-serif;
+    --color-accent: #2F5DE0;
+    --color-accent-hover: #2748B8;
+    --color-on-accent: #FFFFFF;
+    --color-background: #FFFFFF;
+    --color-surface: #F7F7F8;
+    --color-foreground: #1A1A1A;
+    --color-muted-foreground: #6B6B6F;
+    --color-border: #E6E6E8;
+    --color-destructive: #B3271E;
+    --color-destructive-bg: #FCEEED;
+    --color-ring: #2F5DE0;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --font-body: 'Source Sans 3', system-ui, -apple-system, sans-serif;
     --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
-    --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+    --space-5: 20px; --space-6: 24px; --space-8: 32px;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --color-background: #0B1220;
-      --color-surface: #131C2E;
-      --color-foreground: #EAF0FB;
-      --color-muted: #1B2740;
-      --color-muted-foreground: #93A2BD;
-      --color-border: #253352;
-      --color-success-bg: #0E2A1A;
-      --color-destructive-bg: #341418;
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
-      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+      --color-background: #1B1C1D;
+      --color-surface: #232425;
+      --color-foreground: #ECECEC;
+      --color-muted-foreground: #9A9A9E;
+      --color-border: #35363A;
+      --color-destructive: #F2938C;
+      --color-destructive-bg: #3A2321;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
-    --color-background: #0B1220;
-    --color-surface: #131C2E;
-    --color-foreground: #EAF0FB;
-    --color-muted: #1B2740;
-    --color-muted-foreground: #93A2BD;
-    --color-border: #253352;
-    --color-success-bg: #0E2A1A;
-    --color-destructive-bg: #341418;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
-    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+    --color-background: #1B1C1D;
+    --color-surface: #232425;
+    --color-foreground: #ECECEC;
+    --color-muted-foreground: #9A9A9E;
+    --color-border: #35363A;
+    --color-destructive: #F2938C;
+    --color-destructive-bg: #3A2321;
     color-scheme: dark;
   }
 
@@ -82,11 +68,9 @@
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
   }
-  h1, h2, h3 { font-family: var(--font-display); margin: 0; }
   button { font-family: inherit; }
-  ::selection { background: color-mix(in srgb, var(--color-primary) 25%, transparent); }
-
-  a { color: var(--color-primary); }
+  ::selection { background: color-mix(in srgb, var(--color-accent) 25%, transparent); }
+  a { color: var(--color-accent); }
 
   :focus-visible {
     outline: 2px solid var(--color-ring);
@@ -103,167 +87,147 @@
     overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
   }
 
-  /* ============================== Shell layout ============================== */
+  /* ============================== Shell layout ==============================
+     No card, no shadow, no rounded outer frame — the app fills the viewport,
+     same as a real assistant product. */
   .app {
     display: flex;
     flex-direction: column;
     height: 100vh;
     height: 100dvh;
-    max-width: 860px;
-    margin: 0 auto;
-    background: var(--color-surface);
-    box-shadow: var(--shadow-lg);
-  }
-  @media (min-width: 900px) {
-    body { display: flex; justify-content: center; padding: var(--space-6) 0; overflow: auto; }
-    .app { height: min(920px, calc(100vh - 48px)); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--color-border); }
   }
 
   /* ============================== Header ============================== */
   .header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-3) var(--space-5);
     border-bottom: 1px solid var(--color-border);
-    background: var(--color-surface);
     flex-shrink: 0;
   }
-  .brand { display: flex; align-items: center; gap: var(--space-3); min-width: 0; flex: 1; }
+  .brand { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
   .brand-mark {
-    width: 40px; height: 40px; border-radius: var(--radius-sm);
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    width: 26px; height: 26px; border-radius: 7px;
+    background: var(--color-accent); color: var(--color-on-accent);
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    box-shadow: var(--shadow-sm);
+    font-family: var(--font-body); font-weight: 700; font-size: 13px;
   }
-  .brand-mark svg { width: 22px; height: 22px; color: #fff; }
-  .brand-text { min-width: 0; }
-  .brand-text h1 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
-  .brand-sub { font-size: 12.5px; color: var(--color-muted-foreground); display: flex; align-items: center; gap: 5px; }
-  .status-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--color-success); flex-shrink: 0; }
+  .brand-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .status-line { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-muted-foreground); }
+  .status-dot { width: 6px; height: 6px; border-radius: 999px; background: #2E9950; flex-shrink: 0; }
   .status-dot.offline { background: var(--color-destructive); }
-  .status-dot.connecting { background: #D97706; animation: pulse 1.4s ease-in-out infinite; }
+  .status-dot.connecting { background: #C08A1E; animation: pulse 1.4s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 
-  .header-actions { display: flex; align-items: center; gap: var(--space-2); }
+  .header-actions { display: flex; align-items: center; gap: var(--space-1); }
   .icon-btn {
-    width: 40px; height: 40px; border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border); background: var(--color-surface);
+    width: 34px; height: 34px; border-radius: var(--radius-sm);
+    border: none; background: transparent;
     color: var(--color-muted-foreground); display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+    cursor: pointer; transition: background 120ms ease, color 120ms ease;
   }
-  .icon-btn:hover { background: var(--color-muted); color: var(--color-foreground); }
-  .icon-btn svg { width: 19px; height: 19px; }
-
-  /* Trust strip */
-  .trust-strip {
-    display: flex; align-items: center; gap: var(--space-2);
-    padding: var(--space-2) var(--space-5);
-    background: var(--color-success-bg);
-    border-bottom: 1px solid var(--color-border);
-    font-size: 12.5px; color: var(--color-foreground);
-    flex-shrink: 0;
-    transition: background 300ms ease;
-  }
-  .trust-strip svg { width: 15px; height: 15px; color: var(--color-success); flex-shrink: 0; }
-  .trust-strip.flash { background: color-mix(in srgb, var(--color-primary) 12%, var(--color-success-bg)); }
-  .trust-strip strong { font-weight: 600; }
-  .trust-strip .trust-detail { color: var(--color-muted-foreground); }
+  .icon-btn:hover { background: var(--color-surface); color: var(--color-foreground); }
+  .icon-btn svg { width: 18px; height: 18px; }
 
   /* ============================== Transcript ============================== */
   .transcript {
     flex: 1;
     overflow-y: auto;
     overscroll-behavior: contain;
+    scroll-behavior: smooth;
+  }
+  .transcript-inner {
+    max-width: 720px;
+    margin: 0 auto;
     padding: var(--space-6) var(--space-5) var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
-    scroll-behavior: smooth;
-  }
-  .day-sep {
-    align-self: center;
-    font-size: 12px;
-    color: var(--color-muted-foreground);
-    background: var(--color-muted);
-    padding: 3px 10px;
-    border-radius: 999px;
-    margin: var(--space-2) 0;
+    gap: var(--space-5);
+    min-height: 100%;
   }
 
   .welcome {
-    text-align: center;
-    padding: var(--space-8) var(--space-4) var(--space-4);
-    color: var(--color-muted-foreground);
+    margin: auto 0;
+    padding: var(--space-8) 0;
   }
-  .welcome .brand-mark { width: 56px; height: 56px; margin: 0 auto var(--space-4); border-radius: var(--radius-md); }
-  .welcome .brand-mark svg { width: 30px; height: 30px; }
-  .welcome h2 { font-size: 19px; color: var(--color-foreground); margin-bottom: var(--space-2); }
-  .welcome p { max-width: 420px; margin: 0 auto var(--space-5); font-size: 14.5px; line-height: 1.6; }
-  .suggestions { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; }
+  .welcome .brand-mark { width: 40px; height: 40px; border-radius: 10px; font-size: 18px; margin-bottom: var(--space-4); }
+  .welcome h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 var(--space-2); }
+  .welcome p { max-width: 480px; margin: 0 0 var(--space-5); font-size: 14.5px; line-height: 1.6; color: var(--color-muted-foreground); }
+  .suggestions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
   .suggestion-chip {
-    border: 1px solid var(--color-border); background: var(--color-surface);
-    color: var(--color-foreground); border-radius: 999px; padding: 8px 16px;
-    font-size: 13.5px; cursor: pointer; transition: border-color 150ms, background 150ms;
+    border: 1px solid var(--color-border); background: none;
+    color: var(--color-foreground); border-radius: 999px; padding: 7px 14px;
+    font-size: 13.5px; cursor: pointer; transition: border-color 120ms, background 120ms;
     min-height: 36px;
   }
-  .suggestion-chip:hover { border-color: var(--color-primary); background: var(--color-muted); }
+  .suggestion-chip:hover { border-color: var(--color-accent); background: var(--color-surface); }
 
-  .row { display: flex; gap: var(--space-2); max-width: 100%; }
-  .row.user { flex-direction: row-reverse; align-self: flex-end; }
-  .row.agent { align-self: flex-start; }
-  .row.system { align-self: center; max-width: 90%; }
+  .row { display: flex; gap: var(--space-3); max-width: 100%; }
+  .row.user { justify-content: flex-end; }
+  .row.agent { align-items: flex-start; }
+  .row.system { justify-content: center; }
 
+  /* Assistant messages: no bubble, plain text on the page background — this is
+     the single biggest cue that reads as "real AI assistant" vs. "support widget". */
   .avatar {
-    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600; margin-top: 2px;
+    margin-top: 2px; background: var(--color-accent); color: var(--color-on-accent);
   }
-  .avatar.agent { background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); color: #fff; }
-  .avatar.agent svg { width: 17px; height: 17px; }
-  .avatar.user { background: var(--color-muted); color: var(--color-foreground); border: 1px solid var(--color-border); }
+  .avatar svg { width: 14px; height: 14px; }
 
-  .bubble-col { display: flex; flex-direction: column; gap: 4px; max-width: min(78%, 560px); }
-  .row.user .bubble-col { align-items: flex-end; }
+  .bubble-col { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .row.agent .bubble-col { max-width: 100%; }
+  .row.user .bubble-col { align-items: flex-end; max-width: 80%; }
 
   .bubble {
-    padding: 11px 15px;
-    border-radius: var(--radius-md);
-    font-size: 14.5px;
-    line-height: 1.55;
+    font-size: 15px;
+    line-height: 1.6;
     word-wrap: break-word;
-    box-shadow: var(--shadow-sm);
   }
-  .row.agent .bubble { background: var(--color-surface); border: 1px solid var(--color-border); border-top-left-radius: 4px; }
-  .row.user .bubble { background: var(--color-primary); color: var(--color-on-primary); border-top-right-radius: 4px; }
-  .bubble p { margin: 0 0 8px; }
+  .row.user .bubble {
+    background: var(--color-surface);
+    padding: 9px 14px;
+    border-radius: var(--radius-md);
+  }
+  .bubble p { margin: 0 0 10px; }
   .bubble p:last-child { margin-bottom: 0; }
-  .bubble ul, .bubble ol { margin: 4px 0 8px; padding-left: 20px; }
-  .bubble li { margin-bottom: 3px; }
+  .bubble ul, .bubble ol { margin: 4px 0 10px; padding-left: 22px; }
+  .bubble li { margin-bottom: 4px; }
   .bubble strong { font-weight: 600; }
   .bubble a { color: inherit; text-decoration: underline; }
 
-  .msg-meta { font-size: 11px; color: var(--color-muted-foreground); padding: 0 4px; }
+  .msg-meta { font-size: 11px; color: var(--color-muted-foreground); padding: 0 2px; }
 
-  /* Tool activity chip */
-  .tool-chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12.5px; color: var(--color-muted-foreground);
-    background: var(--color-muted); border-radius: 999px;
-    padding: 5px 12px; align-self: flex-start;
-    animation: fade-in 200ms ease;
+  /* Per-message proof that the guardrail acted on THIS message — attached where the
+     evidence is relevant, not as a page-wide banner. Only appears when something was
+     actually found (server-verified), so it never fires on messages with no PII. */
+  .redact-note {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--color-muted-foreground);
+    padding: 0 2px; animation: fade-in 200ms ease;
   }
-  .tool-chip svg { width: 13px; height: 13px; flex-shrink: 0; }
-  .tool-chip.spinning svg { animation: spin 1s linear infinite; }
-  .tool-chip.done { color: var(--color-success); }
-  .tool-chip.done svg { color: var(--color-success); }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes fade-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .redact-note svg { width: 11px; height: 11px; flex-shrink: 0; }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Tool activity — a quiet inline line, not an iconography showcase */
+  .tool-chip {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--color-muted-foreground);
+    padding: 2px 0;
+  }
+  .tool-chip .dot { width: 4px; height: 4px; border-radius: 999px; background: currentColor; flex-shrink: 0; }
+  .tool-chip.spinning .dot { animation: dot-pulse 1s ease-in-out infinite; }
+  .tool-chip.done { color: var(--color-muted-foreground); }
+  .tool-chip.done .dot { background: #2E9950; }
+  @keyframes dot-pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
 
   /* Typing indicator */
-  .typing { display: flex; align-items: center; gap: 4px; padding: 12px 15px; }
+  .typing { display: flex; align-items: center; gap: 4px; padding: 4px 0; height: 22px; }
   .typing span {
-    width: 6px; height: 6px; border-radius: 50%; background: var(--color-muted-foreground);
+    width: 5px; height: 5px; border-radius: 50%; background: var(--color-muted-foreground);
     animation: bounce 1.3s ease-in-out infinite;
   }
   .typing span:nth-child(2) { animation-delay: .15s; }
@@ -273,57 +237,55 @@
   /* System / error messages */
   .system-msg {
     display: flex; align-items: flex-start; gap: 8px;
-    font-size: 13px; padding: 10px 14px; border-radius: var(--radius-sm);
+    font-size: 13px; padding: 9px 13px; border-radius: var(--radius-sm);
     background: var(--color-destructive-bg); color: var(--color-destructive);
-    border: 1px solid color-mix(in srgb, var(--color-destructive) 25%, transparent);
+    max-width: 480px;
   }
-  .system-msg svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+  .system-msg svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
   .system-msg .retry-btn {
     margin-left: auto; flex-shrink: 0; border: 1px solid currentColor; background: transparent;
-    color: inherit; border-radius: 6px; padding: 4px 10px; font-size: 12.5px; cursor: pointer;
-    min-height: 30px;
+    color: inherit; border-radius: 6px; padding: 3px 10px; font-size: 12.5px; cursor: pointer;
+    min-height: 28px;
   }
   .system-msg .retry-btn:hover { background: color-mix(in srgb, var(--color-destructive) 10%, transparent); }
 
   /* ============================== Composer ============================== */
   .composer-wrap {
     flex-shrink: 0;
-    border-top: 1px solid var(--color-border);
-    background: var(--color-surface);
-    padding: var(--space-3) var(--space-5) calc(var(--space-4) + env(safe-area-inset-bottom));
+    padding: 0 var(--space-5) calc(var(--space-4) + env(safe-area-inset-bottom));
   }
+  .composer-inner { max-width: 720px; margin: 0 auto; }
   .composer {
     display: flex; align-items: flex-end; gap: var(--space-2);
-    border: 1px solid var(--color-border); border-radius: var(--radius-md);
+    border: 1px solid var(--color-border); border-radius: 24px;
     background: var(--color-background);
-    padding: 6px 6px 6px 16px;
-    transition: border-color 150ms ease, box-shadow 150ms ease;
+    padding: 8px 8px 8px 18px;
+    transition: border-color 120ms ease;
   }
-  .composer:focus-within { border-color: var(--color-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent); }
+  .composer:focus-within { border-color: var(--color-accent); }
   .composer textarea {
     flex: 1; border: none; background: transparent; resize: none;
     font-family: var(--font-body); font-size: 15px; line-height: 1.45;
-    color: var(--color-foreground); padding: 9px 0; max-height: 140px; min-height: 22px;
+    color: var(--color-foreground); padding: 7px 0; max-height: 140px; min-height: 22px;
   }
   .composer textarea:focus { outline: none; }
   .composer textarea::placeholder { color: var(--color-muted-foreground); }
   .send-btn {
-    width: 40px; height: 40px; border-radius: 10px; border: none; flex-shrink: 0;
-    background: var(--color-primary); color: var(--color-on-primary);
+    width: 34px; height: 34px; border-radius: 999px; border: none; flex-shrink: 0;
+    background: var(--color-accent); color: var(--color-on-accent);
     display: flex; align-items: center; justify-content: center; cursor: pointer;
-    transition: background 150ms ease, transform 100ms ease, opacity 150ms ease;
+    transition: background 120ms ease, opacity 120ms ease;
   }
-  .send-btn:hover:not(:disabled) { background: var(--color-primary-hover); }
-  .send-btn:active:not(:disabled) { transform: scale(0.93); }
-  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .send-btn svg { width: 18px; height: 18px; }
+  .send-btn:hover:not(:disabled) { background: var(--color-accent-hover); }
+  .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .send-btn svg { width: 16px; height: 16px; }
   .composer-foot {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 7px; padding: 0 2px;
-    font-size: 11px; color: var(--color-muted-foreground);
+    margin: var(--space-2) 2px 0;
+    font-size: 11.5px; color: var(--color-muted-foreground);
+    text-align: center;
   }
-  .composer-foot .foot-trust { display: flex; align-items: center; gap: 4px; }
-  .composer-foot svg { width: 11px; height: 11px; }
+  .composer-foot .trust-note { transition: color 200ms ease; }
+  .composer-foot .trust-note.flash { color: var(--color-accent); }
 
   /* Scrollbar (webkit) */
   .transcript::-webkit-scrollbar { width: 8px; }
@@ -338,13 +300,9 @@
   <!-- ============================== Header ============================== -->
   <header class="header">
     <div class="brand">
-      <div class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a10 10 0 0 1 20 0"/><path d="M12 4v6"/><circle cx="12" cy="4" r="1.5" fill="currentColor" stroke="none"/><path d="M8 9v3"/><path d="M16 9v3"/></svg>
-      </div>
-      <div class="brand-text">
-        <h1>NusaTel Care</h1>
-        <div class="brand-sub"><span class="status-dot connecting" id="statusDot" aria-hidden="true"></span><span id="statusText">Menghubungkan…</span></div>
-      </div>
+      <div class="brand-mark" aria-hidden="true">N</div>
+      <span class="brand-name">NusaTel Care</span>
+      <span class="status-line"><span class="status-dot connecting" id="statusDot" aria-hidden="true"></span><span id="statusText">Menghubungkan…</span></span>
     </div>
     <div class="header-actions">
       <button class="icon-btn" id="themeToggle" type="button" aria-label="Ganti tampilan terang/gelap" title="Ganti tampilan">
@@ -356,44 +314,36 @@
     </div>
   </header>
 
-  <!-- ============================== Trust strip ============================== -->
-  <div class="trust-strip" id="trustStrip" role="status">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5v6c0 5.2 3.4 9.4 8 11 4.6-1.6 8-5.8 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
-    <span><strong>Data pribadi Anda dilindungi otomatis</strong> <span class="trust-detail" id="trustDetail">— nama, alamat, NIK, dan kontak disamarkan sebelum diproses AI</span></span>
-  </div>
-
   <!-- ============================== Transcript ============================== -->
   <main class="transcript" id="transcript" role="log" aria-live="polite" aria-label="Riwayat percakapan">
-    <div class="welcome" id="welcome">
-      <div class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a10 10 0 0 1 20 0"/><path d="M12 4v6"/><circle cx="12" cy="4" r="1.5" fill="currentColor" stroke="none"/><path d="M8 9v3"/><path d="M16 9v3"/></svg>
-      </div>
-      <h2>Ada yang bisa kami bantu?</h2>
-      <p>Ceritakan kendala internet, tagihan, atau pertanyaan lain. Nama, alamat, dan data pribadi Anda otomatis disamarkan sebelum diproses oleh AI.</p>
-      <div class="suggestions">
-        <button class="suggestion-chip" type="button" data-prompt="Internet di rumah saya mati sejak pagi, mohon dibantu.">Internet saya mati</button>
-        <button class="suggestion-chip" type="button" data-prompt="Saya mau cek tagihan bulan ini.">Cek tagihan</button>
-        <button class="suggestion-chip" type="button" data-prompt="Saya ingin pindah alamat pemasangan.">Pindah alamat</button>
-        <button class="suggestion-chip" type="button" data-prompt="Lampu indikator modem saya menyala merah.">Lampu modem merah</button>
+    <div class="transcript-inner">
+      <div class="welcome" id="welcome">
+        <div class="brand-mark" aria-hidden="true">N</div>
+        <h2>Ada yang bisa dibantu?</h2>
+        <p>Ceritakan kendala internet, tagihan, atau pertanyaan lain. Nama, alamat, dan data pribadi Anda otomatis disamarkan sebelum diproses AI.</p>
+        <div class="suggestions">
+          <button class="suggestion-chip" type="button" data-prompt="Internet di rumah saya mati sejak pagi, mohon dibantu.">Internet saya mati</button>
+          <button class="suggestion-chip" type="button" data-prompt="Saya mau cek tagihan bulan ini.">Cek tagihan</button>
+          <button class="suggestion-chip" type="button" data-prompt="Saya ingin pindah alamat pemasangan.">Pindah alamat</button>
+          <button class="suggestion-chip" type="button" data-prompt="Lampu indikator modem saya menyala merah.">Lampu modem merah</button>
+        </div>
       </div>
     </div>
   </main>
 
   <!-- ============================== Composer ============================== -->
   <div class="composer-wrap">
-    <form class="composer" id="composerForm">
-      <label for="messageInput" class="sr-only">Tulis pesan</label>
-      <textarea id="messageInput" rows="1" placeholder="Tulis pesan…" maxlength="2000" autocomplete="off"></textarea>
-      <button class="send-btn" type="submit" id="sendBtn" aria-label="Kirim pesan" disabled>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-      </button>
-    </form>
-    <div class="composer-foot">
-      <span class="foot-trust">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-        Dilindungi guardrail PII (regex + NER)
-      </span>
-      <span>Enter untuk kirim · Shift+Enter baris baru</span>
+    <div class="composer-inner">
+      <form class="composer" id="composerForm">
+        <label for="messageInput" class="sr-only">Tulis pesan</label>
+        <textarea id="messageInput" rows="1" placeholder="Tulis pesan…" maxlength="2000" autocomplete="off"></textarea>
+        <button class="send-btn" type="submit" id="sendBtn" aria-label="Kirim pesan" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </form>
+      <div class="composer-foot">
+        <span class="trust-note" id="trustDetail">Data pribadi Anda disamarkan otomatis sebelum diproses AI</span>
+      </div>
     </div>
   </div>
 
@@ -439,13 +389,13 @@
   /* ============================== DOM refs ============================== */
   const $ = (id) => document.getElementById(id);
   const transcript = $('transcript');
+  const transcriptInner = document.querySelector('.transcript-inner');
   const welcome = $('welcome');
   const form = $('composerForm');
   const input = $('messageInput');
   const sendBtn = $('sendBtn');
   const statusDot = $('statusDot');
   const statusText = $('statusText');
-  const trustStrip = $('trustStrip');
   const trustDetail = $('trustDetail');
   const themeToggle = $('themeToggle');
   const themeIcon = $('themeIcon');
@@ -491,7 +441,7 @@
   }
 
   /* ============================== Rendering ============================== */
-  const AGENT_AVATAR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a10 10 0 0 1 20 0"/><path d="M12 4v6"/><circle cx="12" cy="4" r="1.5" fill="currentColor" stroke="none"/><path d="M8 9v3"/><path d="M16 9v3"/></svg>`;
+  const AGENT_AVATAR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="3.2"/></svg>`;
 
   function ensureWelcomeHidden() {
     if (welcome && welcome.parentNode) welcome.remove();
@@ -502,12 +452,23 @@
     const row = document.createElement('div');
     row.className = 'row user';
     row.innerHTML = `
-      <div class="avatar user" aria-hidden="true">Anda</div>
       <div class="bubble-col">
         <div class="bubble">${renderMarkdown(text)}</div>
         <div class="msg-meta">${timeNow()}</div>
       </div>`;
-    transcript.appendChild(row);
+    transcriptInner.appendChild(row);
+    scrollToBottom();
+    return row.querySelector('.bubble-col');
+  }
+
+  // Attaches server-verified proof directly to the message that triggered it — clearer
+  // than a strip elsewhere on the page, and only appears when something was actually found.
+  function markRedacted(userCol, items) {
+    if (!userCol || userCol.querySelector('.redact-note')) return;
+    const note = document.createElement('div');
+    note.className = 'redact-note';
+    note.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>${escapeHtml(items.join(', '))} disamarkan sebelum diproses AI</span>`;
+    userCol.appendChild(note);
     scrollToBottom();
   }
 
@@ -516,11 +477,11 @@
     const row = document.createElement('div');
     row.className = 'row agent';
     row.innerHTML = `
-      <div class="avatar agent" aria-hidden="true">${AGENT_AVATAR}</div>
+      <div class="avatar" aria-hidden="true">${AGENT_AVATAR}</div>
       <div class="bubble-col" data-role="agent-col">
         <div class="bubble" data-role="agent-bubble"><div class="typing" aria-label="Sedang mengetik"><span></span><span></span><span></span></div></div>
       </div>`;
-    transcript.appendChild(row);
+    transcriptInner.appendChild(row);
     scrollToBottom();
     return row.querySelector('[data-role="agent-col"]');
   }
@@ -528,9 +489,6 @@
   function addToolChip(col, toolName, state) {
     let chip = col.querySelector(`[data-tool="${toolName}"]`);
     const label = state === 'done' ? (TOOL_LABELS_DONE[toolName] || 'Selesai') : (TOOL_LABELS[toolName] || `Memproses ${toolName}…`);
-    const icon = state === 'done'
-      ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`
-      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
     if (!chip) {
       chip = document.createElement('div');
       chip.className = 'tool-chip spinning';
@@ -539,7 +497,7 @@
       col.insertBefore(chip, bubble || null);
     }
     chip.className = 'tool-chip' + (state === 'done' ? ' done' : ' spinning');
-    chip.innerHTML = `${icon}<span>${escapeHtml(label)}</span>`;
+    chip.innerHTML = `<span class="dot"></span><span>${escapeHtml(label)}</span>`;
     scrollToBottom();
   }
 
@@ -570,30 +528,32 @@
     ensureWelcomeHidden();
     const row = document.createElement('div');
     row.className = 'row system';
-    row.style.width = '100%';
     row.innerHTML = `
-      <div class="system-msg" style="width:100%">
+      <div class="system-msg">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
         <span>${escapeHtml(message)}</span>
         ${onRetry ? '<button type="button" class="retry-btn">Coba lagi</button>' : ''}
       </div>`;
     if (onRetry) row.querySelector('.retry-btn').addEventListener('click', onRetry);
-    transcript.appendChild(row);
+    transcriptInner.appendChild(row);
     scrollToBottom();
   }
 
-  const DEFAULT_TRUST_DETAIL = '— nama, alamat, NIK, dan kontak disamarkan sebelum diproses AI';
+  const DEFAULT_TRUST_DETAIL = 'Data pribadi Anda disamarkan otomatis sebelum diproses AI';
 
   function sessionTrustDetail() {
     if (sessionTotalRedactions === 0) return DEFAULT_TRUST_DETAIL;
-    return `— ${sessionTotalRedactions} data pribadi telah disamarkan pada sesi ini`;
+    return `${sessionTotalRedactions} data pribadi telah disamarkan pada sesi ini`;
   }
 
+  // Quiet, text-only acknowledgement — no colour-block banner. This is real
+  // evidence (server-verified counts from the guardrail), so it earns a brief
+  // moment of attention, not a permanent marketing strip.
   function flashTrust(detail) {
     trustDetail.textContent = detail;
-    trustStrip.classList.add('flash');
+    trustDetail.classList.add('flash');
     setTimeout(() => {
-      trustStrip.classList.remove('flash');
+      trustDetail.classList.remove('flash');
       trustDetail.textContent = sessionTrustDetail();
     }, 2200);
   }
@@ -641,8 +601,8 @@
     sessionId = null;
     sessionStorage.removeItem(STORAGE_SESSION);
     localStorage.removeItem(STORAGE_SESSION);
-    transcript.innerHTML = '';
-    transcript.appendChild(welcome);
+    transcriptInner.innerHTML = '';
+    transcriptInner.appendChild(welcome);
     sessionTotalRedactions = 0;
     trustDetail.textContent = DEFAULT_TRUST_DETAIL;
   }
@@ -655,7 +615,7 @@
     input.value = '';
     autoGrow();
 
-    addUserMessage(text);
+    const userCol = addUserMessage(text);
 
     let agentCol;
     try {
@@ -715,7 +675,8 @@
               const turnTotal = entries.reduce((sum, [, n]) => sum + n, 0);
               sessionTotalRedactions += turnTotal;
               const items = entries.map(([label, n]) => `${n} ${PII_LABELS[label] || label}`);
-              flashTrust(`— baru saja menyamarkan ${items.join(', ')} pada pesan ini`);
+              flashTrust(`Baru saja menyamarkan ${items.join(', ')} pada pesan ini`);
+              markRedacted(userCol, items);
             }
           }
 

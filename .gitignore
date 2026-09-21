@@ -1,5 +1,11 @@
 .env
-.claude/           # local dev launch config (Claude Code browser preview) — machine-specific paths
+
+# local dev launch config (Claude Code browser preview) — machine-specific paths
+.claude/
+
+# adk web/run local session database (runtime state, not source)
+.adk/
+
 __pycache__/
 *.pyc
 .pytest_cache/

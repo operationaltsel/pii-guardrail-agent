@@ -26,10 +26,14 @@ Untuk menunjuk ke API di alamat lain (mis. staging): buka
 
 ## Keputusan desain
 
-* **Design system**: dihasilkan lewat skill `ui-ux-pro-max` (query: *"customer support chat
-  telco enterprise trust"*) → Swiss/Minimalism, warna trust-blue (`#2563EB`), tipografi
-  Lexend + Source Sans 3 — cocok untuk produk enterprise/customer-support, mendukung
-  light & dark mode.
+* **Terasa seperti asisten AI sungguhan, bukan widget customer-support**: iterasi pertama
+  memakai kartu melayang (border-radius + shadow) di atas backdrop abu-abu, ikon gradien,
+  dan banner warna hijau permanen — pola umum "template produk AI" yang generik. Diubah ke
+  shell full-bleed tanpa kartu, satu warna aksen datar tanpa gradient, dan balasan asisten
+  **tanpa bubble** (teks polos + avatar kecil) — pola yang sama dipakai ChatGPT/Claude, dan
+  jadi sinyal visual terkuat bahwa ini asisten AI, bukan widget chat yang ditempel di situs.
+  Design system awal dihasilkan lewat skill `ui-ux-pro-max` (query: *"customer support chat
+  telco enterprise trust"*), lalu disederhanakan lebih jauh sesuai arahan di atas.
 * **Tanpa framework**: HTML/CSS/JS vanilla. Untuk satu halaman chat dengan kompleksitas
   state yang moderat, ini lebih ringan dan lebih mudah diaudit daripada menambah toolchain
   React/build step ke sebuah take-home project.
@@ -40,11 +44,19 @@ Untuk menunjuk ke API di alamat lain (mis. staging): buka
 * **Markdown minimal & aman**: balasan model (berisi `**bold**`, list bernomor) di-escape
   HTML dulu, baru diterapkan allow-list transform terbatas — tidak pernah menyisipkan HTML
   mentah dari model/user ke DOM.
-* **Bukti guardrail nyata, bukan dekoratif**: strip kepercayaan di header menampilkan
-  jumlah data pribadi yang baru disamarkan, diambil dari `actions.stateDelta.pii_report`
-  yang ditulis `before_model_callback` — nilai sungguhan dari server, bukan animasi kosong.
-  *(Catatan implementasi: kunci ini sengaja TIDAK diberi prefiks `temp:` — ADK menghapus
-  key berprefiks itu dari `state_delta` sebelum event di-stream ke client, lihat
+* **Bukti guardrail nyata, ditempel di tempat kejadian**: setiap pesan pengguna yang
+  memicu redaksi mendapat catatan kecil di bawahnya (mis. "1 telepon, 1 nama disamarkan
+  sebelum diproses AI"), diambil dari `actions.stateDelta.pii_report` yang ditulis
+  `before_model_callback` — nilai sungguhan dari server, bukan animasi kosong. Awalnya ini
+  hanya berupa strip banner di header; diubah setelah pengujian langsung menunjukkan mode
+  `pseudonymize` mengembalikan nilai asli pengguna ke balasan yang ditampilkan (by design,
+  supaya bot tetap bisa menyebut data pelanggan), sehingga pesan bot yang mengutip ulang
+  nomor/nama pengguna terlihat seperti "redaksi tidak terjadi" padahal Gemini tidak pernah
+  menerima nilai mentahnya (dibuktikan lewat reproduksi langsung ke API:
+  `pii_report.detected: {"PHONE": 1}`). Menempelkan buktinya tepat di pesan yang memicunya
+  jauh lebih sulit terlewat daripada banner sesaat di bagian lain halaman.
+  *(Catatan implementasi: kunci `pii_report` sengaja TIDAK diberi prefiks `temp:` — ADK
+  menghapus key berprefiks itu dari `state_delta` sebelum event di-stream ke client, lihat
   `base_session_service.py::_trim_temp_delta_state`. Ditemukan & diverifikasi langsung dari
   source ADK saat frontend ini diuji hidup.)*
 * **Indikator tool-call**: panggilan tool (`cek_tagihan`, `buat_tiket_pengaduan`, dst.)

@@ -1,0 +1,10 @@
+# Serving stack only — no torch/transformers here (that's ner_training/requirements.txt).
+# The service loads a pre-exported ONNX model, so the image stays small (~250 MB vs ~2 GB with torch).
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+pydantic==2.13.5
+onnxruntime==1.30.0
+tokenizers==0.23.2
+numpy==2.5.3
+prometheus_client==0.26.0
+python-dotenv==1.1.1

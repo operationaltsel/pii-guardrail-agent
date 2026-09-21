@@ -1,0 +1,9 @@
+{
+  "labels": [
+    "O",
+    "B-PERSON",
+    "I-PERSON",
+    "B-ADDRESS",
+    "I-ADDRESS"
+  ]
+}

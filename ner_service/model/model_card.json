@@ -1,0 +1,134 @@
+{
+  "model_version": "model",
+  "quantized_int8": true,
+  "export_sec": 4.6,
+  "fp32_mb": 42.6,
+  "pre_processed": false,
+  "int8_mb": 38.1,
+  "base_model": "indobert-lite-base-p1",
+  "params_millions": 11.1,
+  "best_dev_f1": 0.964,
+  "threshold": 0.5,
+  "threshold_selection": {
+    "criterion": "max F2 on dev with precision >= 0.9",
+    "dev_at_threshold": {
+      "threshold": 0.5,
+      "precision": 0.9761,
+      "recall": 0.9741,
+      "f1": 0.9751,
+      "f2": 0.9745,
+      "leak_rate": 0.0005,
+      "over_redaction": 0.0025
+    },
+    "sweep": [
+      {
+        "threshold": 0.1,
+        "precision": 0.9711,
+        "recall": 0.9711,
+        "f1": 0.9711,
+        "f2": 0.9711,
+        "leak_rate": 0.0005,
+        "over_redaction": 0.0034
+      },
+      {
+        "threshold": 0.15,
+        "precision": 0.9712,
+        "recall": 0.9721,
+        "f1": 0.9717,
+        "f2": 0.9719,
+        "leak_rate": 0.0005,
+        "over_redaction": 0.0033
+      },
+      {
+        "threshold": 0.2,
+        "precision": 0.9712,
+        "recall": 0.9721,
+        "f1": 0.9717,
+        "f2": 0.9719,
+        "leak_rate": 0.0005,
+        "over_redaction": 0.0031
+      },
+      {
+        "threshold": 0.25,
+        "precision": 0.9731,
+        "recall": 0.9731,
+        "f1": 0.9731,
+        "f2": 0.9731,
+        "leak_rate": 0.0005,
+        "over_redaction": 0.0029
+      },
+      {
+        "threshold": 0.3,
+        "precision": 0.9731,
+        "recall": 0.9731,
+        "f1": 0.9731,
+        "f2": 0.9731,
+        "leak_rate": 0.0005,
+        "over_redaction": 0.0029
+      },
+      {
+        "threshold": 0.35,
+        "precision": 0.9731,
+        "recall": 0.9731,
+        "f1": 0.9731,
+        "f2": 0.9731,
+        "leak_rate": 0.0005,
+        "over_redaction": 0.0029
+      },
+      {
+        "threshold": 0.4,
+        "precision": 0.9741,
+        "recall": 0.9741,
+        "f1": 0.9741,
+        "f2": 0.9741,
+        "leak_rate": 0.0005,
+        "over_redaction": 0.0029
+      },
+      {
+        "threshold": 0.45,
+        "precision": 0.9751,
+        "recall": 0.9741,
+        "f1": 0.9746,
+        "f2": 0.9743,
+        "leak_rate": 0.0005,
+        "over_redaction": 0.0027
+      },
+      {
+        "threshold": 0.5,
+        "precision": 0.9761,
+        "recall": 0.9741,
+        "f1": 0.9751,
+        "f2": 0.9745,
+        "leak_rate": 0.0005,
+        "over_redaction": 0.0025
+      },
+      {
+        "threshold": 0.55,
+        "precision": 0.9761,
+        "recall": 0.9741,
+        "f1": 0.9751,
+        "f2": 0.9745,
+        "leak_rate": 0.0006,
+        "over_redaction": 0.0024
+      },
+      {
+        "threshold": 0.6,
+        "precision": 0.9761,
+        "recall": 0.9741,
+        "f1": 0.9751,
+        "f2": 0.9745,
+        "leak_rate": 0.0006,
+        "over_redaction": 0.0024
+      },
+      {
+        "threshold": 0.7,
+        "precision": 0.976,
+        "recall": 0.9731,
+        "f1": 0.9746,
+        "f2": 0.9737,
+        "leak_rate": 0.0008,
+        "over_redaction": 0.0024
+      }
+    ]
+  }
+}

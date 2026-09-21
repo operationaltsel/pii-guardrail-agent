@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>NusaTel Care</title>
-<meta name="description" content="Asisten AI customer support NusaTel dengan perlindungan data pribadi otomatis.">
+<title>Nara</title>
+<meta name="description" content="Asisten AI customer support dengan perlindungan data pribadi otomatis.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -108,12 +108,6 @@
     flex-shrink: 0;
   }
   .brand { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
-  .brand-mark {
-    width: 26px; height: 26px; border-radius: 7px;
-    background: var(--color-accent); color: var(--color-on-accent);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    font-family: var(--font-body); font-weight: 700; font-size: 13px;
-  }
   .brand-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
   .status-line { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-muted-foreground); }
   .status-dot { width: 6px; height: 6px; border-radius: 999px; background: #2E9950; flex-shrink: 0; }
@@ -152,7 +146,6 @@
     margin: auto 0;
     padding: var(--space-8) 0;
   }
-  .welcome .brand-mark { width: 40px; height: 40px; border-radius: 10px; font-size: 18px; margin-bottom: var(--space-4); }
   .welcome h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 var(--space-2); }
   .welcome p { max-width: 480px; margin: 0 0 var(--space-5); font-size: 14.5px; line-height: 1.6; color: var(--color-muted-foreground); }
   .suggestions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
@@ -300,8 +293,7 @@
   <!-- ============================== Header ============================== -->
   <header class="header">
     <div class="brand">
-      <div class="brand-mark" aria-hidden="true">N</div>
-      <span class="brand-name">NusaTel Care</span>
+      <span class="brand-name">Nara</span>
       <span class="status-line"><span class="status-dot connecting" id="statusDot" aria-hidden="true"></span><span id="statusText">Menghubungkan…</span></span>
     </div>
     <div class="header-actions">
@@ -318,7 +310,6 @@
   <main class="transcript" id="transcript" role="log" aria-live="polite" aria-label="Riwayat percakapan">
     <div class="transcript-inner">
       <div class="welcome" id="welcome">
-        <div class="brand-mark" aria-hidden="true">N</div>
         <h2>Ada yang bisa dibantu?</h2>
         <p>Ceritakan kendala internet, tagihan, atau pertanyaan lain. Nama, alamat, dan data pribadi Anda otomatis disamarkan sebelum diproses AI.</p>
         <div class="suggestions">

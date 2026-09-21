@@ -1,0 +1,207 @@
+{
+  "name": "crf",
+  "model": "../models/crf",
+  "kind": "crf",
+  "backend": "crf",
+  "threshold": null,
+  "gold": {
+    "per_label": {
+      "PERSON": {
+        "precision": 0.8696,
+        "recall": 0.7895,
+        "f1": 0.8276,
+        "tp": 60,
+        "fp": 9,
+        "fn": 16
+      },
+      "ADDRESS": {
+        "precision": 0.9057,
+        "recall": 0.9231,
+        "f1": 0.9143,
+        "tp": 48,
+        "fp": 5,
+        "fn": 4
+      }
+    },
+    "micro": {
+      "precision": 0.8852,
+      "recall": 0.8438,
+      "f1": 0.864,
+      "tp": 108,
+      "fp": 14,
+      "fn": 20,
+      "f2": 0.8518
+    },
+    "lenient": {
+      "micro": {
+        "precision": 0.9754,
+        "recall": 0.9297,
+        "f1": 0.952,
+        "tp": 119,
+        "fp": 3,
+        "fn": 9
+      },
+      "per_label": {
+        "PERSON": {
+          "precision": 0.971,
+          "recall": 0.8816,
+          "f1": 0.9241,
+          "tp": 67,
+          "fp": 2,
+          "fn": 9
+        },
+        "ADDRESS": {
+          "precision": 0.9811,
+          "recall": 1.0,
+          "f1": 0.9905,
+          "tp": 52,
+          "fp": 1,
+          "fn": 0
+        }
+      }
+    },
+    "char": {
+      "leak_rate": 0.0197,
+      "over_redaction": 0.0309,
+      "clean_message_rate": 0.9407,
+      "pii_chars": 2544
+    },
+    "n_messages": 135
+  },
+  "gold_per_category": {
+    "formal": {
+      "n": 20,
+      "f1": 0.8571,
+      "recall": 0.84,
+      "precision": 0.875,
+      "leak_rate": 0.011,
+      "over_redaction": 0.0298
+    },
+    "informal": {
+      "n": 20,
+      "f1": 0.8,
+      "recall": 0.7273,
+      "precision": 0.8889,
+      "leak_rate": 0.069,
+      "over_redaction": 0.0265
+    },
+    "form": {
+      "n": 8,
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0
+    },
+    "multi_entity": {
+      "n": 7,
+      "f1": 0.7742,
+      "recall": 0.7059,
+      "precision": 0.8571,
+      "leak_rate": 0.0664,
+      "over_redaction": 0.1192
+    },
+    "hard_names": {
+      "n": 19,
+      "f1": 0.8649,
+      "recall": 0.8421,
+      "precision": 0.8889,
+      "leak_rate": 0.0253,
+      "over_redaction": 0.0277
+    },
+    "hard_address": {
+      "n": 16,
+      "f1": 0.875,
+      "recall": 0.875,
+      "precision": 0.875,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0962
+    },
+    "negative": {
+      "n": 30,
+      "f1": 0.0,
+      "recall": 1.0,
+      "precision": 0.0,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0161
+    },
+    "mixed_pii": {
+      "n": 15,
+      "f1": 0.963,
+      "recall": 1.0,
+      "precision": 0.9286,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0064
+    }
+  },
+  "dev": {
+    "per_label": {
+      "PERSON": {
+        "precision": 0.8777,
+        "recall": 0.7673,
+        "f1": 0.8188,
+        "tp": 366,
+        "fp": 51,
+        "fn": 111
+      },
+      "ADDRESS": {
+        "precision": 0.9289,
+        "recall": 0.9289,
+        "f1": 0.9289,
+        "tp": 405,
+        "fp": 31,
+        "fn": 31
+      }
+    },
+    "micro": {
+      "precision": 0.9039,
+      "recall": 0.8445,
+      "f1": 0.8732,
+      "tp": 771,
+      "fp": 82,
+      "fn": 142,
+      "f2": 0.8557
+    },
+    "lenient": {
+      "micro": {
+        "precision": 0.9778,
+        "recall": 0.9179,
+        "f1": 0.9469,
+        "tp": 838,
+        "fp": 19,
+        "fn": 75
+      },
+      "per_label": {
+        "PERSON": {
+          "precision": 0.9549,
+          "recall": 0.8428,
+          "f1": 0.8953,
+          "tp": 402,
+          "fp": 19,
+          "fn": 75
+        },
+        "ADDRESS": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 436,
+          "fp": 0,
+          "fn": 0
+        }
+      }
+    },
+    "char": {
+      "leak_rate": 0.0272,
+      "over_redaction": 0.0247,
+      "clean_message_rate": 0.9125,
+      "pii_chars": 26523
+    },
+    "n_messages": 800
+  },
+  "latency_ms_single_message": {
+    "mean": 0.83,
+    "p50": 0.7,
+    "p95": 1.8,
+    "p99": 3.14
+  }
+}

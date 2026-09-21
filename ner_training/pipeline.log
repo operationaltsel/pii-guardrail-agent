@@ -1,0 +1,169 @@
+[14:03:48] == tune threshold on dev (lite, served model) ==
+{"threshold": 0.1, "precision": 0.9711, "recall": 0.9711, "f1": 0.9711, "f2": 0.9711, "leak_rate": 0.0005, "over_redaction": 0.0034}
+{"threshold": 0.15, "precision": 0.9712, "recall": 0.9721, "f1": 0.9717, "f2": 0.9719, "leak_rate": 0.0005, "over_redaction": 0.0033}
+{"threshold": 0.2, "precision": 0.9712, "recall": 0.9721, "f1": 0.9717, "f2": 0.9719, "leak_rate": 0.0005, "over_redaction": 0.0031}
+{"threshold": 0.25, "precision": 0.9731, "recall": 0.9731, "f1": 0.9731, "f2": 0.9731, "leak_rate": 0.0005, "over_redaction": 0.0029}
+{"threshold": 0.3, "precision": 0.9731, "recall": 0.9731, "f1": 0.9731, "f2": 0.9731, "leak_rate": 0.0005, "over_redaction": 0.0029}
+{"threshold": 0.35, "precision": 0.9731, "recall": 0.9731, "f1": 0.9731, "f2": 0.9731, "leak_rate": 0.0005, "over_redaction": 0.0029}
+{"threshold": 0.4, "precision": 0.9741, "recall": 0.9741, "f1": 0.9741, "f2": 0.9741, "leak_rate": 0.0005, "over_redaction": 0.0029}
+{"threshold": 0.45, "precision": 0.9751, "recall": 0.9741, "f1": 0.9746, "f2": 0.9743, "leak_rate": 0.0005, "over_redaction": 0.0027}
+{"threshold": 0.5, "precision": 0.9761, "recall": 0.9741, "f1": 0.9751, "f2": 0.9745, "leak_rate": 0.0005, "over_redaction": 0.0025}
+{"threshold": 0.55, "precision": 0.9761, "recall": 0.9741, "f1": 0.9751, "f2": 0.9745, "leak_rate": 0.0006, "over_redaction": 0.0024}
+{"threshold": 0.6, "precision": 0.9761, "recall": 0.9741, "f1": 0.9751, "f2": 0.9745, "leak_rate": 0.0006, "over_redaction": 0.0024}
+{"threshold": 0.7, "precision": 0.976, "recall": 0.9731, "f1": 0.9746, "f2": 0.9737, "leak_rate": 0.0008, "over_redaction": 0.0024}
+
+selected threshold=0.5 (dev F2=0.9745, recall=0.9741, precision=0.9761, leak=0.0005)
+[14:16:55] == evaluate served model (dev + gold) ==
+== indobert-lite
+gold strict  P=0.984 R=0.984 F1=0.984 F2=0.984
+   PERSON   P=0.987 R=0.987 F1=0.987  lenient R=0.987
+   ADDRESS  P=0.981 R=0.981 F1=0.981  lenient R=1.000
+gold lenient F1=0.992 | leak=0.0020 over-redaction=0.0033 clean-msg=0.993
+dev  strict  F1=0.976 leak=0.0005
+per category: {"formal": [1.0, 0.0], "informal": [1.0, 0.0], "form": [1.0, 0.0], "multi_entity": [1.0, 0.0], "hard_names": [0.973, 0.0253], "hard_address": [0.9375, 0.0], "negative": [1.0, 0.0], "mixed_pii": [0.963, 0.0]}
+latency ms: {'mean': 28.22, 'p50': 24.74, 'p95': 52.6, 'p99': 76.68}
+[14:17:34] == train IndoBERT-base (comparison) ==
+[15:28:00] base training finished: Binary file ../models/train_base.log matches
+[15:28:00] == export base -> models/indobert-base-onnx-int8 (comparison only, not served) ==
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights:  14%|█▎        | 27/199 [00:00<00:00, 204.23it/s]Loading weights:  24%|██▍       | 48/199 [00:00<00:01, 145.41it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 509.75it/s]
+warning: quant_pre_process failed (Incomplete symbolic shape inference); quantizing without it
+WARNING:root:Please consider to run pre-processing before quantization. Refer to example: https://github.com/microsoft/onnxruntime-inference-examples/blob/main/quantization/image_classification/cpu/ReadMe.md 
+{
+  "model_version": "indobert-base-onnx-int8",
+  "quantized_int8": true,
+  "export_sec": 3.9,
+  "fp32_mb": 472.7,
+  "pre_processed": false,
+  "int8_mb": 119.3,
+  "base_model": "indobert-base-p1",
+  "params_millions": 123.85,
+  "best_dev_f1": 0.9863
+}
+{"threshold": 0.1, "precision": 0.9459, "recall": 0.9751, "f1": 0.9603, "f2": 0.9691, "leak_rate": 0.0001, "over_redaction": 0.0079}
+{"threshold": 0.15, "precision": 0.9507, "recall": 0.9781, "f1": 0.9642, "f2": 0.9725, "leak_rate": 0.0003, "over_redaction": 0.0071}
+{"threshold": 0.2, "precision": 0.9545, "recall": 0.9801, "f1": 0.9671, "f2": 0.9749, "leak_rate": 0.0003, "over_redaction": 0.0067}
+{"threshold": 0.25, "precision": 0.9592, "recall": 0.9831, "f1": 0.971, "f2": 0.9782, "leak_rate": 0.0003, "over_redaction": 0.0057}
+{"threshold": 0.3, "precision": 0.963, "recall": 0.9841, "f1": 0.9734, "f2": 0.9798, "leak_rate": 0.0003, "over_redaction": 0.0053}
+{"threshold": 0.35, "precision": 0.9678, "recall": 0.9861, "f1": 0.9768, "f2": 0.9824, "leak_rate": 0.0003, "over_redaction": 0.0046}
+{"threshold": 0.4, "precision": 0.9697, "recall": 0.9871, "f1": 0.9783, "f2": 0.9836, "leak_rate": 0.0003, "over_redaction": 0.0042}
+{"threshold": 0.45, "precision": 0.9717, "recall": 0.9891, "f1": 0.9803, "f2": 0.9856, "leak_rate": 0.0003, "over_redaction": 0.0039}
+{"threshold": 0.5, "precision": 0.9736, "recall": 0.9891, "f1": 0.9812, "f2": 0.986, "leak_rate": 0.0003, "over_redaction": 0.0037}
+{"threshold": 0.55, "precision": 0.9735, "recall": 0.9871, "f1": 0.9802, "f2": 0.9843, "leak_rate": 0.0006, "over_redaction": 0.0035}
+{"threshold": 0.6, "precision": 0.9745, "recall": 0.9871, "f1": 0.9807, "f2": 0.9846, "leak_rate": 0.0008, "over_redaction": 0.0033}
+{"threshold": 0.7, "precision": 0.9764, "recall": 0.9891, "f1": 0.9827, "f2": 0.9865, "leak_rate": 0.0008, "over_redaction": 0.003}
+
+selected threshold=0.7 (dev F2=0.9865, recall=0.9891, precision=0.9764, leak=0.0008)
+== indobert-base
+gold strict  P=0.977 R=0.977 F1=0.977 F2=0.977
+   PERSON   P=0.974 R=0.974 F1=0.974  lenient R=0.987
+   ADDRESS  P=0.981 R=0.981 F1=0.981  lenient R=1.000
+gold lenient F1=0.992 | leak=0.0020 over-redaction=0.0060 clean-msg=0.993
+dev  strict  F1=0.984 leak=0.0008
+per category: {"formal": [1.0, 0.0], "informal": [0.9545, 0.0], "form": [1.0, 0.0], "multi_entity": [1.0, 0.0], "hard_names": [0.973, 0.0253], "hard_address": [0.9375, 0.0], "negative": [1.0, 0.0], "mixed_pii": [0.963, 0.0]}
+latency ms: {'mean': 13.96, 'p50': 12.07, 'p95': 26.85, 'p99': 34.39}
+[15:35:36] == benchmark served model (lite) ==
+{
+  "model": "../ner_service/model",
+  "backend": "onnx",
+  "onnxruntime_threads": 2,
+  "cpu_logical_cores": 16,
+  "cpu_physical_cores": 12,
+  "model_load": {
+    "seconds": 0.632,
+    "cold_start_ms": 25.0
+  },
+  "memory_mb": {
+    "before_load": 32.1,
+    "after_load": 109.7,
+    "peak_during_load_test": 115.5,
+    "model_footprint": 77.6
+  },
+  "cpu_percent_during_load_test": {
+    "mean": 193.8,
+    "max": 216.1,
+    "note": "% of one core; 2 ORT intra-op threads requested"
+  },
+  "single_message_latency_ms": {
+    "n": 200,
+    "mean": 37.19,
+    "min": 17.96,
+    "p50": 32.26,
+    "p90": 56.24,
+    "p95": 62.09,
+    "p99": 104.82,
+    "max": 140.64
+  },
+  "batch_throughput": {
+    "1": {
+      "messages_per_sec": 44.0,
+      "ms_per_batch": 22.74
+    },
+    "8": {
+      "messages_per_sec": 22.1,
+      "ms_per_batch": 361.42
+    },
+    "32": {
+      "messages_per_sec": 13.0,
+      "ms_per_batch": 2456.83
+    }
+  }
+}
+[15:36:13] == benchmark base (comparison) ==
+{
+  "model": "../ner_training/models/indobert-base-onnx-int8",
+  "backend": "onnx",
+  "onnxruntime_threads": 2,
+  "cpu_logical_cores": 16,
+  "cpu_physical_cores": 12,
+  "model_load": {
+    "seconds": 0.585,
+    "cold_start_ms": 11.9
+  },
+  "memory_mb": {
+    "before_load": 32.3,
+    "after_load": 194.8,
+    "peak_during_load_test": 200.5,
+    "model_footprint": 162.4
+  },
+  "cpu_percent_during_load_test": {
+    "mean": 192.5,
+    "max": 200.5,
+    "note": "% of one core; 2 ORT intra-op threads requested"
+  },
+  "single_message_latency_ms": {
+    "n": 200,
+    "mean": 18.66,
+    "min": 8.34,
+    "p50": 15.51,
+    "p90": 29.81,
+    "p95": 42.53,
+    "p99": 76.54,
+    "max": 82.84
+  },
+  "batch_throughput": {
+    "1": {
+      "messages_per_sec": 67.1,
+      "ms_per_batch": 14.91
+    },
+    "8": {
+      "messages_per_sec": 38.3,
+      "ms_per_batch": 209.05
+    },
+    "32": {
+      "messages_per_sec": 22.5,
+      "ms_per_batch": 1423.7
+    }
+  }
+}
+[15:36:35] == summary ==
+| Model | Backend | Dev F1 | Gold F1 (strict) | Gold F1 (lenient) | Recall | Leak rate | Over-redaction | PERSON F1 | ADDRESS F1 | p50 ms | p95 ms |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| crf | crf | 0.8732 | 0.864 | 0.952 | 0.8438 | 0.0197 | 0.0309 | 0.8276 | 0.9143 | 0.7 | 1.8 |
+| indobert-base | onnx | 0.9842 | 0.9766 | 0.9922 | 0.9766 | 0.002 | 0.006 | 0.9737 | 0.9808 | 12.07 | 26.85 |
+| indobert-lite | onnx | 0.9756 | 0.9844 | 0.9922 | 0.9844 | 0.002 | 0.0033 | 0.9868 | 0.9808 | 24.74 | 52.6 |
+
+| Benchmark | Backend | Model load (s) | RAM footprint (MB) | Peak RAM (MB) | p50 (ms) | p95 (ms) | p99 (ms) |
+|---|---|---|---|---|---|---|---|
+| ner_benchmark_base | onnx | 0.585 | 162.4 | 200.5 | 15.51 | 42.53 | 76.54 |
+| ner_benchmark_lite | onnx | 0.632 | 77.6 | 115.5 | 32.26 | 62.09 | 104.82 |
+[15:36:35] PIPELINE COMPLETE

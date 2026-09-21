@@ -19,3 +19,8 @@ __pycache__/
 ner_training/pretrained/
 ner_training/models/
 ner_training/data/generated/
+
+# onnxruntime shape-inference / quantization leaves temp external-data files in cwd
+# on failure (see export_onnx.py's fallback path) — never useful, sometimes huge
+sym_shape_infer_temp.onnx
+*.data

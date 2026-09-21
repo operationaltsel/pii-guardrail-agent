@@ -1,0 +1,104 @@
+# Nama perumahan / kompleks / apartemen / gedung (tanpa prefiks).
+Citra Garden
+Taman Anggrek
+Bukit Indah
+Villa Melati Mas
+Graha Raya
+Puri Indah
+Kota Wisata
+Legenda Wisata
+Citra Raya
+Bintaro Jaya
+Metland Menteng
+Harapan Indah
+Grand Wisata
+Cibubur Country
+Sentul City
+Bogor Nirwana Residence
+Pesona Khayangan
+Taman Galaxy
+Villa Nusa Indah
+Pondok Gede Permai
+Taman Harapan Baru
+Griya Loka
+Permata Hijau
+Kelapa Gading Permai
+Sunter Agung
+Pluit Karang
+Muara Karang
+Pantai Indah Kapuk
+Casa Grande
+Mediterania Garden
+Thamrin Residence
+Gading Nias
+Bassura City
+Sudirman Park
+Taman Rasuna
+Mutiara Bintaro
+Villa Dago
+Setraduta
+Batununggal Indah
+Antapani Permai
+Margahayu Raya
+Bumi Asri
+Griya Permata
+Pesona Depok
+Villa Pamulang
+Reni Jaya
+Pondok Hijau
+Duta Garden
+Modernland
+Lippo Karawaci
+Taman Kopo Indah
+Bumi Panyileukan
+Pakuwon City
+Citraland
+Graha Famili
+Wisata Bukit Mas
+Taman Pinang Indah
+Deltasari
+Pondok Tjandra
+Araya
+Permata Jingga
+Villa Bukit Tidar
+Jogja Regency
+Merapi View
+Candi Gebang Permai
+Puri Anjasmoro
+Graha Padma
+Bukit Semarang Baru
+Tamansari Majapahit
+Solo Baru
+Fajar Indah
+Palem Semi
+Menara Jakarta
+Wisma Nusantara
+Graha Niaga
+Menara Mulia
+Plaza Semanggi
+Gedung Cyber
+Menara Kuningan
+Wisma Barito
+Graha CIMB
+Soho Residence
+Signature Park
+Green Pramuka
+Kalibata Residence
+Mediterania Palace
+Paragon Village
+Tamansari Semanggi
+Sentra Timur
+Gunung Putri Indah
+Villa Mutiara Gading
+Puri Cendana
+Bekasi Timur Regency
+Taman Century
+Griya Bukit Jaya
+Pondok Ungu Permai
+Taman Wisma Asri
+Vila Gading Harapan
+Perwira Asri
+Citra Indah
+Kemang Pratama
+Kranggan Permai
+Jatibening Estate

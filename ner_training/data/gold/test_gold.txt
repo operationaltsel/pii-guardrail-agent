@@ -1,0 +1,155 @@
+# Gold test set — ditulis manual, TIDAK dihasilkan dari template generator.
+# Format: tag inline <PERSON>..</PERSON>, <ADDRESS>..</ADDRESS> (dievaluasi oleh NER),
+#         serta <NIK>, <EMAIL>, <PHONE> (dievaluasi oleh guardrail end-to-end / regex).
+# "\n" literal = baris baru dalam satu pesan chat. Pedoman: ../../ANNOTATION_GUIDELINE.md
+
+# category: formal
+Nama saya <PERSON>Budi Santoso</PERSON> dan tinggal di <ADDRESS>Jalan Sudirman Jakarta</ADDRESS>
+Halo, saya <PERSON>Dewi Anggraini</PERSON>. Internet di rumah saya di <ADDRESS>Jl. Cempaka Putih Raya No. 17, Jakarta Pusat</ADDRESS> mati sejak kemarin malam.
+Mohon bantuannya, tagihan atas nama <PERSON>Hendra Gunawan</PERSON> bulan ini tidak sesuai.
+Saya ingin mengubah alamat pemasangan ke <ADDRESS>Perumahan Taman Sari Blok F3 No. 8, Sidoarjo</ADDRESS>.
+Selamat siang, perkenalkan saya <PERSON>Rahmawati Putri</PERSON> dari <ADDRESS>Jl. Ahmad Yani No. 45, Kelurahan Sukamaju, Kecamatan Cibeunying Kidul, Kota Bandung</ADDRESS>.
+Paket atas nama Ibu <PERSON>Sri Wahyuni</PERSON> seharusnya dikirim ke <ADDRESS>Jl. Kaliurang Km 7,5 Sleman, Yogyakarta</ADDRESS>.
+Teknisi atas nama <PERSON>Agus Setiawan</PERSON> belum datang ke rumah saya.
+Dengan hormat, saya <PERSON>Yohanes Paulus Kewa</PERSON> ingin mengajukan keluhan terkait gangguan jaringan.
+Tolong kirimkan invoice ke alamat kantor saya di <ADDRESS>Gedung Graha Mandiri Lt. 5, Jl. Imam Bonjol No. 61, Menteng, Jakarta Pusat 10310</ADDRESS>.
+Saya <PERSON>Fransiska Maria Lestari</PERSON>, pelanggan sejak 2019, ingin menanyakan promo perpanjangan kontrak.
+Mohon dicek, pemasangan baru di <ADDRESS>Jl. Diponegoro No. 88 RT 02/RW 04, Denpasar</ADDRESS> sudah dijadwalkan atau belum?
+Bapak <PERSON>Suryadi</PERSON> sudah membayar tagihan tetapi statusnya masih belum lunas.
+Nama pemilik akun adalah <PERSON>Anindya Kusumawardhani</PERSON>.
+Saya mau komplain, modem yang dikirim ke <ADDRESS>Komplek Pondok Indah Blok B No. 12, Jakarta Selatan</ADDRESS> ternyata rusak.
+Terlampir bukti transfer atas nama <PERSON>Kurniawan Adi Saputra</PERSON> sebesar Rp250.000.
+Mohon agar teknisi datang ke <ADDRESS>Jl. Pattimura No. 14, Ambon</ADDRESS> sebelum pukul 12.00.
+Saya <PERSON>Christian Rumengan</PERSON> dari Manado ingin berhenti berlangganan.
+Pemilik rumah adalah Ibu Hj. <PERSON>Aminah</PERSON>, bukan saya.
+Surat pemberitahuan dikirim ke <ADDRESS>Jl. Jend. Sudirman No. 1, Pekanbaru, Riau 28111</ADDRESS>.
+Selamat sore. Saya <PERSON>Hendro Wibisono</PERSON>, pelanggan NusaTel sejak 2015. Sejak pindah ke <ADDRESS>Jl. Raya Darmo Indah Barat No. 7, Surabaya</ADDRESS>, koneksi sering putus terutama malam hari. Sudah tiga kali saya lapor lewat aplikasi tetapi belum ada teknisi yang datang. Mohon segera ditindaklanjuti. Terima kasih.
+
+# category: informal
+halo min, sy <PERSON>rizky ramadhan</PERSON>, wifi dirumah mati terus nih
+kak paketnya kirim ke <ADDRESS>jl melati no 5 bekasi</ADDRESS> ya
+min tolong cek tagihan an <PERSON>joko susilo</PERSON>, kok mahal bgt
+sy tinggal di <ADDRESS>gg kenari 3 rt 5 rw 2 depok</ADDRESS>, sinyal jelek bgt dr kmrn
+ini atas nama <PERSON>putri ayu</PERSON> ya kak, tolong dibantu
+gan internet lemot parah, alamat <ADDRESS>jln. pahlawan 21 semarang</ADDRESS>
+aku <PERSON>nadia</PERSON>, mau tanya kenapa kuota cepet abis
+bang teknisi namanya <PERSON>ujang</PERSON> blm dtg2 juga nih
+udh transfer tp blm masuk, nama rekening <PERSON>Wahyu Hidayat</PERSON>
+tolong ganti alamat sy jd <ADDRESS>perum griya asri blok c2 no 15 tangerang</ADDRESS>
+halo, sy mau pasang indihome di <ADDRESS>jl. raya bogor km 30 cimanggis</ADDRESS> bisa ga?
+mas <PERSON>dimas</PERSON> td udh telp katanya besok dtg
+kak aku mau ganti nomor tp kartu atas nama suami, <PERSON>arif budiman</PERSON>
+rumah sy di <ADDRESS>dusun krajan rt 01 rw 03 desa sumberejo, banyuwangi</ADDRESS> blm ada jaringan fiber?
+wkwk iya min namaku <PERSON>ayu lestari</PERSON>
+min <PERSON>tiara</PERSON> nih, kok sinyal 4g ilang ya
+sy <PERSON>eko</PERSON>, rumah di <ADDRESS>jl sultan agung 7 rt4/rw2 klaten</ADDRESS>
+td kurirnya pak <PERSON>slamet</PERSON> blg alamat ga ketemu
+dikirim ke rumah mertua aja kak, <ADDRESS>jalan cendrawasih no 40 makassar</ADDRESS>
+halo aku <PERSON>Gilang</PERSON> anaknya Bu <PERSON>Ratna</PERSON>, mau tanya tagihan
+
+# category: form
+Nama: <PERSON>Andi Pratama</PERSON>\nAlamat: <ADDRESS>Jl. Veteran No. 10, Malang</ADDRESS>\nNo HP: <PHONE>081234567890</PHONE>
+Nama lengkap : <PERSON>Siti Rahmah</PERSON>\nNIK : <NIK>3578014107900002</NIK>\nAlamat : <ADDRESS>Jl. Darmo Permai III No. 22, Surabaya</ADDRESS>
+nama: <PERSON>bagus wicaksono</PERSON>\nalamat: <ADDRESS>jl. gajah mada 12 pontianak</ADDRESS>\nemail: <EMAIL>bagus.w@gmail.com</EMAIL>
+Data pelanggan -> Nama: <PERSON>Lukas Tanujaya</PERSON>, Alamat: <ADDRESS>Apartemen Green Bay Tower C Lt. 18 Unit 1823, Pluit, Jakarta Utara</ADDRESS>
+Penerima: <PERSON>Rina Marlina</PERSON>\nAlamat kirim: <ADDRESS>Jl. Pemuda No. 3 RT 04/RW 01, Kel. Rawamangun, Jakarta Timur 13220</ADDRESS>\nTelp: <PHONE>0813-9876-5432</PHONE>
+Nama : <PERSON>I Ketut Sudarsana</PERSON>\nAlamat : <ADDRESS>Br. Dinas Kaja, Desa Batubulan, Gianyar, Bali</ADDRESS>
+NAMA: <PERSON>MUHAMMAD FAISAL</PERSON>\nALAMAT: <ADDRESS>JL. SISINGAMANGARAJA NO. 101 MEDAN</ADDRESS>
+Pemohon: <PERSON>Theresia Wulandari</PERSON> | Lokasi pemasangan: <ADDRESS>Cluster Aster Blok D5 No. 3, Summarecon Bekasi</ADDRESS>
+
+# category: multi_entity
+Saya <PERSON>Agung Prasetyo</PERSON>, mau daftarkan istri saya <PERSON>Lina Marlina</PERSON> sebagai pengguna tambahan.
+Paket untuk <PERSON>Bambang</PERSON> dikirim ke <ADDRESS>Jl. Merdeka No. 1 Bogor</ADDRESS>, sedangkan paket untuk <PERSON>Yanti</PERSON> ke <ADDRESS>Jl. Pajajaran No. 20 Bogor</ADDRESS>.
+Anak saya <PERSON>Kevin</PERSON> dan <PERSON>Jessica</PERSON> sering pakai hotspot, apakah bisa tambah kuota keluarga?
+Kemarin saya pindah dari <ADDRESS>Jl. Kenanga No. 4 Solo</ADDRESS> ke <ADDRESS>Jl. Slamet Riyadi No. 210 Solo</ADDRESS>, tolong pindahkan layanannya.
+Tolong sampaikan ke teknisi <PERSON>Hadi</PERSON> bahwa ibu saya <PERSON>Suminah</PERSON> ada di rumah setelah jam 3.
+<PERSON>Reza Aditya</PERSON> dan <PERSON>Clara Wijaya</PERSON> tinggal di <ADDRESS>Jl. Kemang Raya No. 9, Jakarta Selatan</ADDRESS>, keduanya pelanggan pascabayar.
+Saya mewakili ayah saya, Bapak <PERSON>Sutrisno Hadiwijoyo</PERSON>, yang beralamat di <ADDRESS>Jl. Pandanaran No. 55, Semarang</ADDRESS>.
+
+# category: hard_names
+Nama saya <PERSON>Bunga Citra</PERSON>, saya mau kirim bunga untuk ulang tahun ibu.
+Halo, saya <PERSON>Indah</PERSON>. Pelayanannya kurang memuaskan.
+Pagi min, <PERSON>Fajar</PERSON> di sini, sinyal hilang sejak fajar tadi.
+Tagihan a.n. <PERSON>Jaya Kusuma</PERSON> kok belum terbit ya?
+Saya <PERSON>Ni Made Ayu Kartika</PERSON>, pelanggan dari Denpasar.
+Mohon bantuan untuk pelanggan atas nama <PERSON>Marulitua Hutapea</PERSON>.
+Ini <PERSON>Oey Liang Hwa</PERSON>, saya ingin menutup langganan.
+Saya <PERSON>Wa Ode Nurhaya</PERSON> dari Baubau, jaringan di sini sering putus.
+perkenalkan saya <PERSON>Ngurah Rai Putra</PERSON>
+Yang daftar kemarin <PERSON>Sulastri</PERSON>, bukan saya.
+Kurirnya bernama <PERSON>Paijo</PERSON>, dia bilang alamat tidak ditemukan.
+Saya <PERSON>Abdurrahman Al-Habsyi</PERSON>, mau upgrade paket.
+Nama saya <PERSON>Maria Goreti Da Costa</PERSON>, dari Kupang.
+Selamat malam, saya <PERSON>Intan Permata Sari</PERSON>.
+hai kak, aku <PERSON>surya</PERSON>, mau tanya promo
+Anak saya namanya <PERSON>Rizki</PERSON>, semoga rezeki kita lancar ya min.
+Saya <PERSON>Mutiara</PERSON>, mau cek status pengaduan kemarin.
+Nomor ini dipakai oleh <PERSON>Yosef Wenda</PERSON> di Jayapura.
+Tolong hubungi adik saya <PERSON>Cahya</PERSON> jika saya tidak bisa diangkat.
+
+# category: hard_address
+Kirim ke <ADDRESS>Jl. Asia Afrika 8, Bandung</ADDRESS> ya.
+alamatnya <ADDRESS>RT 07 RW 03 Kelurahan Pasir Gunung Selatan, Depok</ADDRESS>
+Saya di <ADDRESS>Apartemen Kalibata City Tower Flamboyan Lt. 11 No. 07</ADDRESS>, sinyal indoor lemah.
+Pengiriman ke <ADDRESS>Desa Ngadisari, Kecamatan Sukapura, Probolinggo</ADDRESS> apakah bisa?
+Rumah saya <ADDRESS>Jl. H. Agus Salim No. 3B, Padang</ADDRESS>.
+Tolong pasang di <ADDRESS>Ruko Golden Boulevard Blok K No. 21, BSD, Tangerang Selatan</ADDRESS>.
+Lokasi gangguan: <ADDRESS>Gang Masjid No. 2, Kelurahan Kampung Melayu, Jakarta Timur</ADDRESS>
+saya tinggal di <ADDRESS>perumahan bumi serpong damai sektor 1.2 blok ab no 10</ADDRESS>
+alamat baru: <ADDRESS>Jl. Letjen S. Parman Kav. 28, Slipi, Jakarta Barat 11470</ADDRESS>
+Tinggal di <ADDRESS>Lr. Harapan No. 12, Palembang</ADDRESS>
+Kantor saya di <ADDRESS>Jalan Jenderal Gatot Subroto Kavling 52-53, Jakarta</ADDRESS>.
+rumahnya di <ADDRESS>gang h. mali no 14, kebon jeruk</ADDRESS>
+Ke <ADDRESS>Jl. Soekarno Hatta No. 590</ADDRESS> saja, dekat kantor pos.
+Mohon kirim ke <ADDRESS>Jl.Kartini No.9 Kudus</ADDRESS>
+saya di <ADDRESS>jl.abc</ADDRESS>, mau lapor gangguan
+Kirim ke kantor desa, <ADDRESS>Desa Tanjung Sari RT 002 RW 001, Kab. Lampung Selatan</ADDRESS>.
+
+# category: negative
+Saya mau jalan-jalan ke Bali bulan depan, apakah roaming aktif otomatis?
+Paket saya masih di jalan sejak tiga hari lalu.
+Apakah ada gangguan jaringan di Surabaya hari ini?
+Bagaimana cara mengaktifkan paket internet bulanan?
+Jalan tol macet parah, sinyal juga hilang terus.
+Indah sekali pelayanan kalian hari ini, terima kasih!
+Saya ingin mengirim bunga lewat aplikasi, tapi pembayaran gagal.
+Kapan promo IndiHome berakhir?
+Kenapa kuota saya habis padahal baru isi kemarin?
+Tolong bantu reset password akun saya.
+Mohon info cabang terdekat di Jakarta Selatan.
+Semoga rezeki lancar dan jaya selalu untuk tim CS.
+Harga paket 50GB berapa ya?
+Fajar tadi internet sempat mati sekitar 30 menit.
+Saya sedang dalam perjalanan ke Bandung, apakah sinyal di tol Cipularang bagus?
+Tagihan bulan Mei kok naik jadi Rp350.000?
+Aplikasi MyNusaTel error terus sejak update.
+Apa bedanya paket Surya dan paket Bintang?
+Terima kasih kak, masalahnya sudah beres.
+Bisa minta nomor telepon kantor pusat?
+jalan keluarnya gimana min? modem udah direstart tetep ga bisa
+saya lagi di jalan, nanti saya telepon balik ya
+Pembayaran lewat Mandiri atau BCA bisa?
+Mau tanya, di Kota Malang sudah ada jaringan 5G?
+Kenapa jalan di depan rumah digali, apakah ada pemasangan kabel fiber?
+Saya pelanggan dari Medan, apakah ada promo khusus?
+Wah mantap, pelayanan cepat dan ramah!
+Tolong kirim ke alamat yang sama seperti bulan lalu.
+Apakah bisa bayar di Indomaret atau Alfamart?
+Saya mau upgrade ke paket 100 Mbps.
+
+# category: mixed_pii
+Saya <PERSON>Dian Puspitasari</PERSON>, NIK <NIK>3171234501900001</NIK>, email <EMAIL>dian.puspita@yahoo.co.id</EMAIL>.
+Hubungi saya di <PHONE>+62 812-3456-7890</PHONE> atau email <EMAIL>budi_k@outlook.com</EMAIL>, nama saya <PERSON>Budi Kurniawan</PERSON>.
+nik sy <NIK>3201011203850004</NIK> a.n <PERSON>ahmad fauzi</PERSON>, alamat <ADDRESS>kp. cibodas rt 02 rw 05 bogor</ADDRESS>
+Tolong kirim kode OTP ke <PHONE>085712345678</PHONE>, akun atas nama <PERSON>Yulia Rahman</PERSON>.
+Email saya <EMAIL>rahmat.hidayat88@gmail.com</EMAIL>, nama <PERSON>Rahmat Hidayat</PERSON>, tinggal di <ADDRESS>Jl. Gatot Subroto No. 12 Medan</ADDRESS>.
+saya <PERSON>tono</PERSON> no hp <PHONE>0821 1234 5678</PHONE> tlg ditelp balik
+Data untuk verifikasi: <PERSON>Evi Susanti</PERSON>, <NIK>6471054208920003</NIK>, <PHONE>(0542) 123456</PHONE>
+Nomor WA <PHONE>6281399887766</PHONE>, atas nama <PERSON>Sinta Dewi</PERSON>
+Kirim tagihan ke <EMAIL>finance@ptmajujaya.co.id</EMAIL>, PIC <PERSON>Taufik Hidayatullah</PERSON>.
+Saya <PERSON>Lestari Handayani</PERSON>, KTP <NIK>3374116512880001</NIK>, domisili <ADDRESS>Jl. Majapahit No. 300, Semarang</ADDRESS>, HP <PHONE>0896-1122-3344</PHONE>.
+email aku <EMAIL>kucing.oren123@gmail.com</EMAIL> tolong kirim invoicenya
+NIK: <NIK>1271030505950007</NIK>
+nomor hp saya <PHONE>0812.9988.7766</PHONE>
+email saya <EMAIL>andi.wijaya at gmail dot com</EMAIL> ya kak
+nik saya <NIK>3273 0115 0690 0001</NIK> mohon dicek

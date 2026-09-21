@@ -1,0 +1,207 @@
+{
+  "name": "indobert-base",
+  "model": "../models/indobert-base-onnx-int8",
+  "kind": "transformer",
+  "backend": "onnx",
+  "threshold": 0.7,
+  "gold": {
+    "per_label": {
+      "PERSON": {
+        "precision": 0.9737,
+        "recall": 0.9737,
+        "f1": 0.9737,
+        "tp": 74,
+        "fp": 2,
+        "fn": 2
+      },
+      "ADDRESS": {
+        "precision": 0.9808,
+        "recall": 0.9808,
+        "f1": 0.9808,
+        "tp": 51,
+        "fp": 1,
+        "fn": 1
+      }
+    },
+    "micro": {
+      "precision": 0.9766,
+      "recall": 0.9766,
+      "f1": 0.9766,
+      "tp": 125,
+      "fp": 3,
+      "fn": 3,
+      "f2": 0.9766
+    },
+    "lenient": {
+      "micro": {
+        "precision": 0.9922,
+        "recall": 0.9922,
+        "f1": 0.9922,
+        "tp": 127,
+        "fp": 1,
+        "fn": 1
+      },
+      "per_label": {
+        "PERSON": {
+          "precision": 0.9868,
+          "recall": 0.9868,
+          "f1": 0.9868,
+          "tp": 75,
+          "fp": 1,
+          "fn": 1
+        },
+        "ADDRESS": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 52,
+          "fp": 0,
+          "fn": 0
+        }
+      }
+    },
+    "char": {
+      "leak_rate": 0.002,
+      "over_redaction": 0.006,
+      "clean_message_rate": 0.9926,
+      "pii_chars": 2544
+    },
+    "n_messages": 135
+  },
+  "gold_per_category": {
+    "formal": {
+      "n": 20,
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0
+    },
+    "informal": {
+      "n": 20,
+      "f1": 0.9545,
+      "recall": 0.9545,
+      "precision": 0.9545,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0124
+    },
+    "form": {
+      "n": 8,
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0
+    },
+    "multi_entity": {
+      "n": 7,
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0
+    },
+    "hard_names": {
+      "n": 19,
+      "f1": 0.973,
+      "recall": 0.9474,
+      "precision": 1.0,
+      "leak_rate": 0.0253,
+      "over_redaction": 0.0
+    },
+    "hard_address": {
+      "n": 16,
+      "f1": 0.9375,
+      "recall": 0.9375,
+      "precision": 0.9375,
+      "leak_rate": 0.0,
+      "over_redaction": 0.046
+    },
+    "negative": {
+      "n": 30,
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0
+    },
+    "mixed_pii": {
+      "n": 15,
+      "f1": 0.963,
+      "recall": 1.0,
+      "precision": 0.9286,
+      "leak_rate": 0.0,
+      "over_redaction": 0.0176
+    }
+  },
+  "dev": {
+    "per_label": {
+      "PERSON": {
+        "precision": 0.9757,
+        "recall": 0.9849,
+        "f1": 0.9803,
+        "tp": 522,
+        "fp": 13,
+        "fn": 8
+      },
+      "ADDRESS": {
+        "precision": 0.9813,
+        "recall": 0.9958,
+        "f1": 0.9885,
+        "tp": 473,
+        "fp": 9,
+        "fn": 2
+      }
+    },
+    "micro": {
+      "precision": 0.9784,
+      "recall": 0.99,
+      "f1": 0.9842,
+      "tp": 995,
+      "fp": 22,
+      "fn": 10,
+      "f2": 0.9877
+    },
+    "lenient": {
+      "micro": {
+        "precision": 0.9833,
+        "recall": 0.995,
+        "f1": 0.9891,
+        "tp": 1000,
+        "fp": 17,
+        "fn": 5
+      },
+      "per_label": {
+        "PERSON": {
+          "precision": 0.9813,
+          "recall": 0.9906,
+          "f1": 0.9859,
+          "tp": 525,
+          "fp": 10,
+          "fn": 5
+        },
+        "ADDRESS": {
+          "precision": 0.9855,
+          "recall": 1.0,
+          "f1": 0.9927,
+          "tp": 475,
+          "fp": 7,
+          "fn": 0
+        }
+      }
+    },
+    "char": {
+      "leak_rate": 0.0008,
+      "over_redaction": 0.0027,
+      "clean_message_rate": 0.9938,
+      "pii_chars": 28845
+    },
+    "n_messages": 800
+  },
+  "latency_ms_single_message": {
+    "mean": 13.96,
+    "p50": 12.07,
+    "p95": 26.85,
+    "p99": 34.39
+  }
+}

@@ -1,0 +1,435 @@
+# Wilayah administratif. Format: <jenis>|<nama>
+# jenis: city (kota/kabupaten), province, province_abbr, kelurahan, kecamatan
+# Kota & provinsi adalah himpunan tertutup (~514 kab/kota) sehingga boleh overlap dengan test set;
+# kelurahan/kecamatan (~83 ribu desa) di-hold-out terhadap gold test set oleh generator.
+city|Jakarta Pusat
+city|Jakarta Selatan
+city|Jakarta Barat
+city|Jakarta Timur
+city|Jakarta Utara
+city|Jakarta
+city|Bandung
+city|Bekasi
+city|Bogor
+city|Depok
+city|Tangerang
+city|Tangerang Selatan
+city|Cimahi
+city|Cirebon
+city|Sukabumi
+city|Tasikmalaya
+city|Garut
+city|Karawang
+city|Purwakarta
+city|Subang
+city|Sumedang
+city|Semarang
+city|Surakarta
+city|Solo
+city|Yogyakarta
+city|Jogja
+city|Sleman
+city|Bantul
+city|Magelang
+city|Salatiga
+city|Pekalongan
+city|Tegal
+city|Purwokerto
+city|Cilacap
+city|Kudus
+city|Jepara
+city|Klaten
+city|Surabaya
+city|Malang
+city|Sidoarjo
+city|Gresik
+city|Mojokerto
+city|Kediri
+city|Madiun
+city|Jember
+city|Banyuwangi
+city|Probolinggo
+city|Pasuruan
+city|Blitar
+city|Denpasar
+city|Badung
+city|Gianyar
+city|Tabanan
+city|Singaraja
+city|Mataram
+city|Kupang
+city|Medan
+city|Binjai
+city|Pematangsiantar
+city|Padang
+city|Bukittinggi
+city|Pekanbaru
+city|Batam
+city|Tanjungpinang
+city|Jambi
+city|Palembang
+city|Bengkulu
+city|Bandar Lampung
+city|Metro
+city|Pangkalpinang
+city|Banda Aceh
+city|Lhokseumawe
+city|Pontianak
+city|Singkawang
+city|Palangkaraya
+city|Banjarmasin
+city|Banjarbaru
+city|Balikpapan
+city|Samarinda
+city|Tarakan
+city|Makassar
+city|Parepare
+city|Gowa
+city|Maros
+city|Manado
+city|Bitung
+city|Tomohon
+city|Gorontalo
+city|Palu
+city|Kendari
+city|Baubau
+city|Ambon
+city|Ternate
+city|Sorong
+city|Jayapura
+city|Merauke
+city|Manokwari
+city|Serang
+city|Cilegon
+city|Pandeglang
+city|Lebak
+city|Kuningan
+city|Indramayu
+city|Majalengka
+city|Ciamis
+city|Banjar
+city|Temanggung
+city|Wonosobo
+city|Boyolali
+city|Sragen
+city|Wonogiri
+city|Kulon Progo
+city|Gunungkidul
+city|Lamongan
+city|Tuban
+city|Bojonegoro
+city|Ngawi
+city|Ponorogo
+city|Tulungagung
+city|Lumajang
+city|Situbondo
+city|Bondowoso
+city|Sumenep
+city|Pamekasan
+city|Bangkalan
+city|Klungkung
+city|Karangasem
+city|Bima
+city|Ende
+city|Maumere
+city|Labuan Bajo
+city|Deli Serdang
+city|Sibolga
+city|Tebing Tinggi
+city|Payakumbuh
+city|Solok
+city|Dumai
+city|Lubuklinggau
+city|Prabumulih
+city|Kotabumi
+city|Sampit
+city|Kotabaru
+city|Bontang
+city|Palopo
+city|Bulukumba
+city|Kotamobagu
+city|Luwuk
+city|Tual
+city|Timika
+city|Nabire
+province|DKI Jakarta
+province|Jawa Barat
+province|Jawa Tengah
+province|Jawa Timur
+province|DI Yogyakarta
+province|Banten
+province|Bali
+province|Nusa Tenggara Barat
+province|Nusa Tenggara Timur
+province|Sumatera Utara
+province|Sumatera Barat
+province|Sumatera Selatan
+province|Riau
+province|Kepulauan Riau
+province|Jambi
+province|Bengkulu
+province|Lampung
+province|Bangka Belitung
+province|Aceh
+province|Kalimantan Barat
+province|Kalimantan Tengah
+province|Kalimantan Selatan
+province|Kalimantan Timur
+province|Kalimantan Utara
+province|Sulawesi Utara
+province|Sulawesi Tengah
+province|Sulawesi Selatan
+province|Sulawesi Tenggara
+province|Sulawesi Barat
+province|Gorontalo
+province|Maluku
+province|Maluku Utara
+province|Papua
+province|Papua Barat
+province_abbr|Jabar
+province_abbr|Jateng
+province_abbr|Jatim
+province_abbr|DIY
+province_abbr|Sumut
+province_abbr|Sumbar
+province_abbr|Sumsel
+province_abbr|Sulsel
+province_abbr|Sulut
+province_abbr|Kaltim
+province_abbr|Kalbar
+province_abbr|Kalsel
+province_abbr|NTB
+province_abbr|NTT
+province_abbr|Kepri
+kelurahan|Sukajadi
+kelurahan|Sukasari
+kelurahan|Sukamulya
+kelurahan|Cibeunying
+kelurahan|Lebakgede
+kelurahan|Cipedes
+kelurahan|Gondangdia
+kelurahan|Cikini
+kelurahan|Kebon Sirih
+kelurahan|Tebet Barat
+kelurahan|Manggarai
+kelurahan|Bukit Duri
+kelurahan|Cawang
+kelurahan|Cililitan
+kelurahan|Kramat Jati
+kelurahan|Jagakarsa
+kelurahan|Lenteng Agung
+kelurahan|Srengseng Sawah
+kelurahan|Cilandak Barat
+kelurahan|Pondok Labu
+kelurahan|Gandaria Utara
+kelurahan|Grogol
+kelurahan|Tomang
+kelurahan|Palmerah
+kelurahan|Kemanggisan
+kelurahan|Cengkareng Timur
+kelurahan|Kalideres
+kelurahan|Kapuk
+kelurahan|Penjaringan
+kelurahan|Sunter Jaya
+kelurahan|Kelapa Gading Timur
+kelurahan|Pulogadung
+kelurahan|Cakung Barat
+kelurahan|Duren Sawit
+kelurahan|Pondok Kelapa
+kelurahan|Ciracas
+kelurahan|Cibubur
+kelurahan|Beji
+kelurahan|Kukusan
+kelurahan|Wonosari
+kelurahan|Karanganyar
+kelurahan|Sidomulyo
+kelurahan|Sukoharjo
+kelurahan|Tegalrejo
+kelurahan|Banyuurip
+kelurahan|Mojosari
+kelurahan|Caturtunggal
+kelurahan|Condongcatur
+kelurahan|Maguwoharjo
+kelurahan|Sinduadi
+kelurahan|Sardonoharjo
+kelurahan|Kotabaru
+kelurahan|Kauman
+kelurahan|Gedongtengen
+kelurahan|Cikutra
+kelurahan|Cicadas
+kelurahan|Cibiru
+kelurahan|Cileunyi Wetan
+kelurahan|Rancaekek Kulon
+kelurahan|Padasuka
+kelurahan|Pasirlayung
+kelurahan|Cigadung
+kelurahan|Tanjung Priok
+kelurahan|Sei Sikambing
+kelurahan|Petisah Tengah
+kelurahan|Helvetia
+kelurahan|Tembung
+kelurahan|Batu Aji
+kelurahan|Sekupang
+kelurahan|Lubuk Baja
+kelurahan|Tanjung Karang
+kelurahan|Kedaton
+kelurahan|Ilir Timur
+kelurahan|Seberang Ulu
+kelurahan|Kuin Utara
+kelurahan|Kayu Tangi
+kelurahan|Gunung Sari
+kelurahan|Klandasan Ilir
+kelurahan|Mariso
+kelurahan|Panaikang
+kelurahan|Tamalanrea
+kelurahan|Wenang Utara
+kelurahan|Malalayang
+kelurahan|Oebobo
+kelurahan|Kelapa Lima
+kelurahan|Hamadi
+kelurahan|Entrop
+kelurahan|Sanur Kaja
+kelurahan|Kuta
+kelurahan|Seminyak
+kelurahan|Peliatan
+kelurahan|Tegallalang
+kelurahan|Panjer
+kelurahan|Sesetan
+kelurahan|Renon
+kelurahan|Ubud
+kelurahan|Jimbaran
+kelurahan|Tonja
+kelurahan|Dauh Puri
+kelurahan|Pemecutan
+kelurahan|Ngampilan
+kelurahan|Bausasran
+kelurahan|Terban
+kelurahan|Kricak
+kelurahan|Mergangsan
+kelurahan|Jebres
+kelurahan|Laweyan
+kelurahan|Kerten
+kelurahan|Pedurungan
+kelurahan|Tembalang
+kelurahan|Banyumanik
+kelurahan|Ngaliyan
+kelurahan|Gubeng
+kelurahan|Airlangga
+kelurahan|Ketintang
+kelurahan|Jemursari
+kelurahan|Lowokwaru
+kelurahan|Dinoyo
+kelurahan|Tlogomas
+kelurahan|Sukun
+kelurahan|Sumbersari
+kelurahan|Jatimulyo
+kelurahan|Margasari
+kelurahan|Bojongsari
+kelurahan|Cisalak
+kelurahan|Sindangbarang
+kelurahan|Tanah Sareal
+kelurahan|Kedung Badak
+kelurahan|Baranangsiang
+kelurahan|Harjamukti
+kelurahan|Pekayon Jaya
+kelurahan|Jatibening
+kelurahan|Margahayu
+kelurahan|Bojong Menteng
+kelurahan|Pamulang Barat
+kelurahan|Serua
+kelurahan|Rempoa
+kelurahan|Ciputat
+kelurahan|Karawaci
+kelurahan|Panunggangan
+kelurahan|Cipondoh
+kelurahan|Sumberagung
+kelurahan|Tirtomartani
+kelurahan|Wedomartani
+kelurahan|Balecatur
+kelurahan|Ngestiharjo
+kelurahan|Panggungharjo
+kelurahan|Bangunharjo
+kelurahan|Tamanan
+kelurahan|Sidoarum
+kelurahan|Tlogoadi
+kecamatan|Coblong
+kecamatan|Cidadap
+kecamatan|Bandung Wetan
+kecamatan|Cicendo
+kecamatan|Andir
+kecamatan|Tebet
+kecamatan|Setiabudi
+kecamatan|Kebayoran Baru
+kecamatan|Pancoran
+kecamatan|Cilandak
+kecamatan|Tanah Abang
+kecamatan|Gambir
+kecamatan|Senen
+kecamatan|Tambora
+kecamatan|Grogol Petamburan
+kecamatan|Pesanggrahan
+kecamatan|Kembangan
+kecamatan|Koja
+kecamatan|Cilincing
+kecamatan|Matraman
+kecamatan|Jatinegara
+kecamatan|Makasar
+kecamatan|Cipayung
+kecamatan|Mlati
+kecamatan|Gamping
+kecamatan|Kasihan
+kecamatan|Sewon
+kecamatan|Banguntapan
+kecamatan|Umbulharjo
+kecamatan|Gondomanan
+kecamatan|Genteng
+kecamatan|Tegalsari
+kecamatan|Wonokromo
+kecamatan|Rungkut
+kecamatan|Sukolilo
+kecamatan|Klojen
+kecamatan|Blimbing
+kecamatan|Denpasar Selatan
+kecamatan|Denpasar Barat
+kecamatan|Kuta Utara
+kecamatan|Medan Baru
+kecamatan|Medan Helvetia
+kecamatan|Medan Johor
+kecamatan|Padang Utara
+kecamatan|Tampan
+kecamatan|Batam Kota
+kecamatan|Ilir Barat I
+kecamatan|Rappocini
+kecamatan|Wenang
+kecamatan|Jayapura Selatan
+kecamatan|Ngaglik
+kecamatan|Depok
+kecamatan|Kalasan
+kecamatan|Godean
+kecamatan|Sukmajaya
+kecamatan|Pancoran Mas
+kecamatan|Limo
+kecamatan|Bogor Barat
+kecamatan|Bogor Tengah
+kecamatan|Bekasi Selatan
+kecamatan|Bekasi Barat
+kecamatan|Rawalumbu
+kecamatan|Pondok Aren
+kecamatan|Serpong Utara
+kecamatan|Ciputat Timur
+kecamatan|Lengkong
+kecamatan|Antapani
+kecamatan|Arcamanik
+kecamatan|Ujungberung
+kecamatan|Banjarsari
+kecamatan|Laweyan
+kecamatan|Semarang Tengah
+kecamatan|Candisari
+kecamatan|Gajahmungkur
+kecamatan|Tembalang
+kecamatan|Balikpapan Kota
+kecamatan|Samarinda Ulu
+kecamatan|Pontianak Kota
+kecamatan|Banjarmasin Tengah
+kecamatan|Mandonga
+kecamatan|Tikala

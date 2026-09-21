@@ -1,0 +1,256 @@
+# Nama jalan (tanpa prefiks Jl./Gg.). Campuran nama pahlawan (sengaja: model harus belajar
+# bahwa nama tokoh di dalam alamat = ADDRESS), flora, fauna, kerajaan, dan kata umum.
+Jend. Sudirman
+Jenderal Sudirman
+Sudirman
+MH Thamrin
+Thamrin
+Gatot Subroto
+Jend. Gatot Subroto
+Ahmad Yani
+Jend. A. Yani
+Imam Bonjol
+Cut Nyak Dien
+Cut Meutia
+Hayam Wuruk
+Pemuda
+Pahlawan
+Pangeran Antasari
+Teuku Umar
+Teuku Cik Ditiro
+Hasanuddin
+Sultan Hasanuddin
+Sam Ratulangi
+Wolter Monginsidi
+Dr. Soetomo
+Dr. Wahidin Sudirohusodo
+Ki Hajar Dewantara
+Ir. H. Juanda
+Juanda
+WR Supratman
+Siliwangi
+Dago
+Braga
+Malioboro
+Magelang
+Parangtritis
+Wates
+Godean
+Monjali
+Ringroad Utara
+Setiabudi
+Cihampelas
+Cipaganti
+Buah Batu
+Pasteur
+Kopo
+Moh. Toha
+Ciumbuleuit
+Tunjungan
+Basuki Rahmat
+Mayjen Sungkono
+HR Muhammad
+Margonda Raya
+Raya Serpong
+Daan Mogot
+Kyai Tapa
+Tomang Raya
+Panjang
+Fatmawati
+Panglima Polim
+Senopati
+Casablanca
+HR Rasuna Said
+Rasuna Said
+Kuningan
+Ampera Raya
+TB Simatupang
+Pramuka
+Salemba Raya
+Matraman Raya
+Otista
+Dewi Sartika
+Kramat Raya
+Letjen Suprapto
+MT Haryono
+DI Panjaitan
+Kapten Tendean
+Pierre Tendean
+Urip Sumoharjo
+Laksda Adisucipto
+Kolonel Sugiono
+Brigjen Katamso
+Panembahan Senopati
+Brawijaya
+Mataram
+Sriwijaya
+Tarumanegara
+Singosari
+Trunojoyo
+Airlangga
+Anggrek
+Cempaka
+Flamboyan
+Dahlia
+Teratai
+Seroja
+Kamboja
+Tulip
+Nusa Indah
+Bougenville
+Kemuning
+Sakura
+Mangga
+Durian
+Rambutan
+Jambu
+Nangka
+Salak
+Belimbing
+Kelapa
+Sawo
+Merpati
+Kutilang
+Rajawali
+Elang
+Garuda
+Nuri
+Kakatua
+Perkutut
+Jalak
+Beringin
+Cemara
+Jati
+Mahoni
+Akasia
+Waru
+Asem
+Sejahtera
+Damai
+Bahagia
+Makmur
+Sentosa
+Kencana
+Mekar
+Karya Bakti
+Swadaya
+Gotong Royong
+Persatuan
+Kemerdekaan
+Proklamasi
+Pembangunan
+Pendidikan
+Kesehatan
+Pelajar
+Olahraga
+Stadion
+Pasar Baru
+Pasar Minggu
+Stasiun
+Masjid Raya
+Sekolah
+Kampus
+Bhayangkara
+Kartika
+Candi
+Diponegoro Barat
+Kalimantan
+Sumatera
+Sulawesi
+Irian
+Bali
+Lombok
+Ternate
+Tidore
+Belitung
+Bangka
+Nias
+Batam
+Samratulangi
+Wahid Hasyim
+KH. Wahid Hasyim
+KH. Agus Salim
+KH. Mas Mansyur
+Pangeran Diponegoro
+Tuanku Imam
+Hang Tuah
+Hang Jebat
+Hang Lekir
+Pattimura Raya
+Martadinata
+RE Martadinata
+Yos Sudarso
+Adi Sucipto
+Adisumarmo
+Slamet Riyadi Raya
+Veteran Raya
+Merdeka Barat
+Merdeka Timur
+Lapangan Banteng
+Medan Merdeka
+Cikini Raya
+Menteng Raya
+Kebon Sirih
+Wahid
+Cendana
+Cik Di Tiro
+Sisingamangaraja Raya
+Gajah Mada Raya
+Pajajaran Raya
+Raya Kalimalang
+Raya Pasar Minggu
+Raya Condet
+Raya Cilandak
+Raya Kebayoran Lama
+Raya Ciputat
+Raya Pondok Gede
+Raya Hankam
+Raya Jatiwaringin
+Raya Narogong
+Raya Cibubur
+Raya Puncak
+Raya Lembang
+Raya Kopo
+Raya Cileunyi
+Raya Solo
+Raya Magelang
+Raya Malang
+Raya Gubeng
+Raya Kenjeran
+Raya Juanda
+Raya Kuta
+Raya Ubud
+Raya Uluwatu
+Bypass Ngurah Rai
+Teuku Nyak Arief
+Iskandar Muda
+Gatot Kaca
+Arjuna
+Bima
+Nakula
+Sadewa
+Srikandi
+Anoman
+Semar
+Petruk
+Gareng
+Mangunsarkoro
+Suropati
+Hos Cokroaminoto
+Tjokroaminoto
+Dr. Sutomo
+Dr. Cipto
+Dr. Setiabudi
+Lodaya
+Lengkong
+Karapitan
+Banda
+Aceh
+Riau
+Jawa
+Madura
+Timor
+Flores
+Sumba
+Seram
+Halmahera

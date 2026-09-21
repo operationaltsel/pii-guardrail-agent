@@ -37,7 +37,13 @@ FAIL_CLOSED_MESSAGE = (
     "belum dapat diproses dengan aman. Silakan coba lagi dalam beberapa saat. "
     "Data pribadi Anda tidak dikirim ke mana pun."
 )
-REPORT_KEY = "temp:pii_report"  # invocation-scoped: counts only, never raw values
+# Not "temp:"-prefixed on purpose: ADK's session service strips temp: keys from the
+# event's own actions.state_delta before it is yielded to callers (base_session_service.py
+# _trim_temp_delta_state, called from append_event during runner.run_async) — a client
+# streaming /run_sse would never see it. This key holds counts/booleans/latency only
+# (never a raw PII value), so persisting it in ordinary session state is safe; a frontend
+# uses it purely as live evidence that the guardrail ran on this turn.
+REPORT_KEY = "pii_report"
 
 
 class PiiGuardrail:

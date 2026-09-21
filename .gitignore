@@ -1,0 +1,15 @@
+.env
+.claude/           # local dev launch config (Claude Code browser preview) — machine-specific paths
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+*.egg-info/
+
+# Heavy, fully-reproducible training intermediates — see README "Reproduksi model" to
+# regenerate (fixed seed => same result). NOT ignored: ner_service/model/ (the model the
+# service actually serves), ner_training/reports/ and benchmark/results/ (evidence for the
+# accuracy/performance sections of the docs) — these ARE committed so the repo runs as-is.
+ner_training/pretrained/
+ner_training/models/
+ner_training/data/generated/

@@ -90,11 +90,76 @@
   /* ============================== Shell layout ==============================
      No card, no shadow, no rounded outer frame — the app fills the viewport,
      same as a real assistant product. */
+  .shell {
+    display: flex;
+    height: 100vh;
+    height: 100dvh;
+  }
   .app {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+  }
+
+  /* ============================== Sidebar ==============================
+     Desktop: a real flex column that pushes the chat over when open (width
+     transition, not a floating overlay). Below 860px there isn't room to push,
+     so it becomes a slide-in panel with a backdrop instead. */
+  .sidebar {
+    width: 260px; flex-shrink: 0; overflow: hidden;
+    display: flex; flex-direction: column;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    transition: width 180ms ease, border-color 180ms ease;
+  }
+  .shell:not(.sidebar-open) .sidebar { width: 0; border-color: transparent; }
+  .sidebar-inner { width: 260px; flex-shrink: 0; display: flex; flex-direction: column; height: 100%; }
+  .sidebar-top { padding: var(--space-3); flex-shrink: 0; }
+  .new-chat-btn {
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    border: 1px solid var(--color-border); background: none; color: var(--color-foreground);
+    border-radius: var(--radius-sm); padding: 8px 10px; font-size: 13.5px; cursor: pointer;
+    min-height: 36px; transition: background 120ms ease;
+  }
+  .new-chat-btn:hover { background: var(--color-background); }
+  .new-chat-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .session-list { flex: 1; overflow-y: auto; padding: 0 var(--space-2) var(--space-3); display: flex; flex-direction: column; gap: 1px; }
+  .session-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 10px; border-radius: var(--radius-sm);
+    cursor: pointer; color: var(--color-foreground); text-decoration: none;
+    border: none; background: none; width: 100%; text-align: left; font-size: 13px;
+  }
+  .session-item:hover { background: var(--color-background); }
+  .session-item.active { background: var(--color-background); font-weight: 600; }
+  .session-item .session-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .session-item .session-delete {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px; border: none; background: none;
+    color: var(--color-muted-foreground); display: none; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .session-item:hover .session-delete { display: flex; }
+  .session-item .session-delete:hover { background: var(--color-border); color: var(--color-destructive); }
+  .session-item .session-delete svg { width: 13px; height: 13px; }
+  .session-empty { padding: var(--space-3) 10px; font-size: 12.5px; color: var(--color-muted-foreground); }
+
+  .sidebar-backdrop { display: none; }
+
+  @media (max-width: 860px) {
+    .sidebar {
+      position: fixed; inset: 0 auto 0 0; z-index: 40; width: 280px;
+      transform: translateX(-100%); border-right: 1px solid var(--color-border);
+      transition: transform 200ms ease;
+    }
+    .sidebar-inner { width: 280px; }
+    .shell.sidebar-open .sidebar { transform: translateX(0); box-shadow: 12px 0 32px rgba(0,0,0,.18); }
+    .sidebar-backdrop {
+      display: block; position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.35);
+      opacity: 0; pointer-events: none; transition: opacity 200ms ease;
+    }
+    .shell.sidebar-open .sidebar-backdrop { opacity: 1; pointer-events: auto; }
   }
 
   /* ============================== Header ============================== */
@@ -288,11 +353,31 @@
 </head>
 <body>
 
-<div class="app">
+<div class="shell" id="shell">
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- ============================== Sidebar ============================== -->
+  <aside class="sidebar" id="sidebar" aria-label="Riwayat percakapan">
+    <div class="sidebar-inner">
+      <div class="sidebar-top">
+        <button class="new-chat-btn" id="sidebarNewChat" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Percakapan baru
+        </button>
+      </div>
+      <nav class="session-list" id="sessionList"></nav>
+    </div>
+  </aside>
+
+  <div class="app">
 
   <!-- ============================== Header ============================== -->
   <header class="header">
     <div class="brand">
+      <button class="icon-btn" id="sidebarToggle" type="button" aria-label="Tampilkan/sembunyikan riwayat percakapan" title="Riwayat percakapan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+      </button>
       <span class="brand-name">Nara</span>
       <span class="status-line"><span class="status-dot connecting" id="statusDot" aria-hidden="true"></span><span id="statusText">Menghubungkan…</span></span>
     </div>
@@ -336,6 +421,8 @@
         <span class="trust-note" id="trustDetail">Data pribadi Anda disamarkan otomatis sebelum diproses AI</span>
       </div>
     </div>
+  </div>
+
   </div>
 
 </div>
@@ -390,6 +477,11 @@
   const trustDetail = $('trustDetail');
   const themeToggle = $('themeToggle');
   const themeIcon = $('themeIcon');
+  const shell = $('shell');
+  const sidebarToggle = $('sidebarToggle');
+  const sidebarBackdrop = $('sidebarBackdrop');
+  const sidebarNewChat = $('sidebarNewChat');
+  const sessionList = $('sessionList');
 
   /* ============================== Utilities ============================== */
   function escapeHtml(s) {
@@ -600,6 +692,146 @@
     transcriptInner.appendChild(welcome);
     sessionTotalRedactions = 0;
     trustDetail.textContent = DEFAULT_TRUST_DETAIL;
+    highlightActiveSession();
+  }
+
+  /* ============================== Sidebar: chat history ============================== */
+  function setSidebarOpen(open) {
+    shell.classList.toggle('sidebar-open', open);
+  }
+  sidebarToggle.addEventListener('click', () => setSidebarOpen(!shell.classList.contains('sidebar-open')));
+  sidebarBackdrop.addEventListener('click', () => setSidebarOpen(false));
+  // Desktop: start open (there's room). Mobile: start closed (it would cover the chat).
+  setSidebarOpen(window.matchMedia('(min-width: 860px)').matches);
+
+  function closeSidebarOnMobile() {
+    if (!window.matchMedia('(min-width: 860px)').matches) setSidebarOpen(false);
+  }
+
+  function relativeTime(unixSeconds) {
+    const diffMin = Math.round((Date.now() / 1000 - unixSeconds) / 60);
+    if (diffMin < 1) return 'Baru saja';
+    if (diffMin < 60) return `${diffMin} menit lalu`;
+    const diffHour = Math.round(diffMin / 60);
+    if (diffHour < 24) return `${diffHour} jam lalu`;
+    const diffDay = Math.round(diffHour / 24);
+    if (diffDay === 1) return 'Kemarin';
+    if (diffDay < 7) return `${diffDay} hari lalu`;
+    return new Date(unixSeconds * 1000).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+  }
+
+  function sessionTitle(session) {
+    return (session.state && session.state.title) || 'Percakapan baru';
+  }
+
+  function highlightActiveSession() {
+    sessionList.querySelectorAll('.session-item').forEach((el) => {
+      el.classList.toggle('active', el.dataset.sessionId === sessionId);
+    });
+  }
+
+  async function loadSessionList() {
+    let sessions;
+    try {
+      const res = await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions`, { method: 'GET' });
+      sessions = await res.json();
+    } catch (_) {
+      return; // sidebar just stays as-is; not worth surfacing an error for this
+    }
+    sessions.sort((a, b) => b.lastUpdateTime - a.lastUpdateTime);
+    sessionList.innerHTML = '';
+    if (!sessions.length) {
+      const empty = document.createElement('div');
+      empty.className = 'session-empty';
+      empty.textContent = 'Belum ada percakapan.';
+      sessionList.appendChild(empty);
+      return;
+    }
+    for (const session of sessions) {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'session-item';
+      item.dataset.sessionId = session.id;
+      item.innerHTML = `
+        <span class="session-title">${escapeHtml(sessionTitle(session))}</span>
+        <button type="button" class="session-delete" aria-label="Hapus percakapan" title="Hapus">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+        </button>`;
+      item.title = relativeTime(session.lastUpdateTime);
+      item.addEventListener('click', () => openSession(session.id));
+      wireDeleteButton(item.querySelector('.session-delete'), session.id);
+      sessionList.appendChild(item);
+    }
+    highlightActiveSession();
+  }
+
+  async function openSession(id) {
+    if (id === sessionId) { closeSidebarOnMobile(); return; }
+    try {
+      const res = await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions/${id}`, { method: 'GET' });
+      const session = await res.json();
+      sessionId = id;
+      sessionStorage.setItem(STORAGE_SESSION, sessionId);
+      localStorage.setItem(STORAGE_SESSION, sessionId);
+      transcriptInner.innerHTML = '';
+      transcriptInner.appendChild(welcome);
+      sessionTotalRedactions = 0;
+      trustDetail.textContent = DEFAULT_TRUST_DETAIL;
+      renderHistory(session.events);
+      highlightActiveSession();
+    } catch (_) {
+      addSystemError('Tidak dapat membuka percakapan ini.', null);
+    }
+    closeSidebarOnMobile();
+  }
+
+  async function deleteSession(id) {
+    try {
+      await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions/${id}`, { method: 'DELETE' });
+    } catch (_) { /* best-effort */ }
+    if (id === sessionId) newConversation();
+    loadSessionList();
+  }
+
+  const CONFIRM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  const DELETE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>';
+
+  // Two-step delete entirely in our own markup (no native confirm() — unreliable across
+  // embedded/automated browser contexts, and it looks inconsistent with the rest of the UI
+  // anyway): first click arms it, a second click within 3s actually deletes.
+  function wireDeleteButton(btn, id) {
+    let armed = false, revertTimer = null;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!armed) {
+        armed = true;
+        btn.classList.add('confirm');
+        btn.innerHTML = CONFIRM_ICON;
+        btn.title = 'Klik lagi untuk menghapus';
+        revertTimer = setTimeout(() => {
+          armed = false;
+          btn.classList.remove('confirm');
+          btn.innerHTML = DELETE_ICON;
+          btn.title = 'Hapus';
+        }, 3000);
+        return;
+      }
+      clearTimeout(revertTimer);
+      deleteSession(id);
+    });
+  }
+
+  // Gives the conversation a title (first ~60 chars of the user's first message) so it's
+  // recognisable in the sidebar later — ChatGPT/Claude do the same. Written via ADK's
+  // state-patch endpoint (no agent turn involved), then the list is refreshed.
+  async function setSessionTitle(text) {
+    try {
+      await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions/${sessionId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ state_delta: { title: text.slice(0, 60) } }),
+      });
+    } catch (_) { /* non-critical */ }
+    loadSessionList();
   }
 
   // Rebuilds the transcript from a Session's stored events after a page reload — otherwise
@@ -656,7 +888,7 @@
 
     let agentCol;
     try {
-      await ensureSession();
+      const isNewSession = (await ensureSession()) === null;
       agentCol = addAgentPlaceholder();
 
       const res = await fetch(API_BASE + '/run_sse', {
@@ -740,6 +972,7 @@
 
       if (sawContent) finalizeAgentMessage(agentCol);
       removeIfEmpty(agentCol);
+      if (isNewSession && sawContent) setSessionTitle(text);
     } catch (err) {
       if (agentCol) removeIfEmpty(agentCol);
       addSystemError(
@@ -788,11 +1021,14 @@
   document.querySelectorAll('.suggestion-chip').forEach((btn) => {
     btn.addEventListener('click', () => sendMessage(btn.dataset.prompt));
   });
-  $('newChatBtn').addEventListener('click', () => {
+  function startNewChat() {
     if (sending) return;
     newConversation();
+    closeSidebarOnMobile();
     input.focus();
-  });
+  }
+  $('newChatBtn').addEventListener('click', startNewChat);
+  sidebarNewChat.addEventListener('click', startNewChat);
 
   /* ============================== Theme ============================== */
   function applyTheme(mode) {
@@ -821,9 +1057,11 @@
     input.focus();
     const ok = await checkHealth();
     if (!ok) return;
+    loadSessionList();
     try {
       const session = await ensureSession();
       if (session) renderHistory(session.events);
+      highlightActiveSession();
     } catch (_) { /* couldn't load history — user can still start typing */ }
   })();
 })();

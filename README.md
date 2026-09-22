@@ -75,6 +75,24 @@ cd frontend && python -m http.server 3100   # buka http://localhost:3100
 Untuk konsol developer ADK (debug event/trace mentah, bukan untuk pengguna akhir):
 `adk web agents` (ganti terminal 2 di atas) → http://localhost:8000.
 
+### Akun pelanggan demo
+
+Mock backend ([agent/agents/cs_agent/db.py](agent/agents/cs_agent/db.py)) di-seed dengan 3
+pelanggan Ventra fiktif. Sengaja bisa dicari di chat pakai nomor pelanggan, nomor HP,
+**atau** nama — kebanyakan pelanggan asli tidak hafal ID internal 10 digit, jadi agent
+(`cari_pelanggan`, lihat [agent/agents/cs_agent/tools.py](agent/agents/cs_agent/tools.py))
+mencocokkan dari apa pun yang disebutkan lebih dulu:
+
+| Nomor Pelanggan | Nama | No. HP | Paket | Status Bayar |
+|---|---|---|---|---|
+| `1122334455` | Budi Santoso | `081234567890` | VentraFiber 50 Mbps | BELUM LUNAS |
+| `2233445566` | Siti Rahmawati | `085711223344` | VentraFiber 100 Mbps | LUNAS |
+| `3344556677` | I Made Wirawan | `081399887766` | VentraFiber 30 Mbps | BELUM LUNAS |
+
+Data ini persisten di SQLite (volume `cs-agent-data`) — bertahan lintas restart container,
+reset hanya kalau volume-nya dihapus (`docker compose down -v`). Tiket pengaduan yang dibuat
+lewat chat juga tersimpan di sana, bisa dicek lagi lewat "Cek status tiket".
+
 ### Menjalankan test
 
 ```bash

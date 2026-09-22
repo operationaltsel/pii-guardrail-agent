@@ -6,6 +6,10 @@
 # adk web/run local session database (runtime state, not source)
 .adk/
 
+# mock backend's SQLite file (agent/agents/cs_agent/db.py) — runtime data, not source
+agent/data/
+*.db
+
 __pycache__/
 *.pyc
 .pytest_cache/

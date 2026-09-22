@@ -6,6 +6,13 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "agents"))
 
+
+@pytest.fixture(autouse=True)
+def _isolated_db(tmp_path, monkeypatch):
+    """Point tools.py's SQLite mock backend (db.py) at a throwaway file per test so tests
+    never touch the real dev/demo database and don't leak ticket rows across pytest runs."""
+    monkeypatch.setenv("VENTRA_DB_PATH", str(tmp_path / "test-ventra.db"))
+
 from cs_agent.guardrail.ner_client import NerClient, NerUnavailable  # noqa: E402
 from cs_agent.guardrail.types import PiiSpan  # noqa: E402
 

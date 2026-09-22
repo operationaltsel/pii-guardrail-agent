@@ -1,5 +1,14 @@
 # CS agent: calls Gemini (external) and the in-cluster ner-service. Scales on CPU; the real
 # bottleneck under load is Gemini latency, not local CPU, so replicas matter more than HPA here.
+#
+# No volume is mounted for the mock backend's SQLite file (agents/cs_agent/db.py) on purpose:
+# SQLite is single-writer, and this Deployment runs 2-6 replicas — a shared PVC would mean
+# concurrent writers on one file, which SQLite does not do safely across pods/nodes. Each pod
+# instead gets its own ephemeral, per-pod SQLite (container filesystem, reset on
+# restart/reschedule) — the same "resets on restart" behaviour the demo already had before
+# persistence was added for docker-compose. A real deployment would replace this mock
+# backend with calls to the ISP's actual CRM/billing API (see tools.py's docstring), which is
+# the correct place for multi-replica-safe shared state, not a file embedded in the agent pod.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

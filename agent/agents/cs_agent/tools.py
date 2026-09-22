@@ -1,23 +1,19 @@
-"""Customer-support tools for the fictional ISP/telco "Ventra" (in-memory mock backend).
+"""Customer-support tools for the fictional ISP/telco "Ventra" (SQLite-backed mock backend).
 
 Tools receive REAL values (de-tokenised by ``before_tool_callback``) and their outputs are
 re-tokenised by ``after_tool_callback`` before the LLM sees them. Field names matter:
 ``nama_*``, ``alamat*``, ``kontak``, ``email``, ``nik`` are treated as PII (redactor.FIELD_POLICY).
+
+Customer/ticket records live in SQLite (see db.py) so they survive a container restart; FAQ
+and outage info below stay plain dicts since they're static reference content, not records
+anyone creates or mutates.
 """
 from __future__ import annotations
 
-import itertools
 import re
 from datetime import date, timedelta
 
-_CUSTOMERS = {
-    "1122334455": {"nama_pelanggan": "Budi Santoso", "no_hp": "081234567890", "paket": "VentraFiber 50 Mbps",
-                   "alamat_pemasangan": "Jl. Sudirman No. 10, Jakarta Pusat", "tagihan": 385000, "status_bayar": "BELUM LUNAS"},
-    "2233445566": {"nama_pelanggan": "Siti Rahmawati", "no_hp": "085711223344", "paket": "VentraFiber 100 Mbps",
-                   "alamat_pemasangan": "Perum Griya Indah Blok C2 No. 7, Bekasi", "tagihan": 525000, "status_bayar": "LUNAS"},
-    "3344556677": {"nama_pelanggan": "I Made Wirawan", "no_hp": "081399887766", "paket": "VentraFiber 30 Mbps",
-                   "alamat_pemasangan": "Jl. Raya Kuta No. 88, Badung", "tagihan": 275000, "status_bayar": "BELUM LUNAS"},
-}
+from . import db
 
 
 def _normalize_phone(s: str) -> str:
@@ -32,20 +28,24 @@ def _find_customer(identitas: str) -> tuple[str, dict] | None:
     This mirrors how a real CS lookup works: the agent almost never gets the exact internal
     ID first; it resolves the customer from what they say, then uses the ID internally.
     """
+    customers = db.all_customers()
     q_digits = re.sub(r"\D", "", identitas)
-    if q_digits in _CUSTOMERS:
-        return q_digits, _CUSTOMERS[q_digits]
     if q_digits:
+        for cust in customers:
+            if cust["nomor_pelanggan"] == q_digits:
+                return cust["nomor_pelanggan"], cust
         q_phone = _normalize_phone(identitas)
-        for nomor, cust in _CUSTOMERS.items():
+        for cust in customers:
             if cust["no_hp"] == q_phone or cust["no_hp"].endswith(q_digits[-8:]) and len(q_digits) >= 8:
-                return nomor, cust
+                return cust["nomor_pelanggan"], cust
     q_name = identitas.strip().lower()
     if len(q_name) >= 3:
-        for nomor, cust in _CUSTOMERS.items():
+        for cust in customers:
             if q_name in cust["nama_pelanggan"].lower():
-                return nomor, cust
+                return cust["nomor_pelanggan"], cust
     return None
+
+
 _OUTAGES = {
     "bekasi": "Gangguan massal akibat kabel optik putus di area Bekasi Timur. Estimasi normal hari ini 21:00 WIB.",
     "bandung": "Pemeliharaan terjadwal pukul 01:00-04:00 WIB di sebagian wilayah Bandung Utara.",
@@ -58,9 +58,6 @@ _FAQ = {
     "cara bayar": "Pembayaran via virtual account bank, QRIS, minimarket, atau aplikasi MyVentra.",
     "berhenti berlangganan": "Pengajuan berhenti langganan diproses 3 hari kerja; modem wajib dikembalikan.",
 }
-_TICKETS: dict[str, dict] = {}
-_ticket_seq = itertools.count(1001)
-
 # Visible to tests/demo: proves tools received real values while the LLM saw tokens.
 TOOL_AUDIT: list[dict] = []
 
@@ -122,13 +119,11 @@ def buat_tiket_pengaduan(kategori: str, deskripsi: str, nama_pelapor: str, konta
         kontak: Nomor telepon atau email pelapor (boleh berupa placeholder [REDACT_PHONE_n]/[REDACT_EMAIL_n]).
         alamat: Alamat lokasi gangguan bila relevan (boleh berupa placeholder [REDACT_ADDRESS_n]).
     """
-    ticket_id = f"TKT-{next(_ticket_seq)}"
-    _TICKETS[ticket_id] = {"kategori": kategori, "deskripsi": deskripsi, "nama_pelapor": nama_pelapor,
-                           "kontak": kontak, "alamat": alamat, "status": "DIBUKA",
-                           "estimasi": (date.today() + timedelta(days=1)).isoformat()}
+    estimasi = (date.today() + timedelta(days=1)).isoformat()
+    ticket_id = db.create_ticket(kategori, deskripsi, nama_pelapor, kontak, alamat, "DIBUKA", estimasi)
     TOOL_AUDIT.append({"tool": "buat_tiket_pengaduan", "nama_pelapor": nama_pelapor, "kontak": kontak, "alamat": alamat})
     return {"status": "ok", "nomor_tiket": ticket_id, "status_tiket": "DIBUKA",
-            "estimasi_penanganan": _TICKETS[ticket_id]["estimasi"],
+            "estimasi_penanganan": estimasi,
             "catatan": "Teknisi akan menghubungi pelapor melalui kontak yang terdaftar."}
 
 
@@ -138,7 +133,7 @@ def cek_status_tiket(nomor_tiket: str) -> dict:
     Args:
         nomor_tiket: Nomor tiket, contoh "TKT-1001".
     """
-    t = _TICKETS.get(nomor_tiket.strip().upper())
+    t = db.get_ticket(nomor_tiket.strip().upper())
     if not t:
         return {"status": "error", "pesan": "Tiket tidak ditemukan."}
     return {"status": "ok", "nomor_tiket": nomor_tiket, "kategori": t["kategori"], "status_tiket": t["status"],
@@ -158,7 +153,7 @@ def ubah_alamat_pemasangan(nomor_pelanggan: str, alamat_baru: str) -> dict:
         return {"status": "error", "pesan": "Nomor pelanggan tidak ditemukan."}
     nomor, cust = found
     TOOL_AUDIT.append({"tool": "ubah_alamat_pemasangan", "alamat_baru": alamat_baru})
-    cust["alamat_pemasangan_pending"] = alamat_baru
+    db.set_pending_address(nomor, alamat_baru)
     return {"status": "ok", "nomor_pelanggan": nomor, "pesan": "Pengajuan pindah alamat diterima, survei 1-3 hari kerja.",
             "alamat_baru": alamat_baru, "biaya": 150000}
 

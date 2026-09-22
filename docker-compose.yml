@@ -29,6 +29,8 @@ services:
       - PII_REDACTION_MODE=${PII_REDACTION_MODE:-pseudonymize}
       - PII_FAIL_MODE=${PII_FAIL_MODE:-closed}
       - ALLOW_ORIGINS=http://localhost:3100
+    volumes:
+      - cs-agent-data:/app/data   # mock customer/ticket SQLite db — survives `down`/`up`
     depends_on:
       ner-service:
         condition: service_healthy
@@ -45,3 +47,6 @@ services:
       resources:
         limits: { cpus: "0.25", memory: 64M }
         reservations: { cpus: "0.05", memory: 16M }
+
+volumes:
+  cs-agent-data:

@@ -10,7 +10,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY agents ./agents
 
-ENV PYTHONUNBUFFERED=1 PORT=8000 ALLOW_ORIGINS=http://localhost:3100
+# SQLite mock-backend file (agents/cs_agent/db.py) lives here; created + owned by the
+# non-root `app` user up front since it won't have permission to create it at runtime.
+RUN mkdir -p /app/data && chown app:app /app/data
+
+ENV PYTHONUNBUFFERED=1 PORT=8000 ALLOW_ORIGINS=http://localhost:3100 VENTRA_DB_PATH=/app/data/ventra.db
 USER app
 EXPOSE 8000
 

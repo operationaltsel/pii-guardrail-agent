@@ -4,6 +4,7 @@ LABEL org.opencontainers.image.title="ventra-care-web" \
       org.opencontainers.image.description="Customer-facing chat UI for the Ventra CS agent"
 
 COPY index.html /usr/share/nginx/html/index.html
+COPY avatar.png /usr/share/nginx/html/avatar.png
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

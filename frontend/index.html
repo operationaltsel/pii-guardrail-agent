@@ -230,11 +230,10 @@
   /* Assistant messages: no bubble, plain text on the page background — this is
      the single biggest cue that reads as "real AI assistant" vs. "support widget". */
   .avatar {
-    width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    margin-top: 2px; background: var(--color-accent); color: var(--color-on-accent);
+    width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+    overflow: hidden; margin-top: 2px;
   }
-  .avatar svg { width: 14px; height: 14px; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .bubble-col { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   .row.agent .bubble-col { max-width: 100%; }
@@ -536,7 +535,7 @@
   }
 
   /* ============================== Rendering ============================== */
-  const AGENT_AVATAR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="3.2"/></svg>`;
+  const AGENT_AVATAR = `<img src="avatar.png" alt="" width="30" height="30">`;
 
   function ensureWelcomeHidden() {
     if (welcome && welcome.parentNode) welcome.remove();

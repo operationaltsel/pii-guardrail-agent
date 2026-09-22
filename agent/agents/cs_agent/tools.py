@@ -11,13 +11,41 @@ import re
 from datetime import date, timedelta
 
 _CUSTOMERS = {
-    "1122334455": {"nama_pelanggan": "Budi Santoso", "paket": "NusaFiber 50 Mbps", "alamat_pemasangan":
-                   "Jl. Sudirman No. 10, Jakarta Pusat", "tagihan": 385000, "status_bayar": "BELUM LUNAS"},
-    "2233445566": {"nama_pelanggan": "Siti Rahmawati", "paket": "NusaFiber 100 Mbps", "alamat_pemasangan":
-                   "Perum Griya Indah Blok C2 No. 7, Bekasi", "tagihan": 525000, "status_bayar": "LUNAS"},
-    "3344556677": {"nama_pelanggan": "I Made Wirawan", "paket": "NusaFiber 30 Mbps", "alamat_pemasangan":
-                   "Jl. Raya Kuta No. 88, Badung", "tagihan": 275000, "status_bayar": "BELUM LUNAS"},
+    "1122334455": {"nama_pelanggan": "Budi Santoso", "no_hp": "081234567890", "paket": "NusaFiber 50 Mbps",
+                   "alamat_pemasangan": "Jl. Sudirman No. 10, Jakarta Pusat", "tagihan": 385000, "status_bayar": "BELUM LUNAS"},
+    "2233445566": {"nama_pelanggan": "Siti Rahmawati", "no_hp": "085711223344", "paket": "NusaFiber 100 Mbps",
+                   "alamat_pemasangan": "Perum Griya Indah Blok C2 No. 7, Bekasi", "tagihan": 525000, "status_bayar": "LUNAS"},
+    "3344556677": {"nama_pelanggan": "I Made Wirawan", "no_hp": "081399887766", "paket": "NusaFiber 30 Mbps",
+                   "alamat_pemasangan": "Jl. Raya Kuta No. 88, Badung", "tagihan": 275000, "status_bayar": "BELUM LUNAS"},
 }
+
+
+def _normalize_phone(s: str) -> str:
+    d = re.sub(r"\D", "", s)
+    return "0" + d[2:] if d.startswith("62") else d
+
+
+def _find_customer(identitas: str) -> tuple[str, dict] | None:
+    """Resolves a customer by whatever the caller actually has on hand: the internal
+    10-digit nomor_pelanggan (what a CS system uses), a phone number (what a real customer
+    remembers), or a name (last resort, may be ambiguous — first match wins for this demo).
+    This mirrors how a real CS lookup works: the agent almost never gets the exact internal
+    ID first; it resolves the customer from what they say, then uses the ID internally.
+    """
+    q_digits = re.sub(r"\D", "", identitas)
+    if q_digits in _CUSTOMERS:
+        return q_digits, _CUSTOMERS[q_digits]
+    if q_digits:
+        q_phone = _normalize_phone(identitas)
+        for nomor, cust in _CUSTOMERS.items():
+            if cust["no_hp"] == q_phone or cust["no_hp"].endswith(q_digits[-8:]) and len(q_digits) >= 8:
+                return nomor, cust
+    q_name = identitas.strip().lower()
+    if len(q_name) >= 3:
+        for nomor, cust in _CUSTOMERS.items():
+            if q_name in cust["nama_pelanggan"].lower():
+                return nomor, cust
+    return None
 _OUTAGES = {
     "bekasi": "Gangguan massal akibat kabel optik putus di area Bekasi Timur. Estimasi normal hari ini 21:00 WIB.",
     "bandung": "Pemeliharaan terjadwal pukul 01:00-04:00 WIB di sebagian wilayah Bandung Utara.",
@@ -37,16 +65,39 @@ _ticket_seq = itertools.count(1001)
 TOOL_AUDIT: list[dict] = []
 
 
-def cek_tagihan(nomor_pelanggan: str) -> dict:
-    """Cek tagihan bulan berjalan untuk nomor pelanggan NusaTel (10 digit).
+def cari_pelanggan(identitas: str) -> dict:
+    """Cari data pelanggan NusaTel. Gunakan ini kalau pelanggan TIDAK tahu nomor
+    pelanggannya — kebanyakan pelanggan hanya ingat nomor HP atau nama mereka, bukan ID
+    internal 10 digit. Coba tool ini dulu dengan nomor HP/nama sebelum meminta pelanggan
+    mencari-cari nomor pelanggannya sendiri.
 
     Args:
-        nomor_pelanggan: Nomor pelanggan 10 digit, contoh "1122334455".
+        identitas: Nomor pelanggan 10 digit, ATAU nomor HP terdaftar, ATAU nama pelanggan
+            (boleh berupa placeholder [REDACT_PHONE_n]/[REDACT_NAMA_n] dari percakapan).
     """
-    cust = _CUSTOMERS.get(re.sub(r"\D", "", nomor_pelanggan))
-    if not cust:
+    found = _find_customer(identitas)
+    if not found:
+        return {"status": "not_found",
+                "pesan": "Pelanggan tidak ditemukan dari nomor HP/nama tersebut. Tawarkan untuk "
+                         "mencari dengan cara lain, atau minta nomor pelanggan bila pelanggan punya tagihan fisik."}
+    nomor, cust = found
+    return {"status": "ok", "nomor_pelanggan": nomor, "nama_pelanggan": cust["nama_pelanggan"],
+            "no_hp": cust["no_hp"], "paket": cust["paket"], "alamat_pemasangan": cust["alamat_pemasangan"]}
+
+
+def cek_tagihan(nomor_pelanggan: str) -> dict:
+    """Cek tagihan bulan berjalan untuk pelanggan NusaTel.
+
+    Args:
+        nomor_pelanggan: Idealnya nomor pelanggan 10 digit (contoh "1122334455"), tapi
+            nomor HP terdaftar atau nama pelanggan juga diterima — tool ini akan mencari
+            pelanggan yang cocok secara otomatis (sama seperti cari_pelanggan).
+    """
+    found = _find_customer(nomor_pelanggan)
+    if not found:
         return {"status": "error", "pesan": "Nomor pelanggan tidak ditemukan."}
-    return {"status": "ok", "nomor_pelanggan": nomor_pelanggan, "nama_pelanggan": cust["nama_pelanggan"],
+    nomor, cust = found
+    return {"status": "ok", "nomor_pelanggan": nomor, "nama_pelanggan": cust["nama_pelanggan"],
             "paket": cust["paket"], "periode": date.today().strftime("%B %Y"), "total_tagihan": cust["tagihan"],
             "status_bayar": cust["status_bayar"], "jatuh_tempo": (date.today().replace(day=20)).isoformat()}
 
@@ -98,15 +149,17 @@ def ubah_alamat_pemasangan(nomor_pelanggan: str, alamat_baru: str) -> dict:
     """Ajukan perubahan alamat pemasangan layanan.
 
     Args:
-        nomor_pelanggan: Nomor pelanggan 10 digit.
+        nomor_pelanggan: Idealnya nomor pelanggan 10 digit, tapi nomor HP terdaftar atau
+            nama pelanggan juga diterima (dicari otomatis, sama seperti cari_pelanggan).
         alamat_baru: Alamat baru lengkap (boleh berupa placeholder [REDACT_ADDRESS_n]).
     """
-    cust = _CUSTOMERS.get(re.sub(r"\D", "", nomor_pelanggan))
-    if not cust:
+    found = _find_customer(nomor_pelanggan)
+    if not found:
         return {"status": "error", "pesan": "Nomor pelanggan tidak ditemukan."}
+    nomor, cust = found
     TOOL_AUDIT.append({"tool": "ubah_alamat_pemasangan", "alamat_baru": alamat_baru})
     cust["alamat_pemasangan_pending"] = alamat_baru
-    return {"status": "ok", "pesan": "Pengajuan pindah alamat diterima, survei 1-3 hari kerja.",
+    return {"status": "ok", "nomor_pelanggan": nomor, "pesan": "Pengajuan pindah alamat diterima, survei 1-3 hari kerja.",
             "alamat_baru": alamat_baru, "biaya": 150000}
 
 
@@ -122,4 +175,5 @@ def cari_faq(topik: str) -> dict:
     return {"status": "ok", "hasil": hits or [{"topik": "-", "jawaban": "Tidak ditemukan di FAQ."}]}
 
 
-ALL_TOOLS = [cek_tagihan, cek_gangguan_wilayah, buat_tiket_pengaduan, cek_status_tiket, ubah_alamat_pemasangan, cari_faq]
+ALL_TOOLS = [cari_pelanggan, cek_tagihan, cek_gangguan_wilayah, buat_tiket_pengaduan, cek_status_tiket,
+            ubah_alamat_pemasangan, cari_faq]

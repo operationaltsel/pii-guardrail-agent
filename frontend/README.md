@@ -68,6 +68,24 @@ Untuk menunjuk ke API di alamat lain (mis. staging): buka
 * **Resilien terhadap restart server**: session ID divalidasi (`GET` sebelum dipakai) setiap
   kali; jika server di-restart (session in-memory hilang), frontend otomatis membuat sesi
   baru alih-alih gagal diam-diam.
+* **Sidebar riwayat percakapan**: "Percakapan baru" tanpa cara melihat lagi chat sebelumnya
+  terasa seperti kehilangan data — pola ChatGPT/Claude (daftar sesi di sidebar, klik untuk
+  buka kembali) dipakai di sini juga. Daftar sesi & transkrip diambil ulang dari REST API ADK
+  (`GET /apps/.../sessions`), bukan disimpan terpisah di browser, supaya tetap konsisten
+  dengan apa yang benar-benar ada di server.
+* **Konfirmasi hapus dua langkah, bukan `window.confirm()`**: dialog konfirmasi native
+  browser diam-diam tidak melakukan apa-apa saat diuji lewat automated browser tool (kemungkinan
+  auto-dismiss di konteks embedded/automated) — berisiko sama tidak konsistennya di konteks
+  browser lain yang serupa. Diganti UI inline dua langkah dalam kendali sendiri: klik pertama
+  mempersenjatai state konfirmasi (ikon centang, 3 detik), klik kedua dalam jendela itu baru
+  benar-benar menghapus.
+* **Balasan singkat & tombol pilihan cepat (gaya asisten telco seperti Veronika)**: prompt
+  agent diarahkan menutup giliran dengan pilihan tertutup yang jelas (mis. konfirmasi ya/tidak,
+  menu kategori, lanjutan tindakan) sebagai baris `[PILIHAN] Opsi 1 | Opsi 2 | ...` di akhir
+  pesan. Frontend mem-parsing baris itu, menghapusnya dari teks yang tampil, dan merender
+  tiap opsi sebagai chip yang bisa langsung diklik (mengirim label opsi itu sebagai pesan
+  berikutnya) — mengurangi mengetik untuk alur transaksional umum, tanpa membatasi pelanggan
+  yang tetap mau mengetik bebas.
 * **Aksesibilitas**: kontras warna diverifikasi (≥4.5:1 teks normal), navigasi keyboard penuh
   dengan focus ring terlihat, `role="log" aria-live="polite"` pada transkrip agar pembaca
   layar mengumumkan balasan baru, target sentuh minimal 44×44px, `prefers-reduced-motion`

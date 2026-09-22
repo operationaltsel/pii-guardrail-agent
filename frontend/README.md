@@ -1,6 +1,6 @@
-# NusaTel Care — Chat UI
+# Ventra Care — Chat UI
 
-Antarmuka chat customer-facing untuk agent NusaTel, menggantikan konsol developer bawaan
+Antarmuka chat customer-facing untuk agent Ventra, menggantikan konsol developer bawaan
 ADK (`adk web`) yang tidak dirancang untuk dilihat pelanggan. Satu file HTML statis, tanpa
 langkah build — memudahkan deploy (Nginx/`python -m http.server`/CDN mana pun) dan
 memastikan tidak ada dependency Node.js yang perlu dijaga.
@@ -22,7 +22,7 @@ cd frontend && python -m http.server 3100
 
 Untuk menunjuk ke API di alamat lain (mis. staging): buka
 `http://localhost:3100/?api=https://staging.example.com`, atau set
-`window.NUSATEL_API_BASE` sebelum skrip dimuat.
+`window.VENTRA_API_BASE` sebelum skrip dimuat.
 
 ## Keputusan desain
 

@@ -1,4 +1,4 @@
-"""NusaTel customer-support agent (Google ADK + Gemini) with a PII guardrail.
+"""Ventra customer-support agent (Google ADK + Gemini) with a PII guardrail.
 
 Run locally:
     adk web agent/agents          # dev UI at http://localhost:8000
@@ -21,9 +21,9 @@ settings = get_settings()
 guardrail = PiiGuardrail(settings)
 
 root_agent = Agent(
-    name="nusatel_cs_agent",
+    name="ventra_cs_agent",
     model=settings.gemini_model,
-    description="Customer support NusaTel dengan guardrail PII (regex + NER).",
+    description="Customer support Ventra dengan guardrail PII (regex + NER).",
     instruction=INSTRUCTION,
     tools=ALL_TOOLS,
     before_model_callback=guardrail.before_model,   # the guardrail required by the brief

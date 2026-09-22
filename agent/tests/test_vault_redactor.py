@@ -70,9 +70,9 @@ def test_known_values_retokenised_without_ner(fake_ner):
 def test_structured_tool_output_policy():
     r = Redactor()
     v = Vault()
-    out = r.redact_structured({"nama_pelanggan": "Budi Santoso", "kontak": "budi@gmail.com", "paket": "NusaFiber 50",
+    out = r.redact_structured({"nama_pelanggan": "Budi Santoso", "kontak": "budi@gmail.com", "paket": "VentraFiber 50",
                                "alamat_pemasangan": "Jl. Sudirman No. 10", "total_tagihan": 385000,
                                "catatan": "hubungi 081234567890"}, v)
-    assert out == {"nama_pelanggan": "[REDACT_NAMA_1]", "kontak": "[REDACT_EMAIL_1]", "paket": "NusaFiber 50",
+    assert out == {"nama_pelanggan": "[REDACT_NAMA_1]", "kontak": "[REDACT_EMAIL_1]", "paket": "VentraFiber 50",
                    "alamat_pemasangan": "[REDACT_ADDRESS_1]", "total_tagihan": 385000,
                    "catatan": "hubungi [REDACT_PHONE_1]"}

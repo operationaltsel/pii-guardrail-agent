@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: cs-agent
-          image: REGISTRY/nusatel-cs-agent:latest   # replace with your Artifact Registry path
+          image: REGISTRY/ventra-cs-agent:latest   # replace with your Artifact Registry path
           ports: [{ containerPort: 8000 }]
           env:
             - { name: GEMINI_MODEL, value: "gemini-3.5-flash-lite" }

@@ -1,4 +1,4 @@
-"""Customer-support tools for the fictional ISP/telco "NusaTel" (in-memory mock backend).
+"""Customer-support tools for the fictional ISP/telco "Ventra" (in-memory mock backend).
 
 Tools receive REAL values (de-tokenised by ``before_tool_callback``) and their outputs are
 re-tokenised by ``after_tool_callback`` before the LLM sees them. Field names matter:
@@ -11,11 +11,11 @@ import re
 from datetime import date, timedelta
 
 _CUSTOMERS = {
-    "1122334455": {"nama_pelanggan": "Budi Santoso", "no_hp": "081234567890", "paket": "NusaFiber 50 Mbps",
+    "1122334455": {"nama_pelanggan": "Budi Santoso", "no_hp": "081234567890", "paket": "VentraFiber 50 Mbps",
                    "alamat_pemasangan": "Jl. Sudirman No. 10, Jakarta Pusat", "tagihan": 385000, "status_bayar": "BELUM LUNAS"},
-    "2233445566": {"nama_pelanggan": "Siti Rahmawati", "no_hp": "085711223344", "paket": "NusaFiber 100 Mbps",
+    "2233445566": {"nama_pelanggan": "Siti Rahmawati", "no_hp": "085711223344", "paket": "VentraFiber 100 Mbps",
                    "alamat_pemasangan": "Perum Griya Indah Blok C2 No. 7, Bekasi", "tagihan": 525000, "status_bayar": "LUNAS"},
-    "3344556677": {"nama_pelanggan": "I Made Wirawan", "no_hp": "081399887766", "paket": "NusaFiber 30 Mbps",
+    "3344556677": {"nama_pelanggan": "I Made Wirawan", "no_hp": "081399887766", "paket": "VentraFiber 30 Mbps",
                    "alamat_pemasangan": "Jl. Raya Kuta No. 88, Badung", "tagihan": 275000, "status_bayar": "BELUM LUNAS"},
 }
 
@@ -55,7 +55,7 @@ _FAQ = {
     "lampu los merah": "Lampu LOS merah berarti sinyal optik terputus. Jangan reset pabrik; laporkan gangguan agar teknisi dikirim.",
     "ganti password wifi": "Buka 192.168.1.1 dari perangkat yang terhubung, login, menu WLAN > Security, ganti WPA key.",
     "pindah alamat": "Pindah alamat dapat diajukan via agent ini. Survei 1-3 hari kerja, biaya Rp150.000.",
-    "cara bayar": "Pembayaran via virtual account bank, QRIS, minimarket, atau aplikasi MyNusaTel.",
+    "cara bayar": "Pembayaran via virtual account bank, QRIS, minimarket, atau aplikasi MyVentra.",
     "berhenti berlangganan": "Pengajuan berhenti langganan diproses 3 hari kerja; modem wajib dikembalikan.",
 }
 _TICKETS: dict[str, dict] = {}
@@ -66,7 +66,7 @@ TOOL_AUDIT: list[dict] = []
 
 
 def cari_pelanggan(identitas: str) -> dict:
-    """Cari data pelanggan NusaTel. Gunakan ini kalau pelanggan TIDAK tahu nomor
+    """Cari data pelanggan Ventra. Gunakan ini kalau pelanggan TIDAK tahu nomor
     pelanggannya — kebanyakan pelanggan hanya ingat nomor HP atau nama mereka, bukan ID
     internal 10 digit. Coba tool ini dulu dengan nomor HP/nama sebelum meminta pelanggan
     mencari-cari nomor pelanggannya sendiri.
@@ -86,7 +86,7 @@ def cari_pelanggan(identitas: str) -> dict:
 
 
 def cek_tagihan(nomor_pelanggan: str) -> dict:
-    """Cek tagihan bulan berjalan untuk pelanggan NusaTel.
+    """Cek tagihan bulan berjalan untuk pelanggan Ventra.
 
     Args:
         nomor_pelanggan: Idealnya nomor pelanggan 10 digit (contoh "1122334455"), tapi
@@ -164,7 +164,7 @@ def ubah_alamat_pemasangan(nomor_pelanggan: str, alamat_baru: str) -> dict:
 
 
 def cari_faq(topik: str) -> dict:
-    """Cari jawaban dari basis pengetahuan (FAQ) NusaTel.
+    """Cari jawaban dari basis pengetahuan (FAQ) Ventra.
 
     Args:
         topik: Kata kunci, contoh "restart modem", "lampu LOS merah", "cara bayar".

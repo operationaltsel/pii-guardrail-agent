@@ -445,11 +445,11 @@
 
   /* ============================== Config ============================== */
   const params = new URLSearchParams(location.search);
-  const API_BASE = params.get('api') || window.NUSATEL_API_BASE || 'http://localhost:8000';
+  const API_BASE = params.get('api') || window.VENTRA_API_BASE || 'http://localhost:8000';
   const APP_NAME = 'cs_agent';
-  const STORAGE_USER = 'nusatel_user_id';
-  const STORAGE_SESSION = 'nusatel_session_id';
-  const STORAGE_THEME = 'nusatel_theme';
+  const STORAGE_USER = 'ventra_user_id';
+  const STORAGE_SESSION = 'ventra_session_id';
+  const STORAGE_THEME = 'ventra_theme';
 
   const TOOL_LABELS = {
     cek_tagihan: 'Mengecek tagihan…',

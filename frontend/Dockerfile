@@ -1,7 +1,7 @@
 # Static file only — no build step (plain HTML/CSS/JS on purpose, see frontend/README.md).
 FROM nginx:1.27-alpine
-LABEL org.opencontainers.image.title="nusatel-care-web" \
-      org.opencontainers.image.description="Customer-facing chat UI for the NusaTel CS agent"
+LABEL org.opencontainers.image.title="ventra-care-web" \
+      org.opencontainers.image.description="Customer-facing chat UI for the Ventra CS agent"
 
 COPY index.html /usr/share/nginx/html/index.html
 COPY nginx.conf /etc/nginx/conf.d/default.conf

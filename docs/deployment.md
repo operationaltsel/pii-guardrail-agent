@@ -39,9 +39,9 @@ docker build -t asia-southeast2-docker.pkg.dev/PROJECT/pii-guardrail/pii-ner-ser
     ner_service/
 docker push asia-southeast2-docker.pkg.dev/PROJECT/pii-guardrail/pii-ner-service:v1
 
-docker build -t asia-southeast2-docker.pkg.dev/PROJECT/pii-guardrail/nusatel-cs-agent:v1 \
+docker build -t asia-southeast2-docker.pkg.dev/PROJECT/pii-guardrail/ventra-cs-agent:v1 \
     agent/
-docker push asia-southeast2-docker.pkg.dev/PROJECT/pii-guardrail/nusatel-cs-agent:v1
+docker push asia-southeast2-docker.pkg.dev/PROJECT/pii-guardrail/ventra-cs-agent:v1
 
 # 3. Ganti placeholder REGISTRY/... di deploy/k8s/*.yaml dengan path Artifact Registry di
 #    atas, lalu buat secret API key Gemini

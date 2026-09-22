@@ -1,5 +1,5 @@
 FROM python:3.12-slim
-LABEL org.opencontainers.image.title="nusatel-cs-agent" \
+LABEL org.opencontainers.image.title="ventra-cs-agent" \
       org.opencontainers.image.description="Google ADK customer-support agent with PII guardrail (regex + remote NER)"
 
 RUN groupadd -r app && useradd -r -g app app

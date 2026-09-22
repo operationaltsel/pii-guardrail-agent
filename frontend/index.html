@@ -259,6 +259,18 @@
 
   .msg-meta { font-size: 11px; color: var(--color-muted-foreground); padding: 0 2px; }
 
+  /* Quick-reply buttons parsed from the agent's own [PILIHAN] line (see prompts.py) —
+     same visual language as the welcome screen's suggestion chips, on purpose: one
+     "tappable option" pattern in the whole app, not a second competing style. */
+  .quick-replies { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: 2px; }
+  .quick-reply-chip {
+    border: 1px solid var(--color-border); background: none;
+    color: var(--color-accent); border-radius: 999px; padding: 7px 14px;
+    font-size: 13.5px; font-weight: 500; cursor: pointer;
+    transition: border-color 120ms, background 120ms; min-height: 36px;
+  }
+  .quick-reply-chip:hover { border-color: var(--color-accent); background: var(--color-surface); }
+
   /* Per-message proof that the guardrail acted on THIS message — attached where the
      evidence is relevant, not as a page-wide banner. Only appears when something was
      actually found (server-verified), so it never fires on messages with no PII. */
@@ -584,26 +596,60 @@
     scrollToBottom();
   }
 
-  function setAgentText(col, text) {
-    const bubble = col.querySelector('[data-role="agent-bubble"]');
-    bubble.innerHTML = renderMarkdown(text);
+  // A trailing `[PILIHAN] Opsi 1 | Opsi 2` line (see prompts.py) becomes tappable quick-reply
+  // buttons instead of text the customer has to retype — the single most recognisable pattern
+  // of menu-driven telco assistants (Veronika/Telkomsel and similar). Parsed defensively so a
+  // still-streaming, not-yet-complete line is simply left as plain text until it completes.
+  const QUICK_REPLY_RE = /\n?\[PILIHAN\]\s*(.+?)\s*$/;
+  function parseQuickReplies(text) {
+    const m = text.match(QUICK_REPLY_RE);
+    if (!m) return { text, options: [] };
+    const options = m[1].split('|').map((s) => s.trim()).filter(Boolean).slice(0, 4);
+    if (!options.length) return { text, options: [] };
+    return { text: text.slice(0, m.index).trimEnd(), options };
   }
 
-  function finalizeAgentMessage(col) {
+  function setAgentText(col, text) {
+    const bubble = col.querySelector('[data-role="agent-bubble"]');
+    bubble.innerHTML = renderMarkdown(parseQuickReplies(text).text);
+  }
+
+  function addQuickReplies(col, options) {
+    if (!options.length || col.querySelector('.quick-replies')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'quick-replies';
+    for (const opt of options) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'quick-reply-chip';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => {
+        wrap.remove(); // this turn is answered — don't leave stale options tappable
+        sendMessage(opt);
+      });
+      wrap.appendChild(btn);
+    }
+    col.appendChild(wrap);
+    scrollToBottom();
+  }
+
+  function finalizeAgentMessage(col, text) {
     if (!col.querySelector('.msg-meta')) {
       const meta = document.createElement('div');
       meta.className = 'msg-meta';
       meta.textContent = timeNow();
       col.appendChild(meta);
     }
+    if (typeof text === 'string') addQuickReplies(col, parseQuickReplies(text).options);
   }
 
   function removeIfEmpty(col) {
     const bubble = col.querySelector('[data-role="agent-bubble"]');
-    if (bubble && !bubble.textContent.trim() && !col.querySelector('.tool-chip')) {
+    const hasOtherContent = col.querySelector('.tool-chip') || col.querySelector('.quick-replies');
+    if (bubble && !bubble.textContent.trim() && !hasOtherContent) {
       col.closest('.row').remove();
     } else if (bubble && !bubble.textContent.trim()) {
-      bubble.remove(); // only tool chips happened, no final text — drop the empty bubble
+      bubble.remove(); // only tool chips/quick-replies happened, no final text — drop the empty bubble
     }
   }
 
@@ -855,7 +901,7 @@
         } else {
           const col = addAgentPlaceholder();
           setAgentText(col, part.text);
-          finalizeAgentMessage(col);
+          finalizeAgentMessage(col, part.text);
         }
       }
       const detected = evt.actions && evt.actions.stateDelta && evt.actions.stateDelta.pii_report
@@ -970,7 +1016,7 @@
         }
       }
 
-      if (sawContent) finalizeAgentMessage(agentCol);
+      if (sawContent) finalizeAgentMessage(agentCol, finalText);
       removeIfEmpty(agentCol);
       if (isNewSession && sawContent) setSessionTitle(text);
     } catch (err) {

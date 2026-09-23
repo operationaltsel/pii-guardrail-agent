@@ -28,7 +28,7 @@ spec:
           image: REGISTRY/ventra-cs-agent:latest   # replace with your Artifact Registry path
           ports: [{ containerPort: 8000 }]
           env:
-            - { name: GEMINI_MODEL, value: "gemini-3.5-flash-lite" }
+            - { name: GEMINI_MODEL, value: "gemini-3.6-flash" }
             - { name: NER_SERVICE_URL, value: "http://ner-service.pii-guardrail.svc.cluster.local:8001" }
             - { name: NER_TIMEOUT_S, value: "3.0" }
             - { name: PII_REDACTION_MODE, value: "pseudonymize" }

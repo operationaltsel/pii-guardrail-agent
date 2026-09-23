@@ -56,6 +56,8 @@ _FAQ = {
     "ganti password wifi": "Buka 192.168.1.1 dari perangkat yang terhubung, login, menu WLAN > Security, ganti WPA key.",
     "pindah alamat": "Pindah alamat dapat diajukan via agent ini. Survei 1-3 hari kerja, biaya Rp150.000.",
     "cara bayar": "Pembayaran via virtual account bank, QRIS, minimarket, atau aplikasi MyVentra.",
+    "info paket": "VentraFiber tersedia 30 Mbps (Rp275.000/bln), 50 Mbps (Rp385.000/bln), dan "
+                  "100 Mbps (Rp525.000/bln). Semua paket unlimited kuota, instalasi gratis untuk area terjangkau.",
     "berhenti berlangganan": "Pengajuan berhenti langganan diproses 3 hari kerja; modem wajib dikembalikan.",
 }
 # Visible to tests/demo: proves tools received real values while the LLM saw tokens.

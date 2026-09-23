@@ -23,7 +23,7 @@ services:
     ports: ["8000:8000"]
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY:?set GOOGLE_API_KEY in .env or the environment}
-      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash-lite}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.6-flash}
       - NER_SERVICE_URL=http://ner-service:8001
       - NER_TIMEOUT_S=3.0
       - PII_REDACTION_MODE=${PII_REDACTION_MODE:-pseudonymize}

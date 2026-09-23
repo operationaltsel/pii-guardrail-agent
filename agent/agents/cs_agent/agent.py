@@ -9,6 +9,8 @@ from __future__ import annotations
 import logging
 
 from google.adk.agents import Agent
+from google.adk.models import Gemini
+from google.genai import types as genai_types
 
 from .config import get_settings
 from .guardrail import PiiGuardrail
@@ -22,7 +24,14 @@ guardrail = PiiGuardrail(settings)
 
 root_agent = Agent(
     name="ventra_cs_agent",
-    model=settings.gemini_model,
+    model=Gemini(
+        model=settings.gemini_model,
+        retry_options=genai_types.HttpRetryOptions(
+            attempts=settings.gemini_retry_attempts,
+            initial_delay=settings.gemini_retry_initial_delay_s,
+            max_delay=settings.gemini_retry_max_delay_s,
+        ),
+    ),
     description="Customer support Ventra dengan guardrail PII (regex + NER).",
     instruction=INSTRUCTION,
     tools=ALL_TOOLS,

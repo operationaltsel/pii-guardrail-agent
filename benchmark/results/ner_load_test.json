@@ -1,0 +1,61 @@
+{
+  "url": "http://localhost:8001",
+  "levels": [
+    {
+      "concurrency": 1,
+      "requests": 100,
+      "wall_seconds": 8.078,
+      "throughput_req_per_sec": 12.4,
+      "latency_ms": {
+        "mean": 80.7,
+        "min": 25.7,
+        "p50": 84.3,
+        "p95": 118.0,
+        "p99": 191.0,
+        "max": 191.2
+      }
+    },
+    {
+      "concurrency": 5,
+      "requests": 100,
+      "wall_seconds": 9.286,
+      "throughput_req_per_sec": 10.8,
+      "latency_ms": {
+        "mean": 460.1,
+        "min": 92.1,
+        "p50": 411.9,
+        "p95": 787.1,
+        "p99": 1183.2,
+        "max": 1185.1
+      }
+    },
+    {
+      "concurrency": 10,
+      "requests": 100,
+      "wall_seconds": 10.107,
+      "throughput_req_per_sec": 9.9,
+      "latency_ms": {
+        "mean": 985.6,
+        "min": 600.1,
+        "p50": 999.1,
+        "p95": 1302.8,
+        "p99": 1497.8,
+        "max": 1498.8
+      }
+    },
+    {
+      "concurrency": 20,
+      "requests": 100,
+      "wall_seconds": 9.6,
+      "throughput_req_per_sec": 10.4,
+      "latency_ms": {
+        "mean": 1832.0,
+        "min": 903.7,
+        "p50": 1846.0,
+        "p95": 2500.6,
+        "p99": 3181.3,
+        "max": 3183.1
+      }
+    }
+  ]
+}

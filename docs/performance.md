@@ -71,6 +71,40 @@ bukan untuk mempercepat komputasi inti. Endpoint `/v1/ner/batch` disediakan untu
 kasus penggunaan non-real-time (mis. audit ulang riwayat chat), bukan jalur utama
 guardrail (yang selalu satu pesan per panggilan).
 
+## Load test HTTP nyata (concurrency)
+
+Semua angka di atas diukur **in-process**, satu panggilan berurutan langsung ke
+`NerEngine` — tidak pernah menyentuh jaringan, FastAPI, atau uvicorn, dan tidak pernah
+lebih dari satu request pada satu waktu. Untuk melihat apa yang sebenarnya terjadi saat
+beberapa klien memukul endpoint HTTP secara bersamaan (skenario nyata: beberapa sesi chat
+aktif sekaligus), [`benchmark/load_test_ner.py`](../benchmark/load_test_ner.py) mengirim
+request `POST /v1/ner` sungguhan lewat jaringan ke container `ner-service` yang sedang
+jalan (`docker compose up`), dari beberapa thread sekaligus, pada beberapa level
+concurrency. Hasil mentah: [`ner_load_test.json`](../benchmark/results/ner_load_test.json).
+Reproduksi: `make load-test-ner` (butuh `ner-service` sudah jalan).
+
+| Concurrency | Throughput (req/s) | p50 | p95 | p99 |
+|---|---|---|---|---|
+| 1  | 12,4 | 84 ms    | 118 ms   | 191 ms   |
+| 5  | 10,8 | 412 ms   | 787 ms   | 1.183 ms |
+| 10 | 9,9  | 999 ms   | 1.303 ms | 1.498 ms |
+| 20 | 10,4 | 1.846 ms | 2.501 ms | 3.181 ms |
+
+**Temuan kunci: throughput mendatar di ~10-12 req/detik di semua level concurrency** —
+menambah klien dari 1 ke 20 tidak menambah throughput sama sekali, hanya menambah antrean
+(p50 naik dari 84 ms ke 1.846 ms secara linear terhadap concurrency). Ini konsisten dengan
+hasil "CPU & throughput batch" di atas: instance ini terikat CPU pada ~2 ORT thread
+(`NER_THREADS=2`, `limits.cpu: "1"` di manifest k8s), jadi satu instance punya plafon
+throughput yang keras, bukan yang melambat secara bertahap.
+
+**Implikasi sizing**: menaikkan `NER_THREADS`/CPU limit satu instance hanya menggeser
+plafon sedikit (dan bersaing dengan proses lain di node yang sama). Respons yang benar
+terhadap beban tinggi adalah **horizontal**, bukan vertikal — persis yang sudah
+dikonfigurasi `HorizontalPodAutoscaler` di
+[`deploy/k8s/ner-service.yaml`](../deploy/k8s/ner-service.yaml) (`minReplicas: 2,
+maxReplicas: 8`, scale on CPU): di atas ~10-12 req/detik sustained, HPA menambah pod baru
+alih-alih membiarkan satu pod mengantre semakin panjang.
+
 ## Interpretasi untuk sizing
 
 * **Latency**: p99 IndoBERT-lite (104,8 ms) memberi margin besar di bawah `NER_TIMEOUT_S`

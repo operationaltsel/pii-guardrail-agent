@@ -5,7 +5,7 @@ NER_TRAIN := ner_training/src
 
 .PHONY: help venv install-training install-service install-agent \
         dataset train-crf train-base train-lite export-onnx tune-threshold \
-        evaluate-crf evaluate-model benchmark test-guardrail test-service reproduce \
+        evaluate-crf evaluate-model benchmark load-test-ner test-guardrail test-service reproduce \
         compose-up compose-down
 
 help:
@@ -17,6 +17,7 @@ help:
 	@echo "make tune-threshold     # pick the entity threshold on dev"
 	@echo "make evaluate-model     # dev + gold metrics for the served model"
 	@echo "make benchmark          # CPU/RAM/latency (brief section F)"
+	@echo "make load-test-ner      # concurrent HTTP load test against a running ner-service"
 	@echo "make test-guardrail     # pytest: regex, vault, redactor, ADK e2e"
 	@echo "make test-service       # pytest: NER REST API contract"
 	@echo "make reproduce          # the full pipeline, start to finish"
@@ -64,6 +65,9 @@ evaluate-model:
 
 benchmark:
 	cd benchmark && ../$(PY) benchmark_ner.py --model ../ner_service/model
+
+load-test-ner:
+	cd benchmark && ../$(PY) load_test_ner.py --url http://localhost:8001
 
 test-guardrail:
 	cd agent && ../$(PY) -m pytest tests -q

@@ -103,65 +103,6 @@
     height: 100%;
   }
 
-  /* ============================== Sidebar ==============================
-     Desktop: a real flex column that pushes the chat over when open (width
-     transition, not a floating overlay). Below 860px there isn't room to push,
-     so it becomes a slide-in panel with a backdrop instead. */
-  .sidebar {
-    width: 260px; flex-shrink: 0; overflow: hidden;
-    display: flex; flex-direction: column;
-    background: var(--color-surface);
-    border-right: 1px solid var(--color-border);
-    transition: width 180ms ease, border-color 180ms ease;
-  }
-  .shell:not(.sidebar-open) .sidebar { width: 0; border-color: transparent; }
-  .sidebar-inner { width: 260px; flex-shrink: 0; display: flex; flex-direction: column; height: 100%; }
-  .sidebar-top { padding: var(--space-3); flex-shrink: 0; }
-  .new-chat-btn {
-    display: flex; align-items: center; gap: 8px; width: 100%;
-    border: 1px solid var(--color-border); background: none; color: var(--color-foreground);
-    border-radius: var(--radius-sm); padding: 8px 10px; font-size: 13.5px; cursor: pointer;
-    min-height: 36px; transition: background 120ms ease;
-  }
-  .new-chat-btn:hover { background: var(--color-background); }
-  .new-chat-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
-
-  .session-list { flex: 1; overflow-y: auto; padding: 0 var(--space-2) var(--space-3); display: flex; flex-direction: column; gap: 1px; }
-  .session-item {
-    display: flex; align-items: center; gap: 6px;
-    padding: 8px 10px; border-radius: var(--radius-sm);
-    cursor: pointer; color: var(--color-foreground); text-decoration: none;
-    border: none; background: none; width: 100%; text-align: left; font-size: 13px;
-  }
-  .session-item:hover { background: var(--color-background); }
-  .session-item.active { background: var(--color-background); font-weight: 600; }
-  .session-item .session-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .session-item .session-delete {
-    flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px; border: none; background: none;
-    color: var(--color-muted-foreground); display: none; align-items: center; justify-content: center; cursor: pointer;
-  }
-  .session-item:hover .session-delete { display: flex; }
-  .session-item .session-delete:hover { background: var(--color-border); color: var(--color-destructive); }
-  .session-item .session-delete svg { width: 13px; height: 13px; }
-  .session-empty { padding: var(--space-3) 10px; font-size: 12.5px; color: var(--color-muted-foreground); }
-
-  .sidebar-backdrop { display: none; }
-
-  @media (max-width: 860px) {
-    .sidebar {
-      position: fixed; inset: 0 auto 0 0; z-index: 40; width: 280px;
-      transform: translateX(-100%); border-right: 1px solid var(--color-border);
-      transition: transform 200ms ease;
-    }
-    .sidebar-inner { width: 280px; }
-    .shell.sidebar-open .sidebar { transform: translateX(0); box-shadow: 12px 0 32px rgba(0,0,0,.18); }
-    .sidebar-backdrop {
-      display: block; position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.35);
-      opacity: 0; pointer-events: none; transition: opacity 200ms ease;
-    }
-    .shell.sidebar-open .sidebar-backdrop { opacity: 1; pointer-events: auto; }
-  }
-
   /* ============================== Header ============================== */
   .header {
     display: flex;
@@ -366,38 +307,20 @@
 
 <div class="shell" id="shell">
 
-  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-
-  <!-- ============================== Sidebar ============================== -->
-  <aside class="sidebar" id="sidebar" aria-label="Riwayat percakapan">
-    <div class="sidebar-inner">
-      <div class="sidebar-top">
-        <button class="new-chat-btn" id="sidebarNewChat" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-          Percakapan baru
-        </button>
-      </div>
-      <nav class="session-list" id="sessionList"></nav>
-    </div>
-  </aside>
-
   <div class="app">
 
   <!-- ============================== Header ============================== -->
   <header class="header">
     <div class="brand">
-      <button class="icon-btn" id="sidebarToggle" type="button" aria-label="Tampilkan/sembunyikan riwayat percakapan" title="Riwayat percakapan">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
-      </button>
       <span class="brand-name">Iting</span>
       <span class="status-line"><span class="status-dot connecting" id="statusDot" aria-hidden="true"></span><span id="statusText">Menghubungkan…</span></span>
     </div>
     <div class="header-actions">
+      <button class="icon-btn" id="resetBtn" type="button" aria-label="Hapus percakapan ini" title="Hapus percakapan">
+        <svg id="resetIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+      </button>
       <button class="icon-btn" id="themeToggle" type="button" aria-label="Ganti tampilan terang/gelap" title="Ganti tampilan">
         <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-      </button>
-      <button class="icon-btn" id="newChatBtn" type="button" aria-label="Mulai percakapan baru" title="Percakapan baru">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
       </button>
     </div>
   </header>
@@ -474,6 +397,13 @@
   let sessionId = sessionStorage.getItem(STORAGE_SESSION) || localStorage.getItem(STORAGE_SESSION);
   let sending = false;
   let sessionTotalRedactions = 0;
+  // Idle nudge: after a few minutes of silence mid-conversation, check in — same pattern as
+  // real telco bots (Vero included). Purely client-side (no LLM call), so it costs no quota
+  // and can't hallucinate. Fires once per idle period; only a genuine new message re-arms it.
+  const IDLE_NUDGE_MS = 2 * 60 * 1000;
+  const IDLE_NUDGE_TEXT = 'Ada lagi yang dapat Iting bantu? Silakan ketik yang Kakak butuhkan.';
+  let idleTimer = null;
+  let hasExchanged = false;
 
   /* ============================== DOM refs ============================== */
   const $ = (id) => document.getElementById(id);
@@ -488,11 +418,9 @@
   const trustDetail = $('trustDetail');
   const themeToggle = $('themeToggle');
   const themeIcon = $('themeIcon');
+  const resetBtn = $('resetBtn');
+  const resetIcon = $('resetIcon');
   const shell = $('shell');
-  const sidebarToggle = $('sidebarToggle');
-  const sidebarBackdrop = $('sidebarBackdrop');
-  const sidebarNewChat = $('sidebarNewChat');
-  const sessionList = $('sessionList');
 
   /* ============================== Utilities ============================== */
   function escapeHtml(s) {
@@ -608,9 +536,23 @@
     return { text: text.slice(0, m.index).trimEnd(), options };
   }
 
+  // Safety net: the server restores [REDACT_*] tokens in the agent's own reply before it
+  // streams to us, but if that ever fails (e.g. the model referenced a token the vault
+  // doesn't have), never show the raw placeholder syntax to the user — swap it for a plain
+  // Indonesian phrase instead. This never reveals the real value (the frontend never has
+  // it), it just avoids leaking implementation detail into a customer-facing chat.
+  const LEAKED_TOKEN_RE = /\[REDACT_(NAMA|ADDRESS|NIK|EMAIL|PHONE)(?:_\d+)?\]/g;
+  const LEAKED_TOKEN_FALLBACK = {
+    NAMA: 'data nama Anda', ADDRESS: 'alamat Anda', NIK: 'NIK Anda',
+    EMAIL: 'email Anda', PHONE: 'nomor HP Anda',
+  };
+  function sanitizeLeakedTokens(text) {
+    return text.replace(LEAKED_TOKEN_RE, (_, tag) => LEAKED_TOKEN_FALLBACK[tag] || 'data Anda');
+  }
+
   function setAgentText(col, text) {
     const bubble = col.querySelector('[data-role="agent-bubble"]');
-    bubble.innerHTML = renderMarkdown(parseQuickReplies(text).text);
+    bubble.innerHTML = renderMarkdown(parseQuickReplies(sanitizeLeakedTokens(text)).text);
   }
 
   function addQuickReplies(col, options) {
@@ -686,6 +628,28 @@
     }, 2200);
   }
 
+  // Trashes the current conversation: clears the visible transcript, drops the local
+  // session reference, and best-effort deletes the session server-side too (so the vault
+  // and history don't just sit around orphaned) — a fresh session is created lazily on the
+  // next message via ensureSession(), same as a brand-new visit.
+  async function resetConversation() {
+    const oldId = sessionId;
+    sessionId = null;
+    sessionStorage.removeItem(STORAGE_SESSION);
+    localStorage.removeItem(STORAGE_SESSION);
+    transcriptInner.innerHTML = '';
+    transcriptInner.appendChild(welcome);
+    sessionTotalRedactions = 0;
+    trustDetail.textContent = DEFAULT_TRUST_DETAIL;
+    cancelIdleNudge();
+    hasExchanged = false;
+    input.focus();
+    if (oldId) {
+      try { await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions/${oldId}`, { method: 'DELETE' }); }
+      catch (_) { /* best-effort — an orphaned in-memory session is harmless */ }
+    }
+  }
+
   /* ============================== API ============================== */
   async function apiFetch(path, options) {
     const res = await fetch(API_BASE + path, {
@@ -727,156 +691,6 @@
       setStatus('offline', 'Tidak dapat terhubung');
       return false;
     }
-  }
-
-  function newConversation() {
-    sessionId = null;
-    sessionStorage.removeItem(STORAGE_SESSION);
-    localStorage.removeItem(STORAGE_SESSION);
-    transcriptInner.innerHTML = '';
-    transcriptInner.appendChild(welcome);
-    sessionTotalRedactions = 0;
-    trustDetail.textContent = DEFAULT_TRUST_DETAIL;
-    highlightActiveSession();
-  }
-
-  /* ============================== Sidebar: chat history ============================== */
-  function setSidebarOpen(open) {
-    shell.classList.toggle('sidebar-open', open);
-  }
-  sidebarToggle.addEventListener('click', () => setSidebarOpen(!shell.classList.contains('sidebar-open')));
-  sidebarBackdrop.addEventListener('click', () => setSidebarOpen(false));
-  // Desktop: start open (there's room). Mobile: start closed (it would cover the chat).
-  setSidebarOpen(window.matchMedia('(min-width: 860px)').matches);
-
-  function closeSidebarOnMobile() {
-    if (!window.matchMedia('(min-width: 860px)').matches) setSidebarOpen(false);
-  }
-
-  function relativeTime(unixSeconds) {
-    const diffMin = Math.round((Date.now() / 1000 - unixSeconds) / 60);
-    if (diffMin < 1) return 'Baru saja';
-    if (diffMin < 60) return `${diffMin} menit lalu`;
-    const diffHour = Math.round(diffMin / 60);
-    if (diffHour < 24) return `${diffHour} jam lalu`;
-    const diffDay = Math.round(diffHour / 24);
-    if (diffDay === 1) return 'Kemarin';
-    if (diffDay < 7) return `${diffDay} hari lalu`;
-    return new Date(unixSeconds * 1000).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-  }
-
-  function sessionTitle(session) {
-    return (session.state && session.state.title) || 'Percakapan baru';
-  }
-
-  function highlightActiveSession() {
-    sessionList.querySelectorAll('.session-item').forEach((el) => {
-      el.classList.toggle('active', el.dataset.sessionId === sessionId);
-    });
-  }
-
-  async function loadSessionList() {
-    let sessions;
-    try {
-      const res = await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions`, { method: 'GET' });
-      sessions = await res.json();
-    } catch (_) {
-      return; // sidebar just stays as-is; not worth surfacing an error for this
-    }
-    sessions.sort((a, b) => b.lastUpdateTime - a.lastUpdateTime);
-    sessionList.innerHTML = '';
-    if (!sessions.length) {
-      const empty = document.createElement('div');
-      empty.className = 'session-empty';
-      empty.textContent = 'Belum ada percakapan.';
-      sessionList.appendChild(empty);
-      return;
-    }
-    for (const session of sessions) {
-      const item = document.createElement('button');
-      item.type = 'button';
-      item.className = 'session-item';
-      item.dataset.sessionId = session.id;
-      item.innerHTML = `
-        <span class="session-title">${escapeHtml(sessionTitle(session))}</span>
-        <button type="button" class="session-delete" aria-label="Hapus percakapan" title="Hapus">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
-        </button>`;
-      item.title = relativeTime(session.lastUpdateTime);
-      item.addEventListener('click', () => openSession(session.id));
-      wireDeleteButton(item.querySelector('.session-delete'), session.id);
-      sessionList.appendChild(item);
-    }
-    highlightActiveSession();
-  }
-
-  async function openSession(id) {
-    if (id === sessionId) { closeSidebarOnMobile(); return; }
-    try {
-      const res = await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions/${id}`, { method: 'GET' });
-      const session = await res.json();
-      sessionId = id;
-      sessionStorage.setItem(STORAGE_SESSION, sessionId);
-      localStorage.setItem(STORAGE_SESSION, sessionId);
-      transcriptInner.innerHTML = '';
-      transcriptInner.appendChild(welcome);
-      sessionTotalRedactions = 0;
-      trustDetail.textContent = DEFAULT_TRUST_DETAIL;
-      renderHistory(session.events);
-      highlightActiveSession();
-    } catch (_) {
-      addSystemError('Tidak dapat membuka percakapan ini.', null);
-    }
-    closeSidebarOnMobile();
-  }
-
-  async function deleteSession(id) {
-    try {
-      await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions/${id}`, { method: 'DELETE' });
-    } catch (_) { /* best-effort */ }
-    if (id === sessionId) newConversation();
-    loadSessionList();
-  }
-
-  const CONFIRM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
-  const DELETE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>';
-
-  // Two-step delete entirely in our own markup (no native confirm() — unreliable across
-  // embedded/automated browser contexts, and it looks inconsistent with the rest of the UI
-  // anyway): first click arms it, a second click within 3s actually deletes.
-  function wireDeleteButton(btn, id) {
-    let armed = false, revertTimer = null;
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (!armed) {
-        armed = true;
-        btn.classList.add('confirm');
-        btn.innerHTML = CONFIRM_ICON;
-        btn.title = 'Klik lagi untuk menghapus';
-        revertTimer = setTimeout(() => {
-          armed = false;
-          btn.classList.remove('confirm');
-          btn.innerHTML = DELETE_ICON;
-          btn.title = 'Hapus';
-        }, 3000);
-        return;
-      }
-      clearTimeout(revertTimer);
-      deleteSession(id);
-    });
-  }
-
-  // Gives the conversation a title (first ~60 chars of the user's first message) so it's
-  // recognisable in the sidebar later — ChatGPT/Claude do the same. Written via ADK's
-  // state-patch endpoint (no agent turn involved), then the list is refreshed.
-  async function setSessionTitle(text) {
-    try {
-      await apiFetch(`/apps/${APP_NAME}/users/${userId}/sessions/${sessionId}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ state_delta: { title: text.slice(0, 60) } }),
-      });
-    } catch (_) { /* non-critical */ }
-    loadSessionList();
   }
 
   // Rebuilds the transcript from a Session's stored events after a page reload — otherwise
@@ -922,8 +736,35 @@
   }
 
   /* ============================== Send flow ============================== */
+  // Quick-reply chips answer ONE specific turn. Once the user moves on — by clicking a chip
+  // (handled inline where it's clicked) or just typing something else — every earlier turn's
+  // chip group is stale: the conversation has moved past whatever question they answered, so
+  // tapping one now could send an option that no longer matches the current context.
+  function clearStaleQuickReplies() {
+    document.querySelectorAll('.quick-replies').forEach((el) => el.remove());
+  }
+
+  function cancelIdleNudge() {
+    clearTimeout(idleTimer);
+    idleTimer = null;
+  }
+
+  function scheduleIdleNudge() {
+    cancelIdleNudge();
+    if (!hasExchanged) return;
+    idleTimer = setTimeout(() => {
+      if (sending) { scheduleIdleNudge(); return; }
+      const col = addAgentPlaceholder();
+      setAgentText(col, IDLE_NUDGE_TEXT);
+      finalizeAgentMessage(col, IDLE_NUDGE_TEXT);
+      scrollToBottom();
+    }, IDLE_NUDGE_MS);
+  }
+
   async function sendMessage(text) {
     if (sending || !text.trim()) return;
+    clearStaleQuickReplies();
+    cancelIdleNudge();
     sending = true;
     sendBtn.disabled = true;
     input.value = '';
@@ -933,7 +774,7 @@
 
     let agentCol;
     try {
-      const isNewSession = (await ensureSession()) === null;
+      await ensureSession();
       agentCol = addAgentPlaceholder();
 
       const res = await fetch(API_BASE + '/run_sse', {
@@ -1015,9 +856,12 @@
         }
       }
 
-      if (sawContent) finalizeAgentMessage(agentCol, finalText);
+      if (sawContent) {
+        finalizeAgentMessage(agentCol, finalText);
+        hasExchanged = true;
+        scheduleIdleNudge();
+      }
       removeIfEmpty(agentCol);
-      if (isNewSession && sawContent) setSessionTitle(text);
     } catch (err) {
       if (agentCol) removeIfEmpty(agentCol);
       addSystemError(
@@ -1066,15 +910,6 @@
   document.querySelectorAll('.suggestion-chip').forEach((btn) => {
     btn.addEventListener('click', () => sendMessage(btn.dataset.prompt));
   });
-  function startNewChat() {
-    if (sending) return;
-    newConversation();
-    closeSidebarOnMobile();
-    input.focus();
-  }
-  $('newChatBtn').addEventListener('click', startNewChat);
-  sidebarNewChat.addEventListener('click', startNewChat);
-
   /* ============================== Theme ============================== */
   function applyTheme(mode) {
     if (mode === 'light' || mode === 'dark') {
@@ -1096,17 +931,43 @@
   });
   applyTheme(localStorage.getItem(STORAGE_THEME));
 
+  // Two-step confirm on the trash icon (no native confirm() — see the note on the old
+  // per-session delete button this replaced: unreliable in embedded/automated contexts,
+  // and it looked inconsistent with the rest of the UI anyway). First click arms it
+  // (icon swaps to a checkmark for 3s), second click within that window resets for real.
+  const RESET_ICON = resetIcon.innerHTML;
+  const CONFIRM_ICON = '<path d="M20 6 9 17l-5-5"/>';
+  (function wireResetButton() {
+    let armed = false, revertTimer = null;
+    resetBtn.addEventListener('click', () => {
+      if (!armed) {
+        armed = true;
+        resetIcon.innerHTML = CONFIRM_ICON;
+        resetBtn.title = 'Klik lagi untuk menghapus';
+        revertTimer = setTimeout(() => {
+          armed = false;
+          resetIcon.innerHTML = RESET_ICON;
+          resetBtn.title = 'Hapus percakapan';
+        }, 3000);
+        return;
+      }
+      clearTimeout(revertTimer);
+      armed = false;
+      resetIcon.innerHTML = RESET_ICON;
+      resetBtn.title = 'Hapus percakapan';
+      resetConversation();
+    });
+  })();
+
   /* ============================== Boot ============================== */
   (async function init() {
     updateSendState();
     input.focus();
     const ok = await checkHealth();
     if (!ok) return;
-    loadSessionList();
     try {
       const session = await ensureSession();
       if (session) renderHistory(session.events);
-      highlightActiveSession();
     } catch (_) { /* couldn't load history — user can still start typing */ }
   })();
 })();

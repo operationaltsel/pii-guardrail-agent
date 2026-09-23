@@ -100,8 +100,12 @@ class PiiGuardrail:
     async def after_model(self, callback_context, llm_response: LlmResponse) -> Optional[LlmResponse]:
         if not self.s.restore_output or self.s.redaction_mode == "mask":
             return None
-        if llm_response.partial or not llm_response.content or not llm_response.content.parts:
-            return None  # streaming chunks may split a token; restore on the final response only
+        if not llm_response.content or not llm_response.content.parts:
+            return None
+        # Restore on every event, not just the final non-partial one: a token split across two
+        # streaming chunks just won't match the regex on either half (harmless no-op), but
+        # skipping partial events entirely let a complete token inside one chunk reach the
+        # client un-restored whenever the model's stream doesn't end with a clean final event.
         vault = Vault.from_state(callback_context.state, self.s.redaction_mode)
         if not vault.tokens:
             return None

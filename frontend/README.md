@@ -68,17 +68,11 @@ Untuk menunjuk ke API di alamat lain (mis. staging): buka
 * **Resilien terhadap restart server**: session ID divalidasi (`GET` sebelum dipakai) setiap
   kali; jika server di-restart (session in-memory hilang), frontend otomatis membuat sesi
   baru alih-alih gagal diam-diam.
-* **Sidebar riwayat percakapan**: "Percakapan baru" tanpa cara melihat lagi chat sebelumnya
-  terasa seperti kehilangan data — pola ChatGPT/Claude (daftar sesi di sidebar, klik untuk
-  buka kembali) dipakai di sini juga. Daftar sesi & transkrip diambil ulang dari REST API ADK
-  (`GET /apps/.../sessions`), bukan disimpan terpisah di browser, supaya tetap konsisten
-  dengan apa yang benar-benar ada di server.
-* **Konfirmasi hapus dua langkah, bukan `window.confirm()`**: dialog konfirmasi native
-  browser diam-diam tidak melakukan apa-apa saat diuji lewat automated browser tool (kemungkinan
-  auto-dismiss di konteks embedded/automated) — berisiko sama tidak konsistennya di konteks
-  browser lain yang serupa. Diganti UI inline dua langkah dalam kendali sendiri: klik pertama
-  mempersenjatai state konfirmasi (ikon centang, 3 detik), klik kedua dalam jendela itu baru
-  benar-benar menghapus.
+* **Satu percakapan berkelanjutan, tanpa sidebar riwayat**: sempat ada sidebar daftar sesi
+  ala ChatGPT/Claude, tapi dilepas lagi — untuk widget CS setransaksional ini (gaya Veronika
+  Telkomsel: to-the-point, sekali sesi selesai) daftar riwayat percakapan lama tidak
+  menambah nilai dan cuma menambah kompleksitas. Sesi tetap satu ID persisten per pengguna
+  (bertahan lintas refresh via `localStorage`), cuma tidak ada UI untuk menjelajah sesi lain.
 * **Balasan singkat & tombol pilihan cepat (gaya asisten telco seperti Veronika)**: prompt
   agent diarahkan menutup giliran dengan pilihan tertutup yang jelas (mis. konfirmasi ya/tidak,
   menu kategori, lanjutan tindakan) sebagai baris `[PILIHAN] Opsi 1 | Opsi 2 | ...` di akhir

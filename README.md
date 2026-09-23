@@ -83,11 +83,14 @@ pelanggan Ventra fiktif. Sengaja bisa dicari di chat pakai nomor pelanggan, nomo
 (`cari_pelanggan`, lihat [agent/agents/cs_agent/tools.py](agent/agents/cs_agent/tools.py))
 mencocokkan dari apa pun yang disebutkan lebih dulu:
 
-| Nomor Pelanggan | Nama | No. HP | Paket | Status Bayar |
-|---|---|---|---|---|
-| `1122334455` | Budi Santoso | `081234567890` | VentraFiber 50 Mbps | BELUM LUNAS |
-| `2233445566` | Siti Rahmawati | `085711223344` | VentraFiber 100 Mbps | LUNAS |
-| `3344556677` | I Made Wirawan | `081399887766` | VentraFiber 30 Mbps | BELUM LUNAS |
+| Nomor Pelanggan | Nama | No. HP | Alamat Pemasangan | Paket | Status Bayar |
+|---|---|---|---|---|---|
+| `1122334455` | Budi Santoso | `081234567890` | Jl. Sudirman No. 10, Jakarta Pusat | VentraFiber 50 Mbps | BELUM LUNAS |
+| `2233445566` | Siti Rahmawati | `085711223344` | Perum Griya Indah Blok C2 No. 7, Bekasi | VentraFiber 100 Mbps | LUNAS |
+| `3344556677` | I Made Wirawan | `081399887766` | Jl. Raya Kuta No. 88, Badung | VentraFiber 30 Mbps | BELUM LUNAS |
+
+Alamat ini juga contoh siap pakai untuk menguji deteksi NER (label ADDRESS) — nama pelanggan
+di atas untuk menguji deteksi NER (label PERSON).
 
 Data ini persisten di SQLite (volume `cs-agent-data`) — bertahan lintas restart container,
 reset hanya kalau volume-nya dihapus (`docker compose down -v`). Tiket pengaduan yang dibuat

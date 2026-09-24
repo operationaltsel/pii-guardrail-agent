@@ -21,6 +21,16 @@ from .vault import TOKEN_RE, Vault
 
 NER_LABELS = ("PERSON", "ADDRESS")
 
+# The NER model labels any unfamiliar standalone token as PERSON with high confidence —
+# keyboard mashing ("asmdamwkdmsa") scored 0.988 live, and the agent then greeted the user
+# by it. A run of 5+ consonants never occurs in the 4,745 distinct words of the training and
+# gold data (names and addresses included), but is typical of mashing, so it's a safe veto.
+_IMPLAUSIBLE_NAME = re.compile(r"[bcdfghjklmnpqrstvwxz]{5,}", re.IGNORECASE)
+
+
+def plausible_ner_span(span: PiiSpan) -> bool:
+    return span.label != "PERSON" or not _IMPLAUSIBLE_NAME.search(span.text)
+
 # Structured tool outputs: PII is declared by field name, not guessed from 2-word strings
 # (NER needs sentence context and would be unreliable on a bare "Budi Santoso").
 FIELD_POLICY: list[tuple[re.Pattern, str]] = [
@@ -71,7 +81,8 @@ class Redactor:
         t = apply_spans(t, regex_spans, vault)
         res = RedactionResult(t, list(regex_spans), regex_ms=(time.perf_counter() - t0) * 1000)
         if use_ner and self.ner is not None and TOKEN_RE.sub("", t).strip():
-            ner_spans = [s for s in await self.ner.detect(t) if s.label in NER_LABELS]
+            ner_spans = [s for s in await self.ner.detect(t)
+                         if s.label in NER_LABELS and plausible_ner_span(s)]
             res.ner_ms = self.ner.last_latency_ms
             res.text = apply_spans(t, ner_spans, vault)
             res.findings += ner_spans

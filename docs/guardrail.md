@@ -42,6 +42,15 @@ NER Service lewat HTTP dengan:
 * **cache LRU** — riwayat percakapan dikirim ulang ke LLM tiap giliran; teks yang sudah
   pernah dianalisis tidak perlu dipanggil ulang ke NER Service.
 
+**Filter ketikan acak** ([`redactor.py`](../agent/agents/cs_agent/guardrail/redactor.py)
+`plausible_ner_span`): model menandai kata asing yang berdiri sendiri sebagai PERSON dengan
+yakin — saat uji langsung, ketikan acak `asmdamwkdmsa` dapat skor 0,988, lalu agent menyapa
+pelanggan "Kak asmdamwkdmsa". Span PERSON yang mengandung ≥5 huruf mati berturut-turut kini
+ditolak. Batas 5 dipilih dari data: tidak ada satu pun dari 4.745 kata unik di data training
+& gold (termasuk semua nama/alamat) yang memenuhinya, sedangkan batas 4 sudah menolak nama
+asli seperti *Anggraeni*. Ketikan acak dengan gugus konsonan pendek masih bisa lolos sebagai
+nama — arah salah yang aman (disamarkan, bukan dibocorkan).
+
 ## 3. Urutan pipeline & data minimisation
 
 ```

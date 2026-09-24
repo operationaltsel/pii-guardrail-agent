@@ -32,6 +32,10 @@ root_agent = Agent(
             max_delay=settings.gemini_retry_max_delay_s,
         ),
     ),
+    # Per-request (not client-level) so ADK's own client headers/retry options stay intact.
+    generate_content_config=genai_types.GenerateContentConfig(
+        http_options=genai_types.HttpOptions(timeout=int(settings.gemini_timeout_s * 1000)),
+    ),
     description="Customer support Ventra dengan guardrail PII (regex + NER).",
     instruction=INSTRUCTION,
     tools=ALL_TOOLS,

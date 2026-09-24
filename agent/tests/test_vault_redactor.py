@@ -76,3 +76,14 @@ def test_structured_tool_output_policy():
     assert out == {"nama_pelanggan": "[REDACT_NAMA_1]", "kontak": "[REDACT_EMAIL_1]", "paket": "VentraFiber 50",
                    "alamat_pemasangan": "[REDACT_ADDRESS_1]", "total_tagihan": 385000,
                    "catatan": "hubungi [REDACT_PHONE_1]"}
+
+
+def test_keyboard_mash_is_not_treated_as_a_name(fake_ner, monkeypatch):
+    # Live regression: the NER model tagged "asmdamwkdmsa" as PERSON (score 0.988) and the
+    # agent then greeted the user as "Kak asmdamwkdmsa".
+    monkeypatch.setattr(fake_ner, "NAMES", fake_ner.NAMES + ["asmdamwkdmsa"])
+    r = Redactor(ner=fake_ner)
+    mash = run(r.redact("asmdamwkdmsa", Vault()))
+    assert mash.text == "asmdamwkdmsa" and not mash.findings
+    real = run(r.redact("Nama saya Budi Santoso", Vault()))
+    assert real.text == "Nama saya [REDACT_NAMA_1]"

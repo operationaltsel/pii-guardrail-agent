@@ -424,6 +424,7 @@
   const IDLE_NUDGE_TEXT = 'Ada lagi yang dapat Iting bantu? Silakan ketik yang Kakak butuhkan.';
   let idleTimer = null;
   let hasExchanged = false;
+  const REPLY_TIMEOUT_MS = 90 * 1000;
 
   /* ============================== DOM refs ============================== */
   const $ = (id) => document.getElementById(id);
@@ -737,6 +738,7 @@
     let redactedTotal = 0;
     let currentUserCol = null;    // the most recent user bubble, for attaching its redact-note
     let markedThisTurn = false;   // only the first detection per turn is real (see sendMessage)
+    let lastUserText = null, answered = true;
     for (const evt of events) {
       const role = evt.content && evt.content.role;
       const parts = (evt.content && evt.content.parts) || [];
@@ -745,10 +747,13 @@
         if (role === 'user') {
           currentUserCol = addUserMessage(part.text);
           markedThisTurn = false;
+          lastUserText = part.text;
+          answered = false;
         } else {
           const col = addAgentPlaceholder();
           setAgentText(col, part.text);
           finalizeAgentMessage(col, part.text);
+          answered = true;
         }
       }
       const detected = evt.actions && evt.actions.stateDelta && evt.actions.stateDelta.pii_report
@@ -766,6 +771,16 @@
     }
     sessionTotalRedactions = redactedTotal;
     trustDetail.textContent = sessionTrustDetail();
+    // Reloading while a reply is in flight cancels the run server-side, leaving the user's
+    // last message stored but unanswered — offer to resend it instead of a silent dead end.
+    if (!answered && lastUserText && currentUserCol) {
+      const orphanRow = currentUserCol.closest('.row');
+      addSystemError('Pesan terakhir Kakak belum sempat dijawab.', () => {
+        orphanRow?.remove();
+        document.querySelectorAll('.row.system').forEach((el) => el.remove());
+        sendMessage(lastUserText);
+      });
+    }
     scrollToBottom(false);
   }
 
@@ -808,12 +823,18 @@
     const userCol = addUserMessage(text);
 
     let agentCol;
+    let abortTimer = null;
     try {
       await ensureSession();
       agentCol = addAgentPlaceholder();
 
+      // Backstop only: the server bounds each Gemini call itself (GEMINI_TIMEOUT_S), this
+      // just guarantees the typing indicator can never spin forever.
+      const controller = new AbortController();
+      abortTimer = setTimeout(() => controller.abort(), REPLY_TIMEOUT_MS);
       const res = await fetch(API_BASE + '/run_sse', {
         method: 'POST',
+        signal: controller.signal,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           app_name: APP_NAME,
@@ -831,6 +852,7 @@
       let finalText = '';
       let sawContent = false;
       let firstTextChunk = true;
+      let shownError = false;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -846,10 +868,15 @@
           let evt;
           try { evt = JSON.parse(payload); } catch (_) { continue; }
 
-          if (evt.errorCode || evt.errorMessage) {
+          // ADK reports model/tool errors as errorCode/errorMessage on an event, but an
+          // exception inside the run (e.g. a Gemini timeout) arrives as {"error": "..."}.
+          if (evt.errorCode || evt.errorMessage || evt.error) {
+            sawContent = true;
+            if (shownError) continue; // one failure can surface as both kinds — show it once
+            shownError = true;
             removeIfEmpty(agentCol);
             addSystemError(
-              friendlyError(evt.errorCode, evt.errorMessage),
+              friendlyError(evt.errorCode, evt.errorMessage || evt.error),
               () => sendMessage(text)
             );
             sawContent = true;
@@ -899,12 +926,17 @@
       removeIfEmpty(agentCol);
     } catch (err) {
       if (agentCol) removeIfEmpty(agentCol);
-      addSystemError(
-        'Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.',
-        () => sendMessage(text)
-      );
-      setStatus('offline', 'Tidak dapat terhubung');
+      if (err && err.name === 'AbortError') {
+        addSystemError('Balasan Iting terlalu lama. Silakan coba lagi.', () => sendMessage(text));
+      } else {
+        addSystemError(
+          'Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.',
+          () => sendMessage(text)
+        );
+        setStatus('offline', 'Tidak dapat terhubung');
+      }
     } finally {
+      clearTimeout(abortTimer);
       sending = false;
       updateSendState();
       input.focus();
@@ -914,6 +946,9 @@
   function friendlyError(code, message) {
     if (code === 'UNAVAILABLE' || /high demand|503/i.test(message || '')) {
       return 'Server sedang sibuk. Silakan coba lagi dalam beberapa saat.';
+    }
+    if (/timeout|timed out|deadline/i.test(message || '')) {
+      return 'Balasan Iting terlalu lama. Silakan coba lagi.';
     }
     if (/PII|guardrail|gangguan/i.test(message || '')) {
       return message; // guardrail's own fail-closed message is already user-facing Indonesian

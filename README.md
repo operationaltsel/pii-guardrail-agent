@@ -158,6 +158,48 @@ Lebih banyak contoh (regex, NER, percakapan multi-giliran dengan tool call, fail
 kasus negatif): [docs/example_transcript.md](docs/example_transcript.md). Kesalahan model
 konkret: `*_errors.md` di `ner_training/reports/` setelah `make evaluate-model`.
 
+### Skrip uji coba — bisa langsung diketik di chat (http://localhost:3100)
+
+Semua baris di bawah ini bisa langsung dicoba tanpa setup tambahan, memakai 3 akun demo di
+atas. Dikelompokkan supaya gampang dipilih saat demo langsung.
+
+**A. Alur customer service (tool-calling, data dari SQLite)**
+
+| # | Ketik ini | Yang terjadi |
+|---|---|---|
+| 1 | "Cek tagihan saya, nomor pelanggan 1122334455" | `cek_tagihan` → Budi Santoso, VentraFiber 50 Mbps, Rp385.000, **BELUM LUNAS** |
+| 2 | "Cek tagihan nomor hp 085711223344" (tanpa sebut nomor pelanggan) | dicocokkan dari nomor HP → Siti Rahmawati, **LUNAS** |
+| 3 | "Saya lupa nomor pelanggan saya, nama saya I Made Wirawan" | `cari_pelanggan` mencocokkan dari nama persis → data lengkap tampil |
+| 4 | "Internet saya di rumah mati total, tolong dong" | agent **minta maaf dulu** (empati) sebelum minta nomor pelanggan/HP — bukan langsung minta data |
+| 5 | lanjutan dari #4: sebut nomor pelanggan → "buatkan tiket saja" | `buat_tiket_pengaduan` dipanggil, dapat nomor tiket baru (format `TKT-xxxx`) |
+| 6 | "Cek status tiket TKT-1001" (pakai nomor tiket dari langkah 5) | `cek_status_tiket` → status `DIBUKA` + estimasi penanganan besok |
+| 7 | "Saya mau pindah alamat pemasangan ke Jl. Melati No. 8, Depok, nomor pelanggan 2233445566" | `ubah_alamat_pemasangan` → alamat baru tersimpan, biaya Rp150.000, survei 1-3 hari kerja |
+| 8 | "Ada gangguan di Bekasi?" | `cek_gangguan_wilayah` → gangguan massal (kabel optik putus), estimasi normal 21:00 WIB |
+| 9 | "Ada gangguan di Bandung?" | pemeliharaan terjadwal 01:00-04:00 WIB |
+| 10 | "Ada gangguan di Badung?" | tidak ada gangguan tercatat (kota di luar data gangguan — negative case) |
+| 11 | "Gimana cara restart modem?" / "lampu LOS merah kenapa?" / "gimana cara bayar?" / "paket apa aja yang tersedia?" | `cari_faq` mencocokkan dari 7 topik FAQ (lihat `_FAQ` di [tools.py](agent/agents/cs_agent/tools.py)) |
+| 12 | "Cek tagihan nomor pelanggan 9999999999" (nomor asal) | `status: "error"`, "Nomor pelanggan tidak ditemukan." — agent tidak mengulang minta data yang sama, tawarkan cara lain (nomor HP/nama) |
+
+**B. Guardrail PII — deteksi & redaksi (bisa dites lepas dari akun demo)**
+
+| # | Ketik ini | Yang dibuktikan |
+|---|---|---|
+| 1 | "NIK saya 3273011506900001, tolong dicatat" | NIK terdeteksi di **tengah kalimat** — bug regex asli brief (`^...$`) cuma cocok kalau *seluruh* pesan adalah NIK, sudah diperbaiki (detail: [docs/guardrail.md § 1](docs/guardrail.md#1-regex-nik-email-telepon)) |
+| 2 | "NIK saya 3273 0115 0690 0001" (pakai spasi) | tetap terdeteksi — regex baru mendukung NIK berspasi + validasi struktur (kode provinsi, tanggal lahir) |
+| 3 | "HP saya +62 812-3456-7890" | telepon terdeteksi — regex asli brief (`+` tak di-escape di dalam `(+62\|...)`) crash `re.error` saat `re.compile()`, bukan cuma gagal match; sudah diperbaiki |
+| 4 | "email saya budi@gmailxcom" (sengaja **tanpa** titik) | **tidak** terdeteksi sebagai email — benar, karena memang bukan email valid (regex asli brief salah: titik tak di-escape berarti cocok dengan karakter apa pun, jadi `budi@gmailxcom` lolos sebagai "valid") |
+| 5 | "email saya budi@gmail.com" | terdeteksi sebagai EMAIL (pembanding langsung dari kasus #4) |
+| 6 | "Saya Dian, NIK 3171234501900001, HP +62 812-3456-7890, email dian@yahoo.co.id" | ketiganya terdeteksi sekaligus dalam satu kalimat, urutan NIK → telepon → email |
+| 7 | "halo min sy rizky ramadhan, wifi dirumah mati terus nih" | NAMA terdeteksi oleh **NER**, gaya bahasa informal, tanpa pola regex apa pun |
+| 8 | "kak paketnya kirim ke jl melati no 5 bekasi ya" | ALAMAT terdeteksi oleh NER dari kalimat informal |
+| 9 | "Saya mau jalan-jalan ke Bali bulan depan, apakah roaming aktif otomatis?" | **tidak ada** yang diredaksi — "Bali" bukan PII (negative test, membuktikan tidak over-redaksi) |
+| 10 | "Apakah ada gangguan jaringan di Surabaya hari ini?" | **tidak ada** yang diredaksi — nama kota berdiri sendiri bukan ALAMAT |
+
+Opsional — fail-closed saat NER Service mati (`docker compose stop ner-service`, coba kirim
+pesan berisi nama/alamat, lalu `docker compose start ner-service` lagi): agent menolak
+memproses dengan pesan "sistem perlindungan data kami sedang mengalami gangguan..." alih-alih
+mengirim data mentah ke Gemini. Lihat [docs/example_transcript.md § 6](docs/example_transcript.md#6-ner-service-tidak-bisa-dihubungi).
+
 ## Struktur repo
 
 ```

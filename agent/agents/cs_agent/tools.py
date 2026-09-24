@@ -22,11 +22,11 @@ def _normalize_phone(s: str) -> str:
 
 
 def _find_customer(identitas: str) -> tuple[str, dict] | None:
-    """Resolves a customer by whatever the caller actually has on hand: the internal
-    10-digit nomor_pelanggan (what a CS system uses), a phone number (what a real customer
-    remembers), or a name (last resort, may be ambiguous — first match wins for this demo).
-    This mirrors how a real CS lookup works: the agent almost never gets the exact internal
-    ID first; it resolves the customer from what they say, then uses the ID internally.
+    """Resolve a customer by account number, registered phone number, or name.
+
+    Name matches require an exact match unless a partial query identifies exactly one
+    customer. Returning the first partial match would risk exposing another customer's
+    record when names are similar.
     """
     customers = db.all_customers()
     q_digits = re.sub(r"\D", "", identitas)
@@ -40,9 +40,15 @@ def _find_customer(identitas: str) -> tuple[str, dict] | None:
                 return cust["nomor_pelanggan"], cust
     q_name = identitas.strip().lower()
     if len(q_name) >= 3:
-        for cust in customers:
-            if q_name in cust["nama_pelanggan"].lower():
-                return cust["nomor_pelanggan"], cust
+        exact_matches = [cust for cust in customers if q_name == cust["nama_pelanggan"].lower()]
+        if exact_matches:
+            customer = exact_matches[0]
+            return customer["nomor_pelanggan"], customer
+
+        partial_matches = [cust for cust in customers if q_name in cust["nama_pelanggan"].lower()]
+        if len(partial_matches) == 1:
+            customer = partial_matches[0]
+            return customer["nomor_pelanggan"], customer
     return None
 
 
@@ -59,6 +65,9 @@ _FAQ = {
     "info paket": "VentraFiber tersedia 30 Mbps (Rp275.000/bln), 50 Mbps (Rp385.000/bln), dan "
                   "100 Mbps (Rp525.000/bln). Semua paket unlimited kuota, instalasi gratis untuk area terjangkau.",
     "berhenti berlangganan": "Pengajuan berhenti langganan diproses 3 hari kerja; modem wajib dikembalikan.",
+    "roaming": "Di dalam negeri (termasuk ke kota/pulau mana pun di Indonesia), kartu Ventra otomatis "
+               "terhubung tanpa biaya roaming tambahan. Untuk roaming internasional (ke luar negeri), "
+               "paket roaming harus diaktifkan lebih dulu lewat aplikasi MyVentra atau tim Customer Service.",
 }
 # Visible to tests/demo: proves tools received real values while the LLM saw tokens.
 TOOL_AUDIT: list[dict] = []

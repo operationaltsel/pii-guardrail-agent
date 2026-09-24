@@ -46,6 +46,17 @@ FAIL_CLOSED_MESSAGE = (
 REPORT_KEY = "pii_report"
 
 
+def _last_user_text(llm_request: LlmRequest) -> Optional[str]:
+    # Function responses also travel as role="user"; skip contents with no text parts.
+    for content in reversed(llm_request.contents or []):
+        if content.role != "user":
+            continue
+        texts = [p.text for p in content.parts or [] if p.text and not p.thought]
+        if texts:
+            return "".join(texts)
+    return None
+
+
 class PiiGuardrail:
     def __init__(self, settings: Settings, ner_client: NerClient | None = None):
         self.s = settings
@@ -91,7 +102,10 @@ class PiiGuardrail:
         report = {"blocked": False, "degraded_regex_only": degraded, "detected": dict(counts),
                   "ner_ms": round(ner_ms, 1) if ner_ms is not None else None,
                   "guardrail_ms": round((time.perf_counter() - t0) * 1000, 1),
-                  "vault_size": len(vault.tokens)}
+                  "vault_size": len(vault.tokens),
+                  # The current message exactly as Gemini receives it (already tokenized, so
+                  # safe to persist/stream) — lets the UI show "what the AI actually saw".
+                  "sent_to_ai": _last_user_text(llm_request)}
         callback_context.state[REPORT_KEY] = report
         log.info("guardrail before_model %s", report)
         return None

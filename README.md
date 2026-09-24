@@ -161,7 +161,9 @@ konkret: `*_errors.md` di `ner_training/reports/` setelah `make evaluate-model`.
 ### Skrip uji coba — bisa langsung diketik di chat (http://localhost:3100)
 
 Semua baris di bawah ini bisa langsung dicoba tanpa setup tambahan, memakai 3 akun demo di
-atas. Dikelompokkan supaya gampang dipilih saat demo langsung.
+atas. Dikelompokkan supaya gampang dipilih saat demo langsung. Untuk melihat input vs output
+guardrail, klik **"Lihat yang dikirim ke AI"** di bawah pesan: muncul teks persis yang
+diterima Gemini, dengan token redaksi disorot.
 
 **A. Alur customer service (tool-calling, data dari SQLite)**
 

@@ -313,6 +313,25 @@
   .quick-reply-chip { border-color: #F0BABA; background: #FFF9F9; color: #A81414; border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 600; min-height: 40px; transition: transform 180ms ease, border-color 180ms ease, background 180ms ease; }
   .quick-reply-chip:hover { transform: translateY(-1px); border-color: var(--color-accent); background: #FFF0F0; }
   .redact-note { width: fit-content; color: #A81414; padding: 4px 8px; border-radius: 99px; background: #FFF0F0; }
+  .sent-ai-toggle {
+    width: fit-content; border: 0; background: none; cursor: pointer;
+    font: inherit; font-size: 11px; color: #A81414; text-decoration: underline;
+    text-underline-offset: 2px; padding: 4px 6px; border-radius: 6px;
+  }
+  .sent-ai-toggle:hover { background: #FFF0F0; }
+  .sent-ai-panel {
+    max-width: 100%; font-size: 12.5px; line-height: 1.55; color: var(--color-foreground);
+    background: #fff; border: 1px dashed #E8BDBD; border-radius: 10px; padding: 8px 11px;
+    overflow-wrap: anywhere; animation: fade-in 200ms ease;
+  }
+  .sent-ai-panel .label {
+    display: block; margin-bottom: 3px; font-size: 10.5px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--color-muted-foreground);
+  }
+  .sent-ai-panel mark {
+    background: #FFE1E1; color: #A81414; border-radius: 4px; padding: 0 3px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11.5px;
+  }
   .tool-chip { width: fit-content; padding: 6px 9px; border-radius: 8px; background: #FFF0F0; }
   .composer-wrap { padding: 8px 24px calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.92) 28%); }
   .composer-inner { max-width: 700px; }
@@ -527,6 +546,30 @@
     note.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>${escapeHtml(items.join(', '))} disamarkan sebelum diproses AI</span>`;
     userCol.appendChild(note);
     scrollToBottom();
+  }
+
+  // Server-reported text of this message exactly as Gemini received it (tokens only, never
+  // raw values) — lets a viewer compare what they typed with what the AI actually saw.
+  const TOKEN_HIGHLIGHT_RE = /\[REDACT_[A-Z]+(?:_\d+)?\]/g;
+  function attachSentToAi(userCol, text) {
+    if (!userCol || typeof text !== 'string' || userCol.querySelector('.sent-ai-toggle')) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sent-ai-toggle';
+    btn.textContent = 'Lihat yang dikirim ke AI';
+    btn.setAttribute('aria-expanded', 'false');
+    const panel = document.createElement('div');
+    panel.className = 'sent-ai-panel';
+    panel.hidden = true;
+    panel.innerHTML = '<span class="label">Teks yang diterima Gemini</span>'
+      + escapeHtml(text).replace(TOKEN_HIGHLIGHT_RE, (t) => `<mark>${t}</mark>`);
+    btn.addEventListener('click', () => {
+      const opening = panel.hidden;
+      panel.hidden = !opening;
+      btn.textContent = opening ? 'Sembunyikan' : 'Lihat yang dikirim ke AI';
+      btn.setAttribute('aria-expanded', String(opening));
+    });
+    userCol.append(btn, panel);
   }
 
   function addAgentPlaceholder() {
@@ -768,6 +811,8 @@
           }
         }
       }
+      const report = evt.actions && evt.actions.stateDelta && evt.actions.stateDelta.pii_report;
+      if (report) attachSentToAi(currentUserCol, report.sent_to_ai);
     }
     sessionTotalRedactions = redactedTotal;
     trustDetail.textContent = sessionTrustDetail();
@@ -896,6 +941,7 @@
               markRedacted(userCol, items);
             }
           }
+          if (delta && delta['pii_report']) attachSentToAi(userCol, delta['pii_report'].sent_to_ai);
 
           const parts = (evt.content && evt.content.parts) || [];
           for (const part of parts) {

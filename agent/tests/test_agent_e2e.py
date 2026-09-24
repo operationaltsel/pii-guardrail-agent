@@ -116,3 +116,22 @@ def test_mask_mode_uses_brief_format():
     runner = build(FakeNer(), redaction_mode="mask")
     asyncio.run(chat(runner, ["Nama saya Budi, saya tinggal di Jl.ABC"]))
     assert "Nama saya [REDACT_NAMA], saya tinggal di [REDACT_ADDRESS]" in REQUESTS[-1]
+
+
+def test_sent_to_ai_report_shows_tokenized_message_only():
+    runner = build(FakeNer())
+
+    async def run():
+        session = await runner.session_service.create_session(app_name="t", user_id="u")
+        reports = []
+        async for ev in runner.run_async(user_id="u", session_id=session.id, new_message=types.Content(
+                role="user", parts=[types.Part(text="Saya Budi Santoso, NIK 3273011506900001")])):
+            report = (ev.actions.state_delta or {}).get("pii_report")
+            if report:
+                reports.append(report)
+        return reports
+
+    reports = asyncio.run(run())
+    assert reports and reports[0]["sent_to_ai"] == "Saya [REDACT_NAMA_1], NIK [REDACT_NIK_1]"
+    for value in RAW_PII:
+        assert value not in json.dumps(reports)

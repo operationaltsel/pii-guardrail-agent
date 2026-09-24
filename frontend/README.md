@@ -56,6 +56,11 @@ Untuk menunjuk ke API di alamat lain (mis. staging): buka
   menghapus key berprefiks itu dari `state_delta` sebelum event di-stream ke client, lihat
   `base_session_service.py::_trim_temp_delta_state`. Ditemukan & diverifikasi langsung dari
   source ADK saat frontend ini diuji hidup.)*
+* **"Lihat yang dikirim ke AI"**: tombol di bawah setiap pesan pengguna membuka teks pesan itu
+  persis seperti yang diterima Gemini, dengan token `[REDACT_*]` disorot. Teksnya diambil dari
+  `pii_report.sent_to_ai` yang ditulis `before_model_callback` setelah redaksi — hanya berisi
+  token, tidak pernah nilai mentah — jadi perbandingan "yang saya ketik" vs "yang dilihat AI"
+  adalah bukti dari server, bukan simulasi di browser.
 * **Indikator tool-call**: panggilan tool (`cek_tagihan`, `buat_tiket_pengaduan`, dst.)
   ditampilkan sebagai chip berlabel Bahasa Indonesia yang ramah, bukan nama fungsi mentah —
   transparansi tanpa membocorkan detail implementasi ke pengguna awam.

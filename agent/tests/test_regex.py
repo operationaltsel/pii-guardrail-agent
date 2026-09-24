@@ -32,6 +32,7 @@ def test_nik_structure_validation():
     assert nik_is_valid("3374116512880001")      # female: day 65 -> 25
     assert not nik_is_valid("0073011506900001")  # province 00
     assert not nik_is_valid("3273011513900001")  # month 13
+    assert not nik_is_valid("3273013102900001")  # 31 February
     # invalid structure is still redacted (fail-safe), only with a lower score
     [span] = det.detect("nomor 9999999999999999")
     assert span.label == "NIK" and span.score < 1.0

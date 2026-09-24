@@ -26,14 +26,11 @@ Untuk menunjuk ke API di alamat lain (mis. staging): buka
 
 ## Keputusan desain
 
-* **Terasa seperti asisten AI sungguhan, bukan widget customer-support**: iterasi pertama
-  memakai kartu melayang (border-radius + shadow) di atas backdrop abu-abu, ikon gradien,
-  dan banner warna hijau permanen — pola umum "template produk AI" yang generik. Diubah ke
-  shell full-bleed tanpa kartu, satu warna aksen datar tanpa gradient, dan balasan asisten
-  **tanpa bubble** (teks polos + avatar kecil) — pola yang sama dipakai ChatGPT/Claude, dan
-  jadi sinyal visual terkuat bahwa ini asisten AI, bukan widget chat yang ditempel di situs.
-  Design system awal dihasilkan lewat skill `ui-ux-pro-max` (query: *"customer support chat
-  telco enterprise trust"*), lalu disederhanakan lebih jauh sesuai arahan di atas.
+* **Satu tampilan modern yang fokus pada percakapan**: antarmuka memakai tema terang tetap
+  dengan aksen merah-putih, ruang kerja terpusat, dan hierarki visual yang jelas. Identitas
+  asisten, status koneksi, dan perlindungan data terlihat tanpa menambah sidebar atau
+  kontrol tema yang tidak diperlukan. Kartu pesan, opsi cepat, dan composer memakai bahasa
+  visual yang sama agar alur bantuan tetap terasa ringan dan konsisten.
 * **Tanpa framework**: HTML/CSS/JS vanilla. Untuk satu halaman chat dengan kompleksitas
   state yang moderat, ini lebih ringan dan lebih mudah diaudit daripada menambah toolchain
   React/build step ke sebuah take-home project.

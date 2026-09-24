@@ -49,7 +49,15 @@ def nik_is_valid(digits: str) -> bool:
     day, month = int(digits[6:8]), int(digits[8:10])
     seq = int(digits[12:16])
     day = day - 40 if day > 40 else day
-    return prov in VALID_PROVINCES and kab > 0 and kec > 0 and 1 <= day <= 31 and 1 <= month <= 12 and seq > 0
+    days_in_month = (31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+    return (
+        prov in VALID_PROVINCES
+        and kab > 0
+        and kec > 0
+        and 1 <= month <= 12
+        and 1 <= day <= days_in_month[month - 1]
+        and seq > 0
+    )
 
 
 def _phone_digits_ok(raw: str) -> bool:

@@ -28,3 +28,8 @@ ner_training/data/generated/
 # on failure (see export_onnx.py's fallback path) — never useful, sometimes huge
 sym_shape_infer_temp.onnx
 *.data
+
+# Presentation-deck build pipeline (screenshots, headless browser profile, PPTX/DOCX
+# exports) — working files for the take-home presentation, not app source.
+artifact-work/
+deliverables/

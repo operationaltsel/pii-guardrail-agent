@@ -126,3 +126,15 @@ string pendek semacam `"Budi Santoso"` saja tanpa konteks.
 * Vault berada di *session state* in-memory (`InMemorySessionService` untuk demo). Untuk
   produksi nyata, gunakan session service persisten dengan enkripsi at-rest untuk vault
   (nilai PII asli tersimpan di sana selama sesi berlangsung).
+* **Sesi in-memory tidak cocok dengan multi-replica.** `adk api_server` di sini berjalan
+  tanpa `--session_service_uri`, sedangkan [cs-agent.yaml](../deploy/k8s/cs-agent.yaml)
+  menjalankan 2-6 replica tanpa session affinity: giliran berikutnya bisa mendarat di pod
+  lain yang tidak punya sesi (maupun vault-nya), sehingga konteks percakapan hilang. Untuk
+  produksi: `DatabaseSessionService` ADK (Postgres/Redis) sebagai store sesi bersama;
+  `sessionAffinity: ClientIP` hanya sebagai stopgap.
+* **Guardrail bukan kontrol akses.** Guardrail menjaga PII agar tidak sampai ke Gemini,
+  tetapi tidak memverifikasi siapa penggunanya: siapa pun yang tahu nomor pelanggan, nomor
+  HP, atau nama bisa meminta tagihan/alamat pelanggan lain lewat tool. API agent juga belum
+  berautentikasi, dan riwayat sesi di server menyimpan teks asli pengguna. Untuk produksi:
+  verifikasi identitas (OTP ke nomor terdaftar atau login) sebelum tool membuka data akun,
+  plus autentikasi di depan API.
